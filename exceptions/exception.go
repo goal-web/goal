@@ -1,7 +1,7 @@
 package exceptions
 
 import (
-	"qbhy/contracts"
+	"goal/contracts"
 )
 
 func WithError(err error, fields contracts.Fields) Exception {

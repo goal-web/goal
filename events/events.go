@@ -1,8 +1,8 @@
 package events
 
 import (
-	"qbhy/contracts"
-	"qbhy/exceptions"
+	"goal/contracts"
+	"goal/exceptions"
 )
 
 var (

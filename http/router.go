@@ -2,9 +2,9 @@ package http
 
 import (
 	"github.com/labstack/echo/v4"
-	"qbhy/contracts"
-	"qbhy/exceptions"
-	"qbhy/logs"
+	"goal/contracts"
+	"goal/exceptions"
+	"goal/logs"
 )
 
 func New() Router {

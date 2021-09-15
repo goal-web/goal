@@ -2,7 +2,7 @@ package logs
 
 import (
 	"github.com/apex/log"
-	"qbhy/contracts"
+	"goal/contracts"
 )
 
 type ApexLogger struct {

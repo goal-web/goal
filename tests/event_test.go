@@ -3,9 +3,9 @@ package tests
 import (
 	"errors"
 	"github.com/stretchr/testify/assert"
-	"qbhy/contracts"
-	"qbhy/events"
-	"qbhy/logs"
+	"goal/contracts"
+	"goal/events"
+	"goal/logs"
 	"testing"
 )
 

@@ -2,9 +2,9 @@ package tests
 
 import (
 	"errors"
-	"qbhy/contracts"
-	"qbhy/exceptions"
-	"qbhy/logs"
+	"goal/contracts"
+	"goal/exceptions"
+	"goal/logs"
 	"testing"
 )
 
