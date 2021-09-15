@@ -2,7 +2,7 @@ package http
 
 import (
 	"github.com/labstack/echo/v4"
-	"goal/contracts"
+	"github.com/qbhy/goal/contracts"
 )
 
 type HttpException struct {

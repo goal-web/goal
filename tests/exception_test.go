@@ -1,9 +1,9 @@
 package tests
 
 import (
-	"goal/contracts"
-	"goal/exceptions"
-	"goal/logs"
+	"github.com/qbhy/goal/contracts"
+	"github.com/qbhy/goal/exceptions"
+	"github.com/qbhy/goal/logs"
 	"testing"
 )
 

@@ -1,7 +1,7 @@
 package events
 
 import (
-	"goal/contracts"
+	"github.com/qbhy/goal/contracts"
 )
 
 type EventException struct {

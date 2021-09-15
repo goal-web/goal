@@ -2,8 +2,8 @@ package exceptions
 
 import (
 	"errors"
-	"goal/contracts"
-	"goal/logs"
+	"github.com/qbhy/goal/contracts"
+	"github.com/qbhy/goal/logs"
 )
 
 var handler contracts.ExceptionHandler
