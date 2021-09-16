@@ -6,17 +6,15 @@ import (
 )
 
 type HttpException struct {
-	exception contracts.Exception
-	Method    string
-	Path      string
+	Exception contracts.Exception
 	Context echo.Context
 }
 
 func (h HttpException) Error() string {
-	return h.exception.Error()
+	return h.Exception.Error()
 }
 
 func (h HttpException) Fields() contracts.Fields {
-	return h.exception.Fields()
+	return h.Exception.Fields()
 }
 

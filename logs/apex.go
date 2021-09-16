@@ -21,6 +21,18 @@ func (a *ApexLogger) WithFields(m contracts.Fields) contracts.Logger {
 	return a
 }
 
+func (a *ApexLogger) WithField(key string, value interface{}) contracts.Logger {
+	if a == nil || a.Entry == nil {
+		a = &ApexLogger{
+			Entry: log.WithField(key, value),
+		}
+	}
+
+	a.Entry.WithField(key, value)
+
+	return a
+}
+
 func (a *ApexLogger) WithError(err error) contracts.Logger {
 	if a == nil || a.Entry == nil {
 		a = &ApexLogger{

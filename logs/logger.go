@@ -20,3 +20,11 @@ func WithException(exception contracts.Exception) contracts.Logger {
 func Default() contracts.Logger {
 	return &ApexLogger{Entry: log.WithFields(log.Fields(contracts.Fields{}))}
 }
+
+func WithInterface(value interface{}) contracts.Logger {
+	return WithField("value", value)
+}
+
+func WithField(key string, value interface{}) contracts.Logger {
+	return &ApexLogger{Entry: log.WithField(key, value)}
+}
