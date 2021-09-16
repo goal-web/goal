@@ -4,9 +4,16 @@ import (
 	"errors"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/logs"
+	"github.com/qbhy/goal/utils"
+	"reflect"
 )
 
 var handler contracts.ExceptionHandler
+
+func init() {
+	// 可以手动调用这个方法覆盖异常处理器
+	SetExceptionHandler(DefaultExceptionHandler{})
+}
 
 func SetExceptionHandler(h contracts.ExceptionHandler) {
 	handler = h
@@ -44,13 +51,33 @@ func Handle(exception contracts.Exception) {
 }
 
 type DefaultExceptionHandler struct {
+	dontReportExceptions []reflect.Type
+}
+
+func NewDefaultHandler(dontReportExceptions []contracts.Exception) DefaultExceptionHandler {
+	defaultHandler := DefaultExceptionHandler{
+		dontReportExceptions: make([]reflect.Type, 0),
+	}
+
+	for _, exception := range dontReportExceptions {
+		defaultHandler.dontReportExceptions = append(defaultHandler.dontReportExceptions, reflect.TypeOf(exception))
+	}
+
+	return defaultHandler
 }
 
 func (h DefaultExceptionHandler) Handle(exception contracts.Exception) {
 	logs.WithException(exception).Error("DefaultExceptionHandler")
 }
 
-func init() {
-	// 可以手动调用这个方法覆盖异常处理器
-	SetExceptionHandler(DefaultExceptionHandler{})
+func (h DefaultExceptionHandler) Report(exception contracts.Exception) {
+}
+
+func (h DefaultExceptionHandler) ShouldReport(exception contracts.Exception) bool {
+	for _, t := range h.dontReportExceptions {
+		if utils.IsSameStruct(t, exception) {
+			return false
+		}
+	}
+	return true
 }
