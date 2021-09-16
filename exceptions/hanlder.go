@@ -55,15 +55,9 @@ type DefaultExceptionHandler struct {
 }
 
 func NewDefaultHandler(dontReportExceptions []contracts.Exception) DefaultExceptionHandler {
-	defaultHandler := DefaultExceptionHandler{
-		dontReportExceptions: make([]reflect.Type, 0),
+	return DefaultExceptionHandler{
+		dontReportExceptions: utils.ConvertToTypes(dontReportExceptions),
 	}
-
-	for _, exception := range dontReportExceptions {
-		defaultHandler.dontReportExceptions = append(defaultHandler.dontReportExceptions, reflect.TypeOf(exception))
-	}
-
-	return defaultHandler
 }
 
 func (h DefaultExceptionHandler) Handle(exception contracts.Exception) {

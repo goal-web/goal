@@ -2,9 +2,7 @@ package http
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/exceptions"
-	"github.com/qbhy/goal/logs"
 )
 
 func New() Router {
@@ -51,18 +49,7 @@ func (router Router) Add(method, path string, handler HttpHandler) {
 				})
 			}
 		}()
-		switch res := handler(context).(type) {
-		case error, contracts.Exception:
-			exceptions.Handle(HttpException{
-				exception: exceptions.ResolveException(res),
-				Method:    method,
-				Path:      path,
-				Context:   context,
-			})
-		case string:
-			logs.WithError(context.String(200, res)).Debug("response error")
-		}
-
+		HandleResponse(handler(context), context)
 		return nil
 	})
 }
