@@ -20,3 +20,12 @@ func IsSameStruct(v1, v2 interface{}) bool {
 
 	return f1.PkgPath() == f2.PkgPath() && f1.Name() == f2.Name()
 }
+
+// ConvertToTypes 把变量转换成反射类型
+func ConvertToTypes(args ...interface{}) []reflect.Type {
+	types := make([]reflect.Type, 0)
+	for _, arg := range args {
+		types = append(types, reflect.TypeOf(arg))
+	}
+	return types
+}
