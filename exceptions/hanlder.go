@@ -68,10 +68,5 @@ func (h DefaultExceptionHandler) Report(exception contracts.Exception) {
 }
 
 func (h DefaultExceptionHandler) ShouldReport(exception contracts.Exception) bool {
-	for _, t := range h.dontReportExceptions {
-		if utils.IsSameStruct(t, exception) {
-			return false
-		}
-	}
-	return true
+	return utils.IsInstanceIn(exception, h.dontReportExceptions...)
 }
