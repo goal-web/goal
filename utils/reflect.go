@@ -30,12 +30,12 @@ func ConvertToTypes(args ...interface{}) []reflect.Type {
 	return types
 }
 
-// InstanceIn 判断变量是否是某些类型
+// IsInstanceIn InstanceIn 判断变量是否是某些类型
 func IsInstanceIn(v interface{}, types ...reflect.Type) bool {
 	for _, e := range types {
 		if IsSameStruct(e, v) {
-			return false
+			return true
 		}
 	}
-	return true
+	return false
 }

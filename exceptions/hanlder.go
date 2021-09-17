@@ -68,5 +68,5 @@ func (h DefaultExceptionHandler) Report(exception contracts.Exception) {
 }
 
 func (h DefaultExceptionHandler) ShouldReport(exception contracts.Exception) bool {
-	return utils.IsInstanceIn(exception, h.dontReportExceptions...)
+	return !utils.IsInstanceIn(exception, h.dontReportExceptions...)
 }
