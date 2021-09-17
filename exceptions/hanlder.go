@@ -3,16 +3,22 @@ package exceptions
 import (
 	"errors"
 	"github.com/qbhy/goal/contracts"
+	"github.com/qbhy/goal/http"
 	"github.com/qbhy/goal/logs"
 	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/validator"
 	"reflect"
 )
 
-var handler contracts.ExceptionHandler
+var (
+	handler        contracts.ExceptionHandler
+	DefaultHandler DefaultExceptionHandler
+)
 
 func init() {
 	// 可以手动调用这个方法覆盖异常处理器
-	SetExceptionHandler(DefaultExceptionHandler{})
+	DefaultHandler = DefaultExceptionHandler{}
+	SetExceptionHandler(DefaultHandler)
 }
 
 func SetExceptionHandler(h contracts.ExceptionHandler) {
@@ -20,18 +26,12 @@ func SetExceptionHandler(h contracts.ExceptionHandler) {
 }
 
 // ResolveException 包装 recover 的返回值
-func ResolveException(v interface{}) Exception {
+func ResolveException(v interface{}) contracts.Exception {
 	switch e := v.(type) {
+	case contracts.Exception:
+		return e
 	case error:
 		return WithError(e, contracts.Fields{})
-	case contracts.Exception:
-		if err, ok := e.(Exception); ok {
-			return err
-		}
-		return Exception{
-			err:    e.Error(),
-			fields: e.Fields(),
-		}
 	case string:
 		return WithError(errors.New(e), contracts.Fields{})
 	default:
@@ -55,13 +55,16 @@ type DefaultExceptionHandler struct {
 }
 
 func NewDefaultHandler(dontReportExceptions []contracts.Exception) DefaultExceptionHandler {
-	return DefaultExceptionHandler{
-		dontReportExceptions: utils.ConvertToTypes(dontReportExceptions),
-	}
+	return DefaultExceptionHandler{utils.ConvertToTypes(dontReportExceptions)}
 }
 
 func (h DefaultExceptionHandler) Handle(exception contracts.Exception) {
-	logs.WithException(exception).Error("DefaultExceptionHandler")
+	switch rawException := exception.(type) {
+	case http.HttpException:
+		h.HandleHttpException(rawException)
+	default:
+		logs.WithException(exception).Error("DefaultExceptionHandler")
+	}
 }
 
 func (h DefaultExceptionHandler) Report(exception contracts.Exception) {
@@ -69,4 +72,10 @@ func (h DefaultExceptionHandler) Report(exception contracts.Exception) {
 
 func (h DefaultExceptionHandler) ShouldReport(exception contracts.Exception) bool {
 	return !utils.IsInstanceIn(exception, h.dontReportExceptions...)
+}
+
+func (h DefaultExceptionHandler) HandleHttpException(exception http.HttpException) {
+	if validateException, isValidateException := exception.Exception.(validator.ValidatorException); isValidateException {
+		_ = exception.Context.JSON(400, validateException.Fields())
+	}
 }

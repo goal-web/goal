@@ -13,20 +13,35 @@ var (
 )
 
 // Validate 验证参数是否复合规则
-func Validate(param interface{}, checkers contracts.Checkers) contracts.Validated {
-	var validateErrors = make(contracts.ValidateErrors, 0)
-
-	utils.EachStructField(param, func(field reflect.StructField, value reflect.Value) {
-		name := strings.ToLower(field.Name)
-		if fieldCheckers, ok := checkers[name]; ok {
-			for _, checker := range fieldCheckers {
-				if err := checker.Check(value.Interface()); err != nil {
-					validateErrors[name] = err
-					return
+func Validate(param interface{}, checkers contracts.Checkers) Validated {
+	var (
+		validateErrors = make(contracts.ValidateErrors, 0)
+		checkField     = func(key string, value interface{}) {
+			if fieldCheckers, ok := checkers[key]; ok {
+				for _, checker := range fieldCheckers {
+					if err := checker.Check(value); err != nil {
+						validateErrors[key] = err
+						return
+					}
 				}
 			}
 		}
-	})
+	)
+
+	switch mapValue := param.(type) {
+	case map[string]interface{}:
+		for key, value := range mapValue {
+			checkField(key, value)
+		}
+	case contracts.Fields:
+		for key, value := range mapValue {
+			checkField(key, value)
+		}
+	default:
+		utils.EachStructField(param, func(field reflect.StructField, value reflect.Value) {
+			checkField(strings.ToLower(field.Name), value.Interface())
+		})
+	}
 
 	return Validated{validateErrors}
 }

@@ -17,3 +17,10 @@ func (v Validated) IsSuccessful() bool {
 func (v Validated) Errors() contracts.ValidateErrors {
 	return v.errors
 }
+
+// Assure 如果验证失败就 panic ，保证数据校验结果无异常
+func (v Validated) Assure() {
+	if v.IsFail() {
+		panic(NewValidatorException(v.errors))
+	}
+}
