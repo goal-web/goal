@@ -6,7 +6,7 @@ import (
 	"github.com/qbhy/goal/http"
 	"github.com/qbhy/goal/logs"
 	"github.com/qbhy/goal/utils"
-	"github.com/qbhy/goal/validator"
+	"github.com/qbhy/goal/validate"
 	"reflect"
 )
 
@@ -75,7 +75,11 @@ func (h DefaultExceptionHandler) ShouldReport(exception contracts.Exception) boo
 }
 
 func (h DefaultExceptionHandler) HandleHttpException(exception http.HttpException) {
-	if validateException, isValidateException := exception.Exception.(validator.ValidatorException); isValidateException {
-		_ = exception.Context.JSON(400, validateException.Fields())
+	if validateException, isValidateException := exception.Exception.(validate.ValidatorException); isValidateException {
+		_ = exception.Context.JSON(400, contracts.Fields{
+			"msg": validateException.Error(),
+			"errors": validateException.Fields(),
+			"param":  validateException.GetParam(),
+		})
 	}
 }
