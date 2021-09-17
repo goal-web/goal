@@ -39,3 +39,13 @@ func IsInstanceIn(v interface{}, types ...reflect.Type) bool {
 	}
 	return false
 }
+
+// EachStructField 遍历结构体的字段
+func EachStructField(s interface{}, handler func(reflect.StructField, reflect.Value)) {
+	t := reflect.TypeOf(s)
+	v := reflect.ValueOf(s)
+
+	for i := 0; i < t.NumField(); i++ {
+		handler(t.Field(i), v.Field(i))
+	}
+}
