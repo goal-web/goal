@@ -75,11 +75,18 @@ func (h DefaultExceptionHandler) ShouldReport(exception contracts.Exception) boo
 }
 
 func (h DefaultExceptionHandler) HandleHttpException(exception http.HttpException) {
-	if validateException, isValidateException := exception.Exception.(validate.ValidatorException); isValidateException {
+	switch preException := exception.Exception.(type) {
+	case validate.ValidatorException:
 		_ = exception.Context.JSON(400, contracts.Fields{
-			"msg": validateException.Error(),
-			"errors": validateException.Fields(),
-			"param":  validateException.GetParam(),
+			"msg":    preException.Error(),
+			"errors": preException.Fields(),
+			"param":  preException.GetParam(),
 		})
+	default:
+		_ = exception.Context.JSON(500, contracts.Fields{
+			"msg":    preException.Error(),
+			"errors": preException.Fields(),
+		})
+		logs.WithException(exception).Error("DefaultExceptionHandler")
 	}
 }

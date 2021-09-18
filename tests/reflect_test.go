@@ -2,26 +2,15 @@ package tests
 
 import (
 	"fmt"
+	"github.com/labstack/echo/v4"
+	"github.com/qbhy/goal/utils"
 	"reflect"
 	"testing"
 )
 
-type DemoArg struct {
-}
-
-func TestReflectFunc(t *testing.T) {
-	fn := func(param []DemoArg) interface{} {
-		return nil
-	}
-
-	fnType := reflect.TypeOf(fn)
-	argNum := fnType.NumIn()
-	fmt.Println("参数个数:", fnType.NumIn())
-
-	for i := 0; i < argNum; i++ {
-		arg := fnType.In(i)
-		fmt.Println(arg.Name(), arg.Kind())
-	}
-
-	fmt.Println(fnType)
+func TestReflect(t *testing.T) {
+	var ctx *echo.Context
+	ctxInstance := echo.New().NewContext(nil,nil)
+	fmt.Println(utils.GetTypeKey(reflect.TypeOf(ctx)))
+	fmt.Println(utils.GetTypeKey(reflect.TypeOf(ctxInstance)))
 }

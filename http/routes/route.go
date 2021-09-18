@@ -15,9 +15,6 @@ type Route struct {
 	method      []string
 	path        string
 	middlewares []echo.MiddlewareFunc
-	handler     HttpHandler
+	handler     interface{}
 }
 
-func (route Route) Handle(ctx echo.Context) interface{} {
-	return route.handler(ctx)
-}

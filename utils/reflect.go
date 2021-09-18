@@ -3,6 +3,7 @@ package utils
 import (
 	"github.com/qbhy/goal/contracts"
 	"reflect"
+	"strings"
 )
 
 // IsSameStruct 判断是否同一个结构体
@@ -55,7 +56,11 @@ func EachStructField(s interface{}, handler func(reflect.StructField, reflect.Va
 
 // GetTypeKey 获取类型唯一字符串
 func GetTypeKey(p reflect.Type) string {
-	return p.PkgPath() + p.Name()
+	if p.Kind() == reflect.Ptr {
+		p = p.Elem()
+	}
+
+	return p.PkgPath() + "." + strings.ToTitle(p.Name())
 }
 
 // NotNil 尽量不要 nil
