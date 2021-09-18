@@ -6,3 +6,7 @@ type HttpResponse interface {
 	Status() int
 	Response(ctx echo.Context) error
 }
+
+type HttpRequest interface {
+	echo.Context
+}

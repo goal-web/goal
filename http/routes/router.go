@@ -83,16 +83,19 @@ func (router *Router) mountRoutes(routes []Route, middlewares ...echo.Middleware
 	for _, route := range routes {
 		(func(route Route) {
 			router.e.Match(route.method, route.path, func(context echo.Context) error {
-				defer func(context echo.Context) {
+				defer func() {
 					if err := recover(); err != nil {
 						exceptions.Handle(http.HttpException{
 							Exception: exceptions.ResolveException(err),
 							Context:   context,
 						})
 					}
-				}(context)
-
-				http.HandleResponse(router.app.Call(route.handler, context), context)
+				}()
+				request := http.Request{Context: context}
+				results := router.app.Call(route.handler, request)
+				if len(results) > 0 {
+					http.HandleResponse(results[0], request)
+				}
 				return nil
 			}, append(middlewares, route.middlewares...)...)
 		})(route)
