@@ -1,6 +1,9 @@
 package utils
 
-import "reflect"
+import (
+	"github.com/qbhy/goal/contracts"
+	"reflect"
+)
 
 // IsSameStruct 判断是否同一个结构体
 func IsSameStruct(v1, v2 interface{}) bool {
@@ -48,4 +51,25 @@ func EachStructField(s interface{}, handler func(reflect.StructField, reflect.Va
 	for i := 0; i < t.NumField(); i++ {
 		handler(t.Field(i), v.Field(i))
 	}
+}
+
+// GetTypeKey 获取类型唯一字符串
+func GetTypeKey(p reflect.Type) string {
+	return p.PkgPath() + p.Name()
+}
+
+// NotNil 尽量不要 nil
+func NotNil(args ...interface{}) interface{} {
+	for _, arg := range args {
+		switch argValue := arg.(type) {
+		case contracts.InstanceProvider:
+			arg = argValue()
+		case func() interface{}:
+			arg = argValue()
+		}
+		if arg != nil {
+			return arg
+		}
+	}
+	return nil
 }
