@@ -51,6 +51,18 @@ func (router *Router) Use(middleware ...echo.MiddlewareFunc) {
 	router.e.Use(middleware...)
 }
 
+func (router *Router) mountMiddleware(middlewares []echo.MiddlewareFunc) []echo.MiddlewareFunc {
+	mountedMiddlewares := make([]echo.MiddlewareFunc, 0)
+	for _, middleware := range middlewares {
+		(func(middleware echo.MiddlewareFunc) {
+			mountedMiddlewares = append(mountedMiddlewares, func(handlerFunc echo.HandlerFunc) echo.HandlerFunc {
+				return router.app.Call(middleware, handlerFunc)[0].(echo.HandlerFunc)
+			})
+		})(middleware)
+	}
+	return mountedMiddlewares
+}
+
 func (router *Router) Add(method interface{}, path string, handler interface{}, middlewares ...echo.MiddlewareFunc) {
 	methods := make([]string, 0)
 	switch v := method.(type) {
