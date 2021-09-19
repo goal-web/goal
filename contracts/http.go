@@ -9,4 +9,5 @@ type HttpResponse interface {
 
 type HttpRequest interface {
 	echo.Context
+	All() Fields
 }
