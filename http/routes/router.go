@@ -23,7 +23,7 @@ type Router struct {
 	routes []Route
 }
 
-func (router *Router) Group(prefix string, middlewares ...echo.MiddlewareFunc) *Group {
+func (router *Router) Group(prefix string, middlewares ...interface{}) *Group {
 	group := NewGroup(prefix, middlewares...)
 
 	router.groups = append(router.groups, group)
@@ -31,24 +31,24 @@ func (router *Router) Group(prefix string, middlewares ...echo.MiddlewareFunc) *
 	return group
 }
 
-func (router *Router) Get(path string, handler interface{}, middlewares ...echo.MiddlewareFunc) {
+func (router *Router) Get(path string, handler interface{}, middlewares ...interface{}) {
 	router.Add(GET, path, handler, middlewares...)
 }
 
-func (router *Router) Post(path string, handler interface{}, middlewares ...echo.MiddlewareFunc) {
+func (router *Router) Post(path string, handler interface{}, middlewares ...interface{}) {
 	router.Add(POST, path, handler, middlewares...)
 }
 
-func (router *Router) Delete(path string, handler interface{}, middlewares ...echo.MiddlewareFunc) {
+func (router *Router) Delete(path string, handler interface{}, middlewares ...interface{}) {
 	router.Add(DELETE, path, handler, middlewares...)
 }
 
-func (router *Router) Put(path string, handler interface{}, middlewares ...echo.MiddlewareFunc) {
+func (router *Router) Put(path string, handler interface{}, middlewares ...interface{}) {
 	router.Add(PUT, path, handler, middlewares...)
 }
 
-func (router *Router) Use(middleware ...echo.MiddlewareFunc) {
-	router.e.Use(middleware...)
+func (router *Router) Use(middleware ...interface{}) {
+	router.e.Use(router.resolveMiddlewares(middleware)...)
 }
 
 func (router *Router) mountMiddleware(middlewares []echo.MiddlewareFunc) []echo.MiddlewareFunc {
@@ -63,7 +63,7 @@ func (router *Router) mountMiddleware(middlewares []echo.MiddlewareFunc) []echo.
 	return mountedMiddlewares
 }
 
-func (router *Router) Add(method interface{}, path string, handler interface{}, middlewares ...echo.MiddlewareFunc) {
+func (router *Router) Add(method interface{}, path string, handler interface{}, middlewares ...interface{}) {
 	methods := make([]string, 0)
 	switch v := method.(type) {
 	case string:
@@ -91,7 +91,7 @@ func (router *Router) Start(address string) error {
 }
 
 // mountRoutes 装配路由
-func (router *Router) mountRoutes(routes []Route, middlewares ...echo.MiddlewareFunc) {
+func (router *Router) mountRoutes(routes []Route, middlewares ...interface{}) {
 	for _, route := range routes {
 		(func(route Route) {
 			router.e.Match(route.method, route.path, func(context echo.Context) error {
@@ -109,7 +109,20 @@ func (router *Router) mountRoutes(routes []Route, middlewares ...echo.Middleware
 					http.HandleResponse(results[0], request)
 				}
 				return nil
-			}, append(middlewares, route.middlewares...)...)
+			}, router.resolveMiddlewares(append(middlewares, route.middlewares...))...)
 		})(route)
 	}
+}
+
+func (router *Router) resolveMiddlewares(interfaceMiddlewares []interface{}, params ...interface{}) []echo.MiddlewareFunc {
+	middlewares := make([]echo.MiddlewareFunc, 0)
+
+	for _, middlewareItem := range interfaceMiddlewares {
+		(func(middleware interface{}) {
+			middlewares = append(middlewares, func(handlerFunc echo.HandlerFunc) echo.HandlerFunc {
+				return router.app.Call(middlewareItem, append(params, handlerFunc)...)[0].(echo.HandlerFunc)
+			})
+		})(middlewareItem)
+	}
+	return middlewares
 }

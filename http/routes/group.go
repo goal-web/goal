@@ -2,7 +2,6 @@ package routes
 
 import (
 	"errors"
-	"github.com/labstack/echo/v4"
 )
 
 var (
@@ -11,11 +10,11 @@ var (
 
 type Group struct {
 	prefix      string
-	middlewares []echo.MiddlewareFunc
+	middlewares []interface{}
 	routes      []Route
 }
 
-func NewGroup(prefix string, middlewares ...echo.MiddlewareFunc) *Group {
+func NewGroup(prefix string, middlewares ...interface{}) *Group {
 	return &Group{
 		prefix:      prefix,
 		routes:      make([]Route, 0),
@@ -31,7 +30,7 @@ func (group *Group) AddRoute(route Route) *Group {
 }
 
 // Add 添加路由，method 只允许字符串或者字符串数组
-func (group *Group) Add(method interface{}, path string, handler HttpHandler, middlewares ...echo.MiddlewareFunc) *Group {
+func (group *Group) Add(method interface{}, path string, handler HttpHandler, middlewares ...interface{}) *Group {
 	methods := make([]string, 0)
 	switch r := method.(type) {
 	case string:
@@ -51,18 +50,18 @@ func (group *Group) Add(method interface{}, path string, handler HttpHandler, mi
 	return group
 }
 
-func (group *Group) Get(path string, handler HttpHandler, middlewares ...echo.MiddlewareFunc) *Group {
+func (group *Group) Get(path string, handler HttpHandler, middlewares ...interface{}) *Group {
 	return group.Add(GET, path, handler, middlewares...)
 }
 
-func (group *Group) Post(path string, handler HttpHandler, middlewares ...echo.MiddlewareFunc) *Group {
+func (group *Group) Post(path string, handler HttpHandler, middlewares ...interface{}) *Group {
 	return group.Add(POST, path, handler, middlewares...)
 }
 
-func (group *Group) Delete(path string, handler HttpHandler, middlewares ...echo.MiddlewareFunc) *Group {
+func (group *Group) Delete(path string, handler HttpHandler, middlewares ...interface{}) *Group {
 	return group.Add(DELETE, path, handler, middlewares...)
 }
 
-func (group *Group) Put(path string, handler HttpHandler, middlewares ...echo.MiddlewareFunc) *Group {
+func (group *Group) Put(path string, handler HttpHandler, middlewares ...interface{}) *Group {
 	return group.Add(PUT, path, handler, middlewares...)
 }

@@ -14,7 +14,6 @@ type HttpHandler = func(echo.Context) interface{}
 type Route struct {
 	method      []string
 	path        string
-	middlewares []echo.MiddlewareFunc
+	middlewares []interface{}
 	handler     interface{}
 }
-

@@ -2,6 +2,7 @@ package container
 
 import (
 	"errors"
+	"fmt"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/utils"
 	"reflect"
@@ -122,9 +123,10 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 			return this.Get(key)
 		})
 
-		//if !reflect.TypeOf(instance).ConvertibleTo(arg) { // 不能转换，报错了，但是理论上来说不会走这里
-		//	panic(errors.New(fmt.Sprintf("%s 的类型与预期不符", key)))
-		//}
+		if instance == nil { // 不能注入 nil 参数
+			panic(errors.New(fmt.Sprintf("%s 无法注入 %s 参数", fnType.String(), arg.String())))
+		}
+
 		fnArgs = append(fnArgs, reflect.ValueOf(instance))
 	}
 
