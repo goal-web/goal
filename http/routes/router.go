@@ -119,8 +119,14 @@ func (router *Router) resolveMiddlewares(interfaceMiddlewares []interface{}, par
 
 	for _, middlewareItem := range interfaceMiddlewares {
 		(func(middleware interface{}) {
-			middlewares = append(middlewares, func(handlerFunc echo.HandlerFunc) echo.HandlerFunc {
-				return router.app.Call(middlewareItem, append(params, handlerFunc)...)[0].(echo.HandlerFunc)
+			middlewares = append(middlewares, func(next echo.HandlerFunc) echo.HandlerFunc {
+				return func(context echo.Context) error {
+					err, isError := router.app.Call(middlewareItem, http.Request{context}, next)[0].(error)
+					if isError {
+						return err
+					}
+					return nil
+				}
 			})
 		})(middlewareItem)
 	}
