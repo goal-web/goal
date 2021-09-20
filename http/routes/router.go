@@ -118,6 +118,10 @@ func (router *Router) resolveMiddlewares(interfaceMiddlewares []interface{}, par
 	middlewares := make([]echo.MiddlewareFunc, 0)
 
 	for _, middlewareItem := range interfaceMiddlewares {
+		if middleware, isEchoMiddleware := middlewareItem.(echo.MiddlewareFunc); isEchoMiddleware {
+			middlewares = append(middlewares, middleware)
+			continue
+		}
 		(func(middleware interface{}) {
 			middlewares = append(middlewares, func(next echo.HandlerFunc) echo.HandlerFunc {
 				return func(context echo.Context) error {
