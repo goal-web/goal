@@ -1,8 +1,10 @@
 package tests
 
 import (
+	"fmt"
 	"github.com/qbhy/goal/container"
 	"github.com/stretchr/testify/assert"
+	"reflect"
 	"testing"
 )
 
@@ -47,4 +49,30 @@ func TestContainer(t *testing.T) {
 	// 不传参，使用容器中的实例
 	assert.True(t, app.Call(fn)[0] == "没有外部参数的话，从容器中获取")
 
+}
+
+type DemoStruct struct {
+	Param DemoParam
+}
+
+func TestContainerMake(t *testing.T) {
+	app := container.New()
+
+	app.Provide(func() DemoParam {
+		return DemoParam{Id: "没有外部参数的话，从容器中获取"}
+	})
+
+	fmt.Println(app.Make(DemoStruct{}))
+
+}
+
+func TestReflectValue(t *testing.T) {
+	a := DemoStruct{
+		Param: DemoParam{Id: "测试"},
+	}
+
+	demoT := &DemoParam{Id: "啊啊"}
+	value := reflect.ValueOf(demoT)
+	fmt.Println(reflect.TypeOf(a))
+	fmt.Println(value)
 }

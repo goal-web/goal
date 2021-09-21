@@ -13,6 +13,7 @@ type Container interface {
 	Flush()
 	Get(string) interface{}
 	Call(interface{}, ...interface{}) []interface{}
+	Make(object interface{}, args ...interface{}) interface{}
 }
 
 type Component interface {

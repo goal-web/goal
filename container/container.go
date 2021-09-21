@@ -130,10 +130,6 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 		fnArgs = append(fnArgs, reflect.ValueOf(instance))
 	}
 
-	if argNum != len(fnArgs) {
-		panic(ArgumentsLenError)
-	}
-
 	results := make([]interface{}, 0)
 
 	for _, result := range reflect.ValueOf(fn).Call(fnArgs) {
@@ -141,4 +137,44 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 	}
 
 	return results
+}
+
+// todo: 尚未完成
+func (this *Container) Make(object interface{}, args ...interface{}) interface{} {
+	objectType := reflect.TypeOf(object)
+
+	switch objectType.Kind() {
+	case reflect.Ptr:
+		objectType = objectType.Elem()
+	case reflect.Struct:
+		break
+	default:
+		panic(errors.New("参数必须是结构体 struct !"))
+	}
+
+	var (
+		objectValue = reflect.ValueOf(object)
+		fieldNum    = objectType.NumField()
+		argsTypeMap = NewArgumentsTypeMap(args)
+	)
+
+	for i := 0; i < fieldNum; i++ {
+		fieldType := objectType.Field(i)
+		if !fieldType.IsExported() {
+			continue
+		}
+
+		key := utils.GetTypeKey(fieldType.Type)
+
+		field := utils.NotNil(argsTypeMap.Pull(key), func() interface{} {
+			return this.Get(key)
+		})
+
+		fieldValue := objectValue.FieldByName(fieldType.Name)
+		if field != nil && fieldValue.CanAddr() {
+			fieldValue.Set(reflect.ValueOf(field))
+		}
+	}
+
+	return objectValue.Interface()
 }
