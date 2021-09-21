@@ -63,7 +63,9 @@ func (h DefaultExceptionHandler) Handle(exception contracts.Exception) {
 	case http.HttpException:
 		h.HandleHttpException(rawException)
 	default:
-		logs.WithException(exception).Error("DefaultExceptionHandler")
+		logs.WithException(exception).
+			WithField("exception", reflect.TypeOf(exception).String()).
+			Error("DefaultExceptionHandler")
 	}
 }
 
@@ -87,6 +89,9 @@ func (h DefaultExceptionHandler) HandleHttpException(exception http.HttpExceptio
 			"msg":    preException.Error(),
 			"errors": preException.Fields(),
 		})
-		logs.WithException(exception).Error("DefaultExceptionHandler")
+
+		logs.WithException(exception).
+			WithField("exception", reflect.TypeOf(exception).String()).
+			Error("DefaultExceptionHandler")
 	}
 }

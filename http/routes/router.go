@@ -75,6 +75,30 @@ func (router *Router) Start(address string) error {
 		router.mountRoutes(group.routes, group.middlewares...)
 	}
 
+	errHandler := func(err error, context echo.Context) {
+		switch rawErr := err.(type) {
+		case http.HttpException:
+			exceptions.Handle(rawErr)
+		default:
+			exceptions.Handle(http.HttpException{
+				Exception: exceptions.ResolveException(err),
+				Context:   context,
+			})
+		}
+	}
+
+	// recovery
+	router.Use(func(request http.Request, next echo.HandlerFunc) error {
+		defer func() {
+			if err := recover(); err != nil {
+				errHandler(exceptions.ResolveException(err), request)
+			}
+		}()
+		return next(request)
+	})
+
+	router.e.HTTPErrorHandler = errHandler
+
 	return router.e.Start(address)
 }
 
@@ -83,14 +107,6 @@ func (router *Router) mountRoutes(routes []Route, middlewares ...interface{}) {
 	for _, route := range routes {
 		(func(route Route) {
 			router.e.Match(route.method, route.path, func(context echo.Context) error {
-				defer func() {
-					if err := recover(); err != nil {
-						exceptions.Handle(http.HttpException{
-							Exception: exceptions.ResolveException(err),
-							Context:   context,
-						})
-					}
-				}()
 				request := http.Request{Context: context}
 				results := router.app.Call(route.handler, request)
 				if len(results) > 0 {
@@ -112,7 +128,7 @@ func (router *Router) resolveMiddlewares(interfaceMiddlewares []interface{}, par
 		}
 		(func(middleware interface{}) {
 			middlewares = append(middlewares, func(next echo.HandlerFunc) echo.HandlerFunc {
-				return func(context echo.Context) error {
+				return func(context echo.Context) (result error) {
 					err, isError := router.app.Call(middlewareItem, http.Request{context}, next)[0].(error)
 					if isError {
 						return err
