@@ -7,7 +7,7 @@ import (
 
 type HttpException struct {
 	Exception contracts.Exception
-	Context echo.Context
+	Context   echo.Context
 }
 
 func (h HttpException) Error() string {
@@ -17,4 +17,3 @@ func (h HttpException) Error() string {
 func (h HttpException) Fields() contracts.Fields {
 	return h.Exception.Fields()
 }
-

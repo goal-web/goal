@@ -1,11 +1,31 @@
 package routes
 
 import (
+	"errors"
 	"github.com/labstack/echo/v4"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/exceptions"
 	"github.com/qbhy/goal/http"
 )
+
+var (
+	ignoreError = errors.New("忽略该错误") // 用于中间件直接返回响应
+)
+
+func errHandler(err error, context echo.Context) {
+	if ignoreError == err {
+		return
+	}
+	switch rawErr := err.(type) {
+	case http.HttpException:
+		exceptions.Handle(rawErr)
+	default:
+		exceptions.Handle(http.HttpException{
+			Exception: exceptions.ResolveException(err),
+			Context:   context,
+		})
+	}
+}
 
 func New(container contracts.Container) Router {
 	return Router{
@@ -75,18 +95,6 @@ func (router *Router) Start(address string) error {
 		router.mountRoutes(group.routes, group.middlewares...)
 	}
 
-	errHandler := func(err error, context echo.Context) {
-		switch rawErr := err.(type) {
-		case http.HttpException:
-			exceptions.Handle(rawErr)
-		default:
-			exceptions.Handle(http.HttpException{
-				Exception: exceptions.ResolveException(err),
-				Context:   context,
-			})
-		}
-	}
-
 	// recovery
 	router.Use(func(request http.Request, next echo.HandlerFunc) error {
 		defer func() {
@@ -118,7 +126,7 @@ func (router *Router) mountRoutes(routes []Route, middlewares ...interface{}) {
 	}
 }
 
-func (router *Router) resolveMiddlewares(interfaceMiddlewares []interface{}, params ...interface{}) []echo.MiddlewareFunc {
+func (router *Router) resolveMiddlewares(interfaceMiddlewares []interface{}) []echo.MiddlewareFunc {
 	middlewares := make([]echo.MiddlewareFunc, 0)
 
 	for _, middlewareItem := range interfaceMiddlewares {
@@ -128,12 +136,15 @@ func (router *Router) resolveMiddlewares(interfaceMiddlewares []interface{}, par
 		}
 		(func(middleware interface{}) {
 			middlewares = append(middlewares, func(next echo.HandlerFunc) echo.HandlerFunc {
-				return func(context echo.Context) (result error) {
-					err, isError := router.app.Call(middlewareItem, http.Request{context}, next)[0].(error)
-					if isError {
-						return err
+				return func(context echo.Context) (err error) {
+					rawResult := router.app.Call(middlewareItem, http.Request{context}, next)[0]
+					switch result := rawResult.(type) {
+					case error:
+						return result
+					default:
+						http.HandleResponse(result, context)
+						return ignoreError
 					}
-					return nil
 				}
 			})
 		})(middlewareItem)
