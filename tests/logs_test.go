@@ -15,3 +15,8 @@ func TestLogger(t *testing.T) {
 
 	logs.WithException(exceptions.New("报错啦", contracts.Fields{"id": 1, "name": "qbhy"})).Info("info数据")
 }
+
+func TestWithField(t *testing.T) {
+	logs.WithError(errors.New("报错了")).WithField("field1", "1").Info("info数据")
+
+}

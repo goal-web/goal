@@ -16,7 +16,7 @@ func (a *ApexLogger) WithFields(m contracts.Fields) contracts.Logger {
 		}
 	}
 
-	a.Entry.WithFields(log.Fields(m))
+	a.Entry = a.Entry.WithFields(log.Fields(m))
 
 	return a
 }
@@ -28,7 +28,7 @@ func (a *ApexLogger) WithField(key string, value interface{}) contracts.Logger {
 		}
 	}
 
-	a.Entry.WithField(key, value)
+	a.Entry = a.Entry.WithField(key, value)
 
 	return a
 }
@@ -40,7 +40,7 @@ func (a *ApexLogger) WithError(err error) contracts.Logger {
 		}
 	}
 
-	a.Entry.WithError(err)
+	a.Entry = a.Entry.WithError(err)
 
 	return a
 }
@@ -52,7 +52,7 @@ func (a *ApexLogger) WithException(err contracts.Exception) contracts.Logger {
 		}
 	}
 
-	a.Entry.WithError(err).WithFields(log.Fields(err.Fields()))
+	a.Entry = a.Entry.WithError(err).WithFields(log.Fields(err.Fields()))
 
 	return a
 }
