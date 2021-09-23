@@ -60,7 +60,9 @@ func GetTypeKey(p reflect.Type) string {
 		p = p.Elem()
 	}
 
-	return p.PkgPath() + "." + strings.ToTitle(p.Name())
+	pkgPath := p.PkgPath()
+
+	return IfString(pkgPath == "", "", pkgPath+".") + p.Name()
 }
 
 // NotNil 尽量不要 nil

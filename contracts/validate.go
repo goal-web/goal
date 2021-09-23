@@ -1,13 +1,12 @@
 package contracts
 
 type Checker interface {
-	Check(fieldName string, value interface{}) error
-	Message(fieldName string) string
+	Check(value interface{}) error
 }
 
 type Checkers map[string][]Checker
 
-type ValidateErrors map[string]error
+type ValidateErrors map[string][]string
 
 type ValidatedResult interface {
 	SafeValidate
@@ -16,16 +15,30 @@ type ValidatedResult interface {
 	Errors() ValidateErrors
 }
 
+// FieldsAlias 有别名
 type FieldsAlias interface {
-	GetFieldAlias(key string) string
+	GetFieldsNameMap() map[string]string
 }
 
+// Validator 验证器
 type Validator interface {
-	SafeValidate
 	Validate() ValidatedResult
 }
 
+// SafeValidate 验证不通过即 panic
 type SafeValidate interface {
 	Assure()
 }
 
+// ValidatableForm 可验证的表单
+type ValidatableForm interface {
+	GetCheckers() Checkers
+	GetFields() Fields
+}
+
+// ValidatableAliasForm 可验证并且设置了字段名映射的表单
+type ValidatableAliasForm interface {
+	FieldsAlias
+	GetCheckers() Checkers
+	GetFields() Fields
+}

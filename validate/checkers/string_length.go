@@ -12,16 +12,12 @@ type StringLength struct {
 	Max int
 }
 
-func (this StringLength) Message(fieldName string) string {
-	return fmt.Sprint(fmt.Sprintf("%s的长度必须在 %d 到 %d 之间", fieldName, this.Min, this.Max))
-}
-
-func (this StringLength) Check(fieldName string, value interface{}) error {
+func (this StringLength) Check(value interface{}) error {
 	switch str := value.(type) {
 	case string:
 		size := len([]rune(str))
 		if size > this.Max || size < this.Min {
-			return errors.New(this.Message(fieldName))
+			return errors.New(fmt.Sprintf("{field}的长度必须在 %d 到 %d 之间",  this.Min, this.Max))
 		}
 		return nil
 	default:

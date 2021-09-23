@@ -11,7 +11,9 @@ import (
 
 func TestArgumentsTypeMap(t *testing.T) {
 	args := container.NewArgumentsTypeMap([]interface{}{"啦啦啦", DemoParam{Id: "111"}})
-	assert.True(t, args.Pull("string") == "啦啦啦")
+	str := args.Pull("string")
+	fmt.Println(str)
+	assert.True(t, str == "啦啦啦")
 
 	args = container.NewArgumentsTypeMap([]interface{}{})
 	assert.True(t, args.Pull("string") == nil)

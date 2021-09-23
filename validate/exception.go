@@ -17,7 +17,9 @@ func NewValidatorException(param interface{}, errors contracts.ValidateErrors) V
 
 func (this ValidatorException) Error() (str string) {
 	for _, err := range this.errors {
-		return err.Error()
+		if len(err[0]) > 0 {
+			return err[0]
+		}
 	}
 	return
 }
@@ -25,7 +27,7 @@ func (this ValidatorException) Error() (str string) {
 func (this ValidatorException) Fields() contracts.Fields {
 	var fields = make(contracts.Fields, 0)
 	for key, err := range this.errors {
-		fields[key] = err.Error()
+		fields[key] = err
 	}
 	return fields
 }
