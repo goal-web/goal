@@ -60,7 +60,7 @@ func (this *Container) Singleton(key string, provider contracts.InstanceProvider
 	this.singletons[this.GetKey(key)] = provider
 }
 
-func (this *Container) Bound(key string) bool {
+func (this *Container) HasBound(key string) bool {
 	key = this.GetKey(key)
 	if _, existsBind := this.binds[key]; existsBind {
 		return true
@@ -139,42 +139,66 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 	return results
 }
 
-// todo: 尚未完成
-func (this *Container) Make(object interface{}, args ...interface{}) interface{} {
-	objectType := reflect.TypeOf(object)
+func (this *Container) DI(object interface{}, args ...interface{}) {
+	var (
+		objectValue = reflect.ValueOf(object)
+	)
 
-	switch objectType.Kind() {
+	switch objectValue.Kind() {
 	case reflect.Ptr:
-		objectType = objectType.Elem()
-	case reflect.Struct:
-		break
+		if objectValue.Elem().Kind() != reflect.Struct {
+			panic(errors.New("参数必须是结构体指针 !"))
+		}
+		objectValue = objectValue.Elem()
 	default:
-		panic(errors.New("参数必须是结构体 struct !"))
+		panic(errors.New("参数必须是结构体指针!"))
 	}
 
 	var (
-		objectValue = reflect.ValueOf(object)
-		fieldNum    = objectType.NumField()
+		valueType   = objectValue.Type()
+		fieldNum    = objectValue.NumField()
 		argsTypeMap = NewArgumentsTypeMap(args)
+		tempValue   = reflect.New(valueType).Elem()
+		isComponent = valueType.Implements(ComponentType)
 	)
 
+	tempValue.Set(objectValue)
+
 	for i := 0; i < fieldNum; i++ {
-		fieldType := objectType.Field(i)
-		if !fieldType.IsExported() {
-			continue
+		var (
+			field          = valueType.Field(i)
+			key            = utils.GetTypeKey(field.Type)
+			fieldTags      = utils.ParseStructTag(field.Tag)
+			fieldValue     = tempValue.Field(i)
+			fieldInterface interface{}
+		)
+
+		if di, existsDiTag := fieldTags["di"]; existsDiTag { // 配置了 fieldTags tag，优先用 tag 的配置
+			fieldInterface = utils.NotNil(argsTypeMap.Pull(key), func() interface{} {
+				if len(di) > 0 { // 如果指定某 di 值，优先取这个值
+					return this.Get(di[0])
+				}
+				return nil
+			}, func() interface{} {
+				return this.Get(utils.StringOr(key))
+			})
+		} else if isComponent {
+			fieldInterface = utils.NotNil(argsTypeMap.Pull(key), func() interface{} {
+				return this.Get(key)
+			})
 		}
 
-		key := utils.GetTypeKey(fieldType.Type)
-
-		field := utils.NotNil(argsTypeMap.Pull(key), func() interface{} {
-			return this.Get(key)
-		})
-
-		fieldValue := objectValue.FieldByName(fieldType.Name)
-		if field != nil && fieldValue.CanAddr() {
-			fieldValue.Set(reflect.ValueOf(field))
+		if fieldInterface != nil {
+			fieldType := reflect.TypeOf(fieldInterface)
+			if fieldType.ConvertibleTo(field.Type) {
+				fieldValue.Set(reflect.ValueOf(fieldInterface))
+			} else {
+				panic(errors.New(fmt.Sprintf("无法注入 %s ，因为类型不一致，目标类型为 %s，而将注入的类型为 %s", field.Name, field.Type.String(), fieldType.String())))
+			}
 		}
 	}
 
-	return objectValue.Interface()
+	objectValue.Set(tempValue)
+
+	return
 }

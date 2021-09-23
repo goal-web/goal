@@ -8,14 +8,14 @@ type Container interface {
 	Bind(string, InstanceProvider)
 	Instance(string, interface{})
 	Singleton(string, InstanceProvider)
-	Bound(string) bool
+	HasBound(string) bool
 	Alias(string, string)
 	Flush()
 	Get(string) interface{}
 	Call(interface{}, ...interface{}) []interface{}
-	Make(object interface{}, args ...interface{}) interface{}
+	DI(object interface{}, args ...interface{})
 }
 
 type Component interface {
-	Construct() interface{}
+	ShouldInject()
 }

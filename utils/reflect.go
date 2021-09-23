@@ -78,3 +78,17 @@ func NotNil(args ...interface{}) interface{} {
 	}
 	return nil
 }
+
+// ParseStructTag 解析结构体的tag
+func ParseStructTag(rawTag reflect.StructTag) map[string][]string {
+	results := make(map[string][]string, 0)
+	for _, tagString := range strings.Split(string(rawTag), " ") {
+		tag := strings.Split(tagString, ":")
+		if len(tag) > 1 {
+			results[tag[0]] = strings.Split(strings.ReplaceAll(tag[1], `"`, ""), ",")
+		} else {
+			results[tag[0]] = nil
+		}
+	}
+	return results
+}

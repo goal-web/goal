@@ -52,27 +52,48 @@ func TestContainer(t *testing.T) {
 }
 
 type DemoStruct struct {
-	Param DemoParam
+	Param  DemoParam `di:""`       // 注入对应类型的实例
+	Config string    `di:"config"` // 注入指定 key 的实例
 }
 
 func TestContainerMake(t *testing.T) {
 	app := container.New()
 
+	app.Instance("config", "通过容器设置的配置")
+
 	app.Provide(func() DemoParam {
 		return DemoParam{Id: "没有外部参数的话，从容器中获取"}
 	})
 
-	fmt.Println(app.Make(DemoStruct{}))
+	demo := &DemoStruct{}
 
+	app.DI(demo)
+
+	fmt.Println(demo)
 }
 
 func TestReflectValue(t *testing.T) {
-	a := DemoStruct{
-		Param: DemoParam{Id: "测试"},
-	}
+	var b interface{}
+	b = struct {
+		Name string
+	}{}
 
-	demoT := &DemoParam{Id: "啊啊"}
-	value := reflect.ValueOf(demoT)
-	fmt.Println(reflect.TypeOf(a))
-	fmt.Println(value)
+	// v is the interface{}
+	v := reflect.ValueOf(&b).Elem()
+
+	// Allocate a temporary variable with type of the struct.
+	//    v.Elem() is the vale contained in the interface.
+	tmp := reflect.New(v.Elem().Type()).Elem()
+
+	// Copy the struct value contained in interface to
+	// the temporary variable.
+	tmp.Set(v.Elem())
+
+	// Set the field.
+	tmp.FieldByName("Name").SetString("Hello")
+
+	// Set the interface to the modified struct value.
+	v.Set(tmp)
+
+	fmt.Printf("%#v\n", b)
 }
