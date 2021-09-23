@@ -3,6 +3,7 @@ package tests
 import (
 	"fmt"
 	"github.com/qbhy/goal/container"
+	"github.com/qbhy/goal/utils"
 	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
@@ -20,11 +21,19 @@ func TestBaseContainer(t *testing.T) {
 	app := container.New()
 
 	app.Instance("a", "a")
+	assert.True(t, app.HasBound("a"))
 	assert.True(t, app.Get("a") == "a")
+
+	app.Alias("a", "A")
+
+	assert.True(t, app.Get("A") == "a")
+	assert.True(t, app.HasBound("A"))
 
 	app.Provide(func() DemoParam {
 		return DemoParam{Id: "测试一下"}
 	})
+
+	assert.True(t, app.Get(utils.GetTypeKey(reflect.TypeOf(DemoParam{}))).(DemoParam).Id == "测试一下")
 
 	app.Call(func(param DemoParam) {
 		assert.True(t, param.Id == "测试一下")

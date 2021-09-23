@@ -9,8 +9,7 @@ import (
 )
 
 var (
-	CallerTypeError   = errors.New("参数类型必须是有一个返回值的函数")
-	ArgumentsLenError = errors.New("参数长度不一致")
+	CallerTypeError = errors.New("参数类型必须是有一个返回值的函数")
 )
 
 type Container struct {
@@ -65,10 +64,10 @@ func (this *Container) HasBound(key string) bool {
 	if _, existsBind := this.binds[key]; existsBind {
 		return true
 	}
-	if _, existsSingleton := this.binds[key]; existsSingleton {
+	if _, existsSingleton := this.singletons[key]; existsSingleton {
 		return true
 	}
-	if _, existsInstance := this.binds[key]; existsInstance {
+	if _, existsInstance := this.instances[key]; existsInstance {
 		return true
 	}
 	return false
