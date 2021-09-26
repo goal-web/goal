@@ -15,12 +15,6 @@ var (
 	DefaultHandler DefaultExceptionHandler
 )
 
-func init() {
-	// 可以手动调用这个方法覆盖异常处理器
-	DefaultHandler = DefaultExceptionHandler{}
-	SetExceptionHandler(DefaultHandler)
-}
-
 func SetExceptionHandler(h contracts.ExceptionHandler) {
 	handler = h
 }

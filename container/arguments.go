@@ -24,3 +24,15 @@ func (this ArgumentsTypeMap) Pull(key string) (arg interface{}) {
 	}
 	return nil
 }
+
+// FindConvertibleArg 找到可转换的参数
+func (this ArgumentsTypeMap) FindConvertibleArg(targetType reflect.Type) interface{} {
+	for _, args := range this {
+		for _, arg := range args {
+			if reflect.TypeOf(arg).ConvertibleTo(targetType) {
+				return arg
+			}
+		}
+	}
+	return nil
+}

@@ -123,7 +123,10 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 		})
 
 		if instance == nil { // 不能注入 nil 参数
-			panic(errors.New(fmt.Sprintf("%s 无法注入 %s 参数", fnType.String(), arg.String())))
+			instance = argsTypeMap.FindConvertibleArg(arg);
+			if  instance == nil {
+				panic(errors.New(fmt.Sprintf("%s 无法注入 %s 参数", fnType.String(), arg.String())))
+			}
 		}
 
 		fnArgs = append(fnArgs, reflect.ValueOf(instance))
@@ -200,4 +203,10 @@ func (this *Container) DI(object interface{}, args ...interface{}) {
 	objectValue.Set(tempValue)
 
 	return
+}
+
+func (this *Container) RegisterServices(services ...contracts.ServiceProvider) {
+	for _, service := range services {
+		service.Register(this)
+	}
 }
