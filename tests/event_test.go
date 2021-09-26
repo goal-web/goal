@@ -2,10 +2,11 @@ package tests
 
 import (
 	"errors"
-	"github.com/stretchr/testify/assert"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/events"
+	"github.com/qbhy/goal/exceptions"
 	"github.com/qbhy/goal/logs"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -33,13 +34,10 @@ func (d DemoListener) Handle(event contracts.Event) {
 }
 
 func TestEvent(t *testing.T) {
-	events.SetEventListeners(map[contracts.EventName][]contracts.EventListener{
-		Demo: {
-			DemoListener{},
-			DemoPanicListener{},
-		},
-	})
-	events.Dispatch(DemoEvent{})
+	dispatcher := events.NewDispatcher(exceptions.DefaultExceptionHandler{})
+	dispatcher.Register(Demo, DemoPanicListener{})
+	dispatcher.Register(Demo, DemoListener{})
+	dispatcher.Dispatch(DemoEvent{})
 
 	assert.Nil(t, recover())
 }
