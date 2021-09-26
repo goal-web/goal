@@ -17,7 +17,7 @@ type ValidatedResult interface {
 
 // FieldsAlias 有别名
 type FieldsAlias interface {
-	GetFieldsNameMap() map[string]string
+	FieldsNameMap() map[string]string
 }
 
 // Validator 验证器
@@ -32,13 +32,12 @@ type SafeValidate interface {
 
 // ValidatableForm 可验证的表单
 type ValidatableForm interface {
-	GetCheckers() Checkers
-	GetFields() Fields
+	Checkers() Checkers
+	ValidData() Fields
 }
 
 // ValidatableAliasForm 可验证并且设置了字段名映射的表单
 type ValidatableAliasForm interface {
 	FieldsAlias
-	GetCheckers() Checkers
-	GetFields() Fields
+	ValidatableForm
 }

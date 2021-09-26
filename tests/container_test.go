@@ -84,27 +84,17 @@ func TestContainerMake(t *testing.T) {
 }
 
 func TestReflectValue(t *testing.T) {
-	var b interface{}
-	b = struct {
-		Name string
-	}{}
+	app := container.New()
 
-	// v is the interface{}
-	v := reflect.ValueOf(&b).Elem()
+	app.ProvideSingleton(func() DemoParam {
+		return DemoParam{
+			Id: "a",
+		}
+	}, "param")
 
-	// Allocate a temporary variable with type of the struct.
-	//    v.Elem() is the vale contained in the interface.
-	tmp := reflect.New(v.Elem().Type()).Elem()
+	type AliasParam DemoParam
 
-	// Copy the struct value contained in interface to
-	// the temporary variable.
-	tmp.Set(v.Elem())
-
-	// Set the field.
-	tmp.FieldByName("Name").SetString("Hello")
-
-	// Set the interface to the modified struct value.
-	v.Set(tmp)
-
-	fmt.Printf("%#v\n", b)
+	app.Call(func(param AliasParam) {
+		fmt.Println(param)
+	}, app.Get("param"))
 }

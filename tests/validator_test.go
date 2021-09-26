@@ -36,7 +36,7 @@ type DemoForm struct {
 	Username string
 }
 
-func (d DemoForm) GetFieldsNameMap() map[string]string {
+func (d DemoForm) FieldsNameMap() map[string]string {
 	return map[string]string{
 		"id": "身份证",
 	}
@@ -84,14 +84,13 @@ func TestValidatorCustomChecker(t *testing.T) {
 
 type DemoValidatable struct {
 	fields contracts.Fields
-
 }
 
-func (d DemoValidatable) GetFieldsNameMap() map[string]string {
+func (d DemoValidatable) FieldsNameMap() map[string]string {
 	return map[string]string{"id": "IDD"}
 }
 
-func (d DemoValidatable) GetCheckers() contracts.Checkers {
+func (d DemoValidatable) Checkers() contracts.Checkers {
 	return map[string][]contracts.Checker{
 		"id": {checkers.Custom(func(i interface{}) error {
 			if i != nil {
@@ -102,7 +101,7 @@ func (d DemoValidatable) GetCheckers() contracts.Checkers {
 	}
 }
 
-func (d DemoValidatable) GetFields() contracts.Fields {
+func (d DemoValidatable) ValidData() contracts.Fields {
 	return d.fields
 }
 

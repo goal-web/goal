@@ -130,8 +130,11 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 	fnArgs := make([]reflect.Value, 0)
 
 	for i := 0; i < argNum; i++ {
-		arg := fnType.In(i)
-		key := utils.GetTypeKey(arg)
+		var (
+			arg      = fnType.In(i)
+			key      = utils.GetTypeKey(arg)
+			argValue reflect.Value
+		)
 
 		instance := utils.NotNil(argsTypeMap.Pull(key), func() interface{} {
 			return this.Get(key)
@@ -142,9 +145,12 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 			if instance == nil {
 				panic(errors.New(fmt.Sprintf("%s 无法注入 %s 参数", fnType.String(), arg.String())))
 			}
+			argValue = reflect.ValueOf(instance).Convert(arg)
+		}else{
+			argValue = reflect.ValueOf(instance)
 		}
 
-		fnArgs = append(fnArgs, reflect.ValueOf(instance))
+		fnArgs = append(fnArgs, argValue)
 	}
 
 	results := make([]interface{}, 0)

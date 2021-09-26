@@ -17,14 +17,14 @@ func Make(param interface{}, args ...interface{}) *Validator {
 	switch paramValue := param.(type) {
 	case contracts.ValidatableAliasForm:
 		return &Validator{
-			paramValue.GetFields(),
-			paramValue.GetCheckers(),
-			paramValue.GetFieldsNameMap(),
+			paramValue.ValidData(),
+			paramValue.Checkers(),
+			paramValue.FieldsNameMap(),
 		}
 	case contracts.ValidatableForm:
 		return &Validator{
-			paramValue.GetFields(),
-			paramValue.GetCheckers(),
+			paramValue.ValidData(),
+			paramValue.Checkers(),
 			make(map[string]string, 0),
 		}
 	default:
@@ -48,7 +48,7 @@ type Validator struct {
 }
 
 // Assure 如果验证失败就 panic ，保证数据校验结果无异常
-func (this Validator) Assure() {
+func (this *Validator) Assure() {
 	validated := this.Validate()
 
 	if validated.IsFail() {
