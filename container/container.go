@@ -19,26 +19,41 @@ type Container struct {
 	aliases    map[string]string
 }
 
-func (this *Container) Provide(provider interface{}) {
+func (this *Container) Provide(provider interface{}, aliases ...string) {
 	providerType := reflect.TypeOf(provider)
 	if providerType.Kind() != reflect.Func || providerType.NumOut() != 1 {
 		panic(CallerTypeError)
 	}
+
 	resultType := providerType.Out(0)
-	this.Bind(utils.GetTypeKey(resultType), func() interface{} {
+	key := utils.GetTypeKey(resultType)
+
+	this.Bind(key, func() interface{} {
 		return reflect.ValueOf(provider).Call(nil)[0].Interface()
 	})
+
+	if alias := utils.StringOr(aliases...); alias != "" {
+		this.Alias(key, alias)
+	}
 }
 
-func (this *Container) ProvideSingleton(provider interface{}) {
+func (this *Container) ProvideSingleton(provider interface{}, aliases ...string) {
 	providerType := reflect.TypeOf(provider)
+
 	if providerType.Kind() != reflect.Func || providerType.NumOut() != 1 {
 		panic(CallerTypeError)
 	}
+
 	resultType := providerType.Out(0)
-	this.Singleton(utils.GetTypeKey(resultType), func() interface{} {
+	key := utils.GetTypeKey(resultType)
+
+	this.Singleton(key, func() interface{} {
 		return reflect.ValueOf(provider).Call(nil)[0].Interface()
 	})
+
+	if alias := utils.StringOr(aliases...); alias != "" {
+		this.Alias(key, alias)
+	}
 }
 
 func New() Container {
@@ -123,8 +138,8 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 		})
 
 		if instance == nil { // 不能注入 nil 参数
-			instance = argsTypeMap.FindConvertibleArg(arg);
-			if  instance == nil {
+			instance = argsTypeMap.FindConvertibleArg(arg)
+			if instance == nil {
 				panic(errors.New(fmt.Sprintf("%s 无法注入 %s 参数", fnType.String(), arg.String())))
 			}
 		}

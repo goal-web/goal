@@ -12,66 +12,84 @@ var (
 	ignoreError = errors.New("忽略该错误") // 用于中间件直接返回响应
 )
 
-func errHandler(err error, context echo.Context) {
+func New(container contracts.Container) contracts.Router {
+	return &router{
+		app:    container,
+		e:      echo.New(),
+		routes: make([]contracts.Route, 0),
+		groups: make([]contracts.RouteGroup, 0),
+	}
+}
+
+type router struct {
+	app    contracts.Container
+	e      *echo.Echo
+	groups []contracts.RouteGroup
+	routes []contracts.Route
+}
+
+func (this *router) errHandler(err error, context echo.Context) {
 	if ignoreError == err {
 		return
 	}
+	var httpException http.HttpException
 	switch rawErr := err.(type) {
 	case http.HttpException:
-		exceptions.Handle(rawErr)
+		httpException = rawErr
 	default:
-		exceptions.Handle(http.HttpException{
+		httpException = http.HttpException{
 			Exception: exceptions.ResolveException(err),
 			Context:   context,
-		})
+		}
 	}
+
+	// 调用容器内的异常处理器
+	this.app.Call(func(handler contracts.ExceptionHandler, exception http.HttpException) {
+		handler.Handle(exception)
+	}, httpException)
 }
 
-func New(container contracts.Container) Router {
-	return Router{
-		app:    container,
-		e:      echo.New(),
-		routes: make([]Route, 0),
-		groups: make([]*Group, 0),
-	}
+func (this *router) Group(prefix string, middlewares ...interface{}) contracts.RouteGroup {
+	groupInstance := NewGroup(prefix, middlewares...)
+
+	this.groups = append(this.groups, groupInstance)
+
+	return groupInstance
 }
 
-type Router struct {
-	app    contracts.Container
-	e      *echo.Echo
-	groups []*Group
-	routes []Route
+func (this *router) Get(path string, handler interface{}, middlewares ...interface{}) {
+	this.Add(echo.GET, path, handler, middlewares...)
 }
 
-func (router *Router) Group(prefix string, middlewares ...interface{}) *Group {
-	group := NewGroup(prefix, middlewares...)
-
-	router.groups = append(router.groups, group)
-
-	return group
+func (this *router) Post(path string, handler interface{}, middlewares ...interface{}) {
+	this.Add(echo.POST, path, handler, middlewares...)
 }
 
-func (router *Router) Get(path string, handler interface{}, middlewares ...interface{}) {
-	router.Add(GET, path, handler, middlewares...)
+func (this *router) Delete(path string, handler interface{}, middlewares ...interface{}) {
+	this.Add(echo.DELETE, path, handler, middlewares...)
 }
 
-func (router *Router) Post(path string, handler interface{}, middlewares ...interface{}) {
-	router.Add(POST, path, handler, middlewares...)
+func (this *router) Put(path string, handler interface{}, middlewares ...interface{}) {
+	this.Add(echo.PUT, path, handler, middlewares...)
 }
 
-func (router *Router) Delete(path string, handler interface{}, middlewares ...interface{}) {
-	router.Add(DELETE, path, handler, middlewares...)
+func (this *router) Patch(path string, handler interface{}, middlewares ...interface{}) {
+	this.Add(echo.PATCH, path, handler, middlewares...)
 }
 
-func (router *Router) Put(path string, handler interface{}, middlewares ...interface{}) {
-	router.Add(PUT, path, handler, middlewares...)
+func (this *router) Options(path string, handler interface{}, middlewares ...interface{}) {
+	this.Add(echo.OPTIONS, path, handler, middlewares...)
 }
 
-func (router *Router) Use(middleware ...interface{}) {
-	router.e.Use(router.resolveMiddlewares(middleware)...)
+func (this *router) Trace(path string, handler interface{}, middlewares ...interface{}) {
+	this.Add(echo.TRACE, path, handler, middlewares...)
 }
 
-func (router *Router) Add(method interface{}, path string, handler interface{}, middlewares ...interface{}) {
+func (this *router) Use(middleware ...interface{}) {
+	this.e.Use(this.resolveMiddlewares(middleware)...)
+}
+
+func (this *router) Add(method interface{}, path string, handler interface{}, middlewares ...interface{}) {
 	methods := make([]string, 0)
 	switch v := method.(type) {
 	case string:
@@ -79,7 +97,7 @@ func (router *Router) Add(method interface{}, path string, handler interface{}, 
 	case []string:
 		methods = v
 	}
-	router.routes = append(router.routes, Route{
+	this.routes = append(this.routes, &route{
 		method:      methods,
 		path:        path,
 		middlewares: middlewares,
@@ -88,45 +106,45 @@ func (router *Router) Add(method interface{}, path string, handler interface{}, 
 }
 
 // Start 启动 server
-func (router *Router) Start(address string) error {
-	router.mountRoutes(router.routes)
+func (this *router) Start(address string) error {
+	this.mountRoutes(this.routes)
 
-	for _, group := range router.groups {
-		router.mountRoutes(group.routes, group.middlewares...)
+	for _, group := range this.groups {
+		this.mountRoutes(group.Routes(), group.Middlewares()...)
 	}
 
 	// recovery
-	router.Use(func(request http.Request, next echo.HandlerFunc) error {
+	this.Use(func(request http.Request, next echo.HandlerFunc) error {
 		defer func() {
 			if err := recover(); err != nil {
-				errHandler(exceptions.ResolveException(err), request)
+				this.errHandler(exceptions.ResolveException(err), request)
 			}
 		}()
 		return next(request)
 	})
 
-	router.e.HTTPErrorHandler = errHandler
+	this.e.HTTPErrorHandler = this.errHandler
 
-	return router.e.Start(address)
+	return this.e.Start(address)
 }
 
 // mountRoutes 装配路由
-func (router *Router) mountRoutes(routes []Route, middlewares ...interface{}) {
-	for _, route := range routes {
-		(func(route Route) {
-			router.e.Match(route.method, route.path, func(context echo.Context) error {
+func (this *router) mountRoutes(routes []contracts.Route, middlewares ...interface{}) {
+	for _, routeItem := range routes {
+		(func(routeInstance contracts.Route) {
+			this.e.Match(routeInstance.Method(), routeInstance.Path(), func(context echo.Context) error {
 				request := http.Request{Context: context}
-				results := router.app.Call(route.handler, request)
+				results := this.app.Call(routeInstance.Handler(), request)
 				if len(results) > 0 {
 					http.HandleResponse(results[0], request)
 				}
 				return nil
-			}, router.resolveMiddlewares(append(middlewares, route.middlewares...))...)
-		})(route)
+			}, this.resolveMiddlewares(append(middlewares, routeInstance.Middlewares()...))...)
+		})(routeItem)
 	}
 }
 
-func (router *Router) resolveMiddlewares(interfaceMiddlewares []interface{}) []echo.MiddlewareFunc {
+func (this *router) resolveMiddlewares(interfaceMiddlewares []interface{}) []echo.MiddlewareFunc {
 	middlewares := make([]echo.MiddlewareFunc, 0)
 
 	for _, middlewareItem := range interfaceMiddlewares {
@@ -137,7 +155,7 @@ func (router *Router) resolveMiddlewares(interfaceMiddlewares []interface{}) []e
 		(func(middleware interface{}) {
 			middlewares = append(middlewares, func(next echo.HandlerFunc) echo.HandlerFunc {
 				return func(context echo.Context) (err error) {
-					rawResult := router.app.Call(middlewareItem, http.Request{context}, next)[0]
+					rawResult := this.app.Call(middlewareItem, http.Request{context}, next)[0]
 					switch result := rawResult.(type) {
 					case error:
 						return result

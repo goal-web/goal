@@ -3,8 +3,8 @@ package contracts
 type InstanceProvider func() interface{}
 
 type Container interface {
-	Provide(interface{})
-	ProvideSingleton(interface{})
+	Provide(interface{}, ...string)
+	ProvideSingleton(interface{}, ...string)
 	Bind(string, InstanceProvider)
 	Instance(string, interface{})
 	Singleton(string, InstanceProvider)

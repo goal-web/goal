@@ -24,9 +24,9 @@ func (d DemoExceptionHandler) Handle(exception contracts.Exception) {
 }
 
 func TestExceptionHandler(t *testing.T) {
-	exceptions.SetExceptionHandler(DemoExceptionHandler{})
+	handler := DemoExceptionHandler{}
 
-	exceptions.Handle(exceptions.New("报错了", contracts.Fields{
+	handler.Handle(exceptions.New("报错了", contracts.Fields{
 		"id": 1,
 	}))
 
