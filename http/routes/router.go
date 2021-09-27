@@ -116,10 +116,11 @@ func (this *router) Start(address string) error {
 	}
 
 	// recovery
-	this.Use(func(request http.Request, next echo.HandlerFunc) error {
+	this.Use(func(request http.Request, next echo.HandlerFunc) (result error) {
 		defer func() {
 			if err := recover(); err != nil {
 				this.errHandler(exceptions.ResolveException(err), request)
+				result = ignoreError
 			}
 		}()
 		return next(request)
