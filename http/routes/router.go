@@ -96,6 +96,8 @@ func (this *router) Add(method interface{}, path string, handler interface{}, mi
 		methods = []string{v}
 	case []string:
 		methods = v
+	default:
+		panic(errors.New("method 只能接收 string 或者 []string"))
 	}
 	this.routes = append(this.routes, &route{
 		method:      methods,
@@ -109,8 +111,8 @@ func (this *router) Add(method interface{}, path string, handler interface{}, mi
 func (this *router) Start(address string) error {
 	this.mountRoutes(this.routes)
 
-	for _, group := range this.groups {
-		this.mountRoutes(group.Routes(), group.Middlewares()...)
+	for _, routeGroup := range this.groups {
+		this.mountRoutes(routeGroup.Routes(), routeGroup.Middlewares()...)
 	}
 
 	// recovery
@@ -136,7 +138,11 @@ func (this *router) mountRoutes(routes []contracts.Route, middlewares ...interfa
 				request := http.Request{Context: context}
 				results := this.app.Call(routeInstance.Handler(), request)
 				if len(results) > 0 {
+					if result, isErr := results[0].(error); isErr {
+						return result
+					}
 					http.HandleResponse(results[0], request)
+					return ignoreError
 				}
 				return nil
 			}, this.resolveMiddlewares(append(middlewares, routeInstance.Middlewares()...))...)
