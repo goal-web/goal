@@ -83,7 +83,7 @@ func TestContainerMake(t *testing.T) {
 	fmt.Println(demo)
 }
 
-func TestReflectValue(t *testing.T) {
+func TestAliasType(t *testing.T) {
 	app := container.New()
 
 	app.ProvideSingleton(func() DemoParam {
@@ -97,4 +97,41 @@ func TestReflectValue(t *testing.T) {
 	app.Call(func(param AliasParam) {
 		fmt.Println(param)
 	}, app.Get("param"))
+}
+
+type DemoStruct2 struct {
+	DemoStruct
+}
+
+func (d DemoStruct2) ShouldInject() {
+}
+
+// 调用方法支持注入自定义类
+func TestAutoContainer(t *testing.T) {
+	app := container.New()
+
+	app.ProvideSingleton(func() DemoStruct {
+		return DemoStruct{
+			Param:  DemoParam{Id: "id"},
+			Config: "config",
+		}
+	}, "struct")
+
+	//struct2Type := reflect.TypeOf(DemoStruct2{})
+	//struct2Value := reflect.New(struct2Type).Interface()
+	struct2Value := &DemoStruct2{}
+
+	app.DI(struct2Value)
+
+
+	app.Call(func(struct2 DemoStruct2) {
+		assert.True(t, struct2.Config == "config" && struct2.Param.Id == "id")
+	}, app.Get("struct"))
+
+	app.Call(func(struct2 DemoStruct2) {
+		assert.True(t, struct2.Config == "config22" && struct2.Param.Id == "custom")
+	}, DemoStruct{
+		Param:  DemoParam{Id: "custom"},
+		Config: "config22",
+	})
 }

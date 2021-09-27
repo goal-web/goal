@@ -126,10 +126,9 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 		panic(CallerTypeError)
 	}
 
-	argNum := fnType.NumIn()
 	fnArgs := make([]reflect.Value, 0)
 
-	for i := 0; i < argNum; i++ {
+	for i := 0; i < fnType.NumIn(); i++ {
 		var (
 			arg      = fnType.In(i)
 			key      = utils.GetTypeKey(arg)
@@ -140,13 +139,18 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 			return this.Get(key)
 		})
 
-		if instance == nil { // 不能注入 nil 参数
+		if instance == nil {
+			// 1. 尝试从外部参数注入
 			instance = argsTypeMap.FindConvertibleArg(arg)
 			if instance == nil {
-				panic(errors.New(fmt.Sprintf("%s 无法注入 %s 参数", fnType.String(), arg.String())))
+				// 2. 尝试 new 一个自己然后 di 作为参数
+				instance = reflect.New(arg).Interface()
+				this.DI(instance, args...)
+				argValue = reflect.ValueOf(instance).Elem()
+			} else {
+				argValue = reflect.ValueOf(instance).Convert(arg)
 			}
-			argValue = reflect.ValueOf(instance).Convert(arg)
-		}else{
+		} else {
 			argValue = reflect.ValueOf(instance)
 		}
 
