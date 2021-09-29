@@ -22,7 +22,18 @@ func TestBaseConfig(t *testing.T) {
 		Sep:   "=",
 	})
 
+	// 测试从 .env 文件获取配置
 	assert.True(t, conf.GetInt("int") == 10086)
+	assert.True(t, conf.GetString("app.name") == "goal")
+
+	// 测试从环境变量获取配置
+	assert.Nil(t, os.Setenv("app.name","ggboy"))
+	assert.True(t, conf.GetString("app.name") == "ggboy")
+
+	// 测试 env 覆盖配置文件配置
+	assert.Nil(t, os.Setenv("int","new_int"))
+	assert.True(t, conf.GetString("int") == "new_int")
+	assert.Nil(t, os.Unsetenv("int"))
 
 	conf.Merge("sub", config.WithFields(contracts.Fields{"a": "sub a"}))
 

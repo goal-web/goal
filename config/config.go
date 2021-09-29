@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/utils"
+	"os"
 	"strings"
 )
 
@@ -38,12 +39,17 @@ func (this *config) Merge(key string, config contracts.Config) {
 }
 
 func (this *config) Set(key string, value interface{}) {
-	this.fields[key] = value
+	this.fields[this.getKey(key)] = value
 }
 
 func (this *config) Get(key string, defaultValue ...interface{}) interface{} {
 
-	// 优先从指定 env 获取配置
+	// 环境变量优先级最高
+	if envValue := os.Getenv(key); envValue != "" {
+		return envValue
+	}
+
+	// 指定 env 配置次之
 	if this.env != "" && !strings.Contains(key, ":") {
 		if value := this.Get(fmt.Sprintf("%s:%s", this.env, key)); value != nil {
 			return value
@@ -67,6 +73,13 @@ func (this *config) Get(key string, defaultValue ...interface{}) interface{} {
 	}
 
 	return nil
+}
+
+func (this *config) getKey(key string) string {
+	if this.env != "" {
+		return utils.IfString(strings.Contains(key, ":"), key, fmt.Sprintf("%s:%s", this.env, key))
+	}
+	return key
 }
 
 func (this *config) GetConfig(key string) contracts.Config {
