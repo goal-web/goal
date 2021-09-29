@@ -27,10 +27,12 @@ func (dispatcher EventDispatcher) Dispatch(event contracts.Event) {
 	// 加个协程
 	defer func() {
 		if err := recover(); err != nil {
-			dispatcher.exceptionHandler.Handle(EventException{
-				exception: exceptions.ResolveException(err),
-				event:     event,
-			})
+			go func() {
+				dispatcher.exceptionHandler.Handle(EventException{
+					exception: exceptions.ResolveException(err),
+					event:     event,
+				})
+			}()
 		}
 	}()
 	for _, listener := range dispatcher.eventListenersMap[event.Name()] {

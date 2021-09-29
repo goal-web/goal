@@ -5,6 +5,7 @@ import (
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/exceptions"
 	"github.com/qbhy/goal/logs"
+	"github.com/qbhy/parallel"
 	"testing"
 )
 
@@ -17,6 +18,14 @@ func TestLogger(t *testing.T) {
 }
 
 func TestWithField(t *testing.T) {
+	row := parallel.NewParallel(50)
+
 	logs.WithError(errors.New("报错了")).WithField("field1", "1").Info("info数据")
 
+	row.Add(func() interface{} {
+		logs.WithError(errors.New("协程里面报错了")).WithField("field1", "1").Info("info数据")
+		return nil
+	})
+
+	row.Run()
 }
