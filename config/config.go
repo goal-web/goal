@@ -10,24 +10,35 @@ import (
 
 func New(env string) contracts.Config {
 	return &config{
-		env:     env,
-		fields:  make(contracts.Fields),
-		configs: make(map[string]contracts.Config, 0),
+		env:       env,
+		envValues: make(map[string]string),
+		fields:    make(contracts.Fields),
+		configs:   make(map[string]contracts.Config, 0),
 	}
 }
 
 func WithFields(fields contracts.Fields) contracts.Config {
 	return &config{
-		env:     "",
-		fields:  fields,
-		configs: make(map[string]contracts.Config, 0),
+		env:       "",
+		envValues: make(map[string]string),
+		fields:    fields,
+		configs:   make(map[string]contracts.Config, 0),
 	}
 }
 
 type config struct {
-	env     string
-	fields  contracts.Fields
-	configs map[string]contracts.Config
+	env       string
+	fields    contracts.Fields
+	configs   map[string]contracts.Config
+	envValues map[string]string
+}
+
+func (this *config) GetEnv(key string) string {
+	if this.envValues[key] == "" {
+		this.envValues[key] = os.Getenv(key)
+	}
+
+	return this.envValues[key]
 }
 
 func (this *config) Load(provider contracts.FieldsProvider) {
@@ -45,7 +56,7 @@ func (this *config) Set(key string, value interface{}) {
 func (this *config) Get(key string, defaultValue ...interface{}) interface{} {
 
 	// 环境变量优先级最高
-	if envValue := os.Getenv(key); envValue != "" {
+	if envValue := this.GetEnv(key); envValue != "" {
 		return envValue
 	}
 
