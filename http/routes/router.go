@@ -43,12 +43,10 @@ func (this *router) errHandler(err error, context echo.Context) {
 		}
 	}
 
-	go func() {
-		// 调用容器内的异常处理器
-		this.app.Call(func(handler contracts.ExceptionHandler, exception http.HttpException) {
-			handler.Handle(exception)
-		}, httpException)
-	}()
+	// 调用容器内的异常处理器
+	this.app.Call(func(handler contracts.ExceptionHandler, exception http.HttpException) {
+		handler.Handle(exception)
+	}, httpException)
 }
 
 func (this *router) Group(prefix string, middlewares ...interface{}) contracts.RouteGroup {
