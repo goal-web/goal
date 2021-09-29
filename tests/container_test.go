@@ -123,7 +123,6 @@ func TestAutoContainer(t *testing.T) {
 
 	app.DI(struct2Value)
 
-
 	app.Call(func(struct2 DemoStruct2) {
 		assert.True(t, struct2.Config == "config" && struct2.Param.Id == "id")
 	}, app.Get("struct"))
@@ -134,4 +133,32 @@ func TestAutoContainer(t *testing.T) {
 		Param:  DemoParam{Id: "custom"},
 		Config: "config22",
 	})
+}
+
+// 测试控制器执行
+type DemoDependent struct {
+	Id string
+}
+
+type DemoController struct {
+	Dep DemoDependent `di:""` // 表示需要注入
+}
+
+func (this *DemoController) PrintDep() {
+	fmt.Println(this.Dep)
+}
+
+func TestControllerCall(t *testing.T) {
+	app := container.New()
+	app.ProvideSingleton(func() DemoDependent {
+		return DemoDependent{
+			Id: "id ddd",
+		}
+	})
+
+	controller := &DemoController{}
+
+	app.DI(controller)
+
+	app.Call(controller.PrintDep)
 }
