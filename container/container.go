@@ -120,7 +120,7 @@ func (this *Container) Get(key string) interface{} {
 
 func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 	fnType := reflect.TypeOf(fn)
-	argsTypeMap := NewArgumentsTypeMap(args)
+	argsTypeMap := NewArgumentsTypeMap(append(args, this))
 
 	if fnType.Kind() != reflect.Func {
 		panic(CallerTypeError)
@@ -184,7 +184,7 @@ func (this *Container) DI(object interface{}, args ...interface{}) {
 	var (
 		valueType   = objectValue.Type()
 		fieldNum    = objectValue.NumField()
-		argsTypeMap = NewArgumentsTypeMap(args)
+		argsTypeMap = NewArgumentsTypeMap(append(args, this))
 		tempValue   = reflect.New(valueType).Elem()
 		isComponent = valueType.Implements(ComponentType)
 	)

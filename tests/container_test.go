@@ -3,6 +3,7 @@ package tests
 import (
 	"fmt"
 	"github.com/qbhy/goal/container"
+	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/utils"
 	"github.com/stretchr/testify/assert"
 	"reflect"
@@ -161,4 +162,12 @@ func TestControllerCall(t *testing.T) {
 	app.DI(controller)
 
 	app.Call(controller.PrintDep)
+}
+
+func TestCallAndDIContainer(t *testing.T) {
+	app := container.New()
+
+	app.Call(func(container2 contracts.Container)  {
+		fmt.Println(container2)
+	})
 }
