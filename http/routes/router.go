@@ -15,7 +15,7 @@ var (
 func New(container contracts.Container) contracts.Router {
 	return &router{
 		app:    container,
-		e:      echo.New(),
+		echo:   echo.New(),
 		routes: make([]contracts.Route, 0),
 		groups: make([]contracts.RouteGroup, 0),
 	}
@@ -23,7 +23,7 @@ func New(container contracts.Container) contracts.Router {
 
 type router struct {
 	app    contracts.Container
-	e      *echo.Echo
+	echo   *echo.Echo
 	groups []contracts.RouteGroup
 	routes []contracts.Route
 }
@@ -86,7 +86,7 @@ func (this *router) Trace(path string, handler interface{}, middlewares ...inter
 }
 
 func (this *router) Use(middleware ...interface{}) {
-	this.e.Use(this.resolveMiddlewares(middleware)...)
+	this.echo.Use(this.resolveMiddlewares(middleware)...)
 }
 
 func (this *router) Add(method interface{}, path string, handler interface{}, middlewares ...interface{}) {
@@ -126,16 +126,16 @@ func (this *router) Start(address string) error {
 		return next(request)
 	})
 
-	this.e.HTTPErrorHandler = this.errHandler
+	this.echo.HTTPErrorHandler = this.errHandler
 
-	return this.e.Start(address)
+	return this.echo.Start(address)
 }
 
 // mountRoutes 装配路由
 func (this *router) mountRoutes(routes []contracts.Route, middlewares ...interface{}) {
 	for _, routeItem := range routes {
 		(func(routeInstance contracts.Route) {
-			this.e.Match(routeInstance.Method(), routeInstance.Path(), func(context echo.Context) error {
+			this.echo.Match(routeInstance.Method(), routeInstance.Path(), func(context echo.Context) error {
 				request := http.Request{Context: context}
 				results := this.app.Call(routeInstance.Handler(), request)
 				if len(results) > 0 {
