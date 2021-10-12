@@ -7,3 +7,29 @@ func MergeFields(fields contracts.Fields, finalFields contracts.Fields) {
 		fields[key] = value
 	}
 }
+
+func GetStringField(fields contracts.Fields, key string, defaultValues ...string) string {
+	if value, existsString := fields[key]; existsString {
+		if str, isString := value.(string); isString {
+			return str
+		}
+		return StringOr(defaultValues...)
+	} else {
+		return StringOr(defaultValues...)
+	}
+}
+
+func GetInt64Field(fields contracts.Fields, key string, defaultValues ...int64) int64 {
+	var defaultValue int64 = 0
+	if len(defaultValues) > 0 {
+		defaultValue = defaultValues[0]
+	}
+	if value, existsValue := fields[key]; existsValue {
+		if intValue, isInt := value.(int64); isInt {
+			return intValue
+		}
+		return ConvertToInt64(value, defaultValue)
+	} else {
+		return ConvertToInt64(value, defaultValue)
+	}
+}

@@ -2,6 +2,10 @@ package contracts
 
 import "time"
 
+type CacheFactory interface {
+	Store(name ...string) CacheStore
+}
+
 type CacheRepository interface {
 	Pull(key string, defaultValue ...interface{}) interface{}
 
@@ -32,6 +36,11 @@ type CacheStore interface {
 
 	Put(key string, value interface{}, seconds time.Duration) error
 
+	// Add Store an item in the cache if the key does not exist.
+	Add(key string, value interface{}, ttl ...time.Duration) error
+
+	Pull(key string, defaultValue ...interface{}) interface{}
+
 	PutMany(values map[string]interface{}, seconds time.Duration) error
 
 	Increment(key string, value ...int64) (int64, error)
@@ -45,4 +54,8 @@ type CacheStore interface {
 	Flush() error
 
 	GetPrefix() string
+
+	Remember(key string, ttl time.Duration, provider InstanceProvider) interface{}
+
+	RememberForever(key string, provider InstanceProvider) interface{}
 }
