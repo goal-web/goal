@@ -48,7 +48,7 @@ func (this *Container) ProvideSingleton(provider interface{}, aliases ...string)
 	key := utils.GetTypeKey(resultType)
 
 	this.Singleton(key, func() interface{} {
-		return reflect.ValueOf(provider).Call(nil)[0].Interface()
+		return this.Call(provider)[0]
 	})
 
 	if alias := utils.StringOr(aliases...); alias != "" {
@@ -105,8 +105,8 @@ func (this *Container) Flush() {
 
 func (this *Container) Get(key string) interface{} {
 	key = this.GetKey(key)
-	if instance, existsInstance := this.instances[key]; existsInstance {
-		return instance
+	if tempInstance, existsInstance := this.instances[key]; existsInstance {
+		return tempInstance
 	}
 	if singletonProvider, existsProvider := this.singletons[key]; existsProvider {
 		this.instances[key] = singletonProvider()
@@ -135,23 +135,23 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 			argValue reflect.Value
 		)
 
-		instance := utils.NotNil(argsTypeMap.Pull(key), func() interface{} {
+		tempInstance := utils.NotNil(argsTypeMap.Pull(key), func() interface{} {
 			return this.Get(key)
 		})
 
-		if instance == nil {
+		if tempInstance == nil {
 			// 1. 尝试从外部参数注入
-			instance = argsTypeMap.FindConvertibleArg(arg)
-			if instance == nil {
+			tempInstance = argsTypeMap.FindConvertibleArg(arg)
+			if tempInstance == nil {
 				// 2. 尝试 new 一个自己然后 di 作为参数
-				instance = reflect.New(arg).Interface()
-				this.DI(instance, args...)
-				argValue = reflect.ValueOf(instance).Elem()
+				tempInstance = reflect.New(arg).Interface()
+				this.DI(tempInstance, args...)
+				argValue = reflect.ValueOf(tempInstance).Elem()
 			} else {
-				argValue = reflect.ValueOf(instance).Convert(arg)
+				argValue = reflect.ValueOf(tempInstance).Convert(arg)
 			}
 		} else {
-			argValue = reflect.ValueOf(instance)
+			argValue = reflect.ValueOf(tempInstance)
 		}
 
 		fnArgs = append(fnArgs, argValue)
