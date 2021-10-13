@@ -20,4 +20,8 @@ func (this ServiceProvider) Register(app contracts.Container) {
 	app.ProvideSingleton(func(factory contracts.RedisFactory) contracts.RedisConnection {
 		return factory.Connection()
 	})
+
+	app.ProvideSingleton(func(redis contracts.RedisConnection) *Connection {
+		return redis.(*Connection)
+	})
 }
