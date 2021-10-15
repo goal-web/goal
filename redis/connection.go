@@ -20,7 +20,9 @@ func (this *Connection) Subscribe(channels []string, closure contracts.RedisSubs
 			err := pubSub.Close()
 			if err != nil {
 				// 处理异常
-				this.exceptionHandler.Handle(exceptions.ResolveException(err))
+				this.exceptionHandler.Handle(SubscribeException{
+					exceptions.ResolveException(err),
+				})
 			}
 		}(pubSub)
 
@@ -39,7 +41,9 @@ func (this *Connection) PSubscribe(channels []string, closure contracts.RedisSub
 			err := pubSub.Close()
 			if err != nil {
 				// 处理异常
-				this.exceptionHandler.Handle(exceptions.ResolveException(err))
+				this.exceptionHandler.Handle(SubscribeException{
+					exceptions.ResolveException(err),
+				})
 			}
 		}(pubSub)
 
@@ -53,6 +57,22 @@ func (this *Connection) PSubscribe(channels []string, closure contracts.RedisSub
 
 func (this *Connection) Command(method string, args ...interface{}) (interface{}, error) {
 	return this.client.Do(context.Background(), append([]interface{}{method}, args...)...).Result()
+}
+
+func (this *Connection) PubSubChannels(pattern string) ([]string, error) {
+	return this.client.PubSubChannels(context.Background(), pattern).Result()
+}
+
+func (this *Connection) PubSubNumSub(channels ...string) (map[string]int64, error) {
+	return this.client.PubSubNumSub(context.Background(), channels...).Result()
+}
+
+func (this *Connection) PubSubNumPat() (int64, error) {
+	return this.client.PubSubNumPat(context.Background()).Result()
+}
+
+func (this *Connection) Publish(channel string, message interface{}) (int64, error) {
+	return this.client.Publish(context.Background(), channel, message).Result()
 }
 
 func (this *Connection) Client() *goredis.Client {
