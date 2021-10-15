@@ -502,4 +502,100 @@ func (this *Connection) ScriptKill() (string, error) {
 func (this *Connection) ScriptLoad(script string) (string, error) {
 	return this.client.ScriptLoad(context.Background(), script).Result()
 }
+
 // scripting end
+
+// zset start
+
+func (this *Connection) ZAdd(key string, members ...*goredis.Z) (int64, error) {
+	return this.client.ZAdd(context.Background(), key, members...).Result()
+}
+
+func (this *Connection) ZCard(key string) (int64, error) {
+	return this.client.ZCard(context.Background(), key).Result()
+}
+
+func (this *Connection) ZCount(key, min, max string) (int64, error) {
+	return this.client.ZCount(context.Background(), key, min, max).Result()
+}
+
+func (this *Connection) ZIncrBy(key string, increment float64, member string) (float64, error) {
+	return this.client.ZIncrBy(context.Background(), key, increment, member).Result()
+}
+
+func (this *Connection) ZInterStore(destination string, store *goredis.ZStore) (int64, error) {
+	return this.client.ZInterStore(context.Background(), destination, store).Result()
+}
+
+func (this *Connection) ZLexCount(key, min, max string) (int64, error) {
+	return this.client.ZLexCount(context.Background(), key, min, max).Result()
+}
+
+func (this *Connection) ZPopMax(key string, count ...int64) ([]goredis.Z, error) {
+	return this.client.ZPopMax(context.Background(), key, count...).Result()
+}
+
+func (this *Connection) ZPopMin(key string, count ...int64) ([]goredis.Z, error) {
+	return this.client.ZPopMin(context.Background(), key, count...).Result()
+}
+
+func (this *Connection) ZRange(key string, start, stop int64) ([]string, error) {
+	return this.client.ZRange(context.Background(), key, start, stop).Result()
+}
+
+func (this *Connection) ZRangeByLex(key string, opt *goredis.ZRangeBy) ([]string, error) {
+	return this.client.ZRangeByLex(context.Background(), key, opt).Result()
+}
+
+func (this *Connection) ZRevRangeByLex(key string, opt *goredis.ZRangeBy) ([]string, error) {
+	return this.client.ZRevRangeByLex(context.Background(), key, opt).Result()
+}
+
+func (this *Connection) ZRangeByScore(key string, opt *goredis.ZRangeBy) ([]string, error) {
+	return this.client.ZRangeByScore(context.Background(), key, opt).Result()
+}
+
+func (this *Connection) ZRank(key, member string) (int64, error) {
+	return this.client.ZRank(context.Background(), key, member).Result()
+}
+
+func (this *Connection) ZRem(key string, members ...interface{}) (int64, error) {
+	return this.client.ZRem(context.Background(), key, members...).Result()
+}
+
+func (this *Connection) ZRemRangeByLex(key, min, max string) (int64, error) {
+	return this.client.ZRemRangeByLex(context.Background(), key, min, max).Result()
+}
+
+func (this *Connection) ZRemRangeByRank(key string, start, stop int64) (int64, error) {
+	return this.client.ZRemRangeByRank(context.Background(), key, start, stop).Result()
+}
+
+func (this *Connection) ZRemRangeByScore(key, min, max string) (int64, error) {
+	return this.client.ZRemRangeByScore(context.Background(), key, min, max).Result()
+}
+
+func (this *Connection) ZRevRange(key string, start, stop int64) ([]string, error) {
+	return this.client.ZRevRange(context.Background(), key, start, stop).Result()
+}
+
+func (this *Connection) ZRevRangeByScore(key string, opt *goredis.ZRangeBy) ([]string, error) {
+	return this.client.ZRevRangeByScore(context.Background(), key, opt).Result()
+}
+
+func (this *Connection) ZRevRank(key, member string) (int64, error) {
+	return this.client.ZRevRank(context.Background(), key, member).Result()
+}
+
+func (this *Connection) ZScore(key, member string) (float64, error) {
+	return this.client.ZScore(context.Background(), key, member).Result()
+}
+
+func (this *Connection) ZUnionStore(key string, store *goredis.ZStore) (int64, error) {
+	return this.client.ZUnionStore(context.Background(), key, store).Result()
+}
+
+func (this *Connection) ZScan(key string, cursor uint64, match string, count int64) ([]string, uint64, error) {
+	return this.client.ZScan(context.Background(), key, cursor, match, count).Result()
+}
+// zset end
