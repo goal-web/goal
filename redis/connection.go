@@ -88,15 +88,91 @@ func (this *Connection) ClientGetName() (string, error) {
 	return this.client.ClientGetName(context.Background()).Result()
 }
 
-func (this *Connection) Keys(pattern string) ([]string, error) {
-	return this.client.Keys(context.Background(), pattern).Result()
-}
-
 func (this *Connection) StrLen(key string) (int64, error) {
 	return this.client.StrLen(context.Background(), key).Result()
 }
 
 // getter end
+// keys start
+
+func (this *Connection) Keys(pattern string) ([]string, error) {
+	return this.client.Keys(context.Background(), pattern).Result()
+}
+
+func (this *Connection) Del(keys ...string) (int64, error) {
+	return this.client.Del(context.Background(), keys...).Result()
+}
+
+func (this *Connection) Dump(key string) (string, error) {
+	return this.client.Dump(context.Background(), key).Result()
+}
+
+func (this *Connection) Exists(keys ...string) (int64, error) {
+	return this.client.Exists(context.Background(), keys...).Result()
+}
+
+func (this *Connection) Expire(key string, expiration time.Duration) (bool, error) {
+	return this.client.Expire(context.Background(), key, expiration).Result()
+}
+
+func (this *Connection) ExpireAt(key string, tm time.Time) (bool, error) {
+	return this.client.ExpireAt(context.Background(), key, tm).Result()
+}
+
+func (this *Connection) PExpire(key string, expiration time.Duration) (bool, error) {
+	return this.client.PExpire(context.Background(), key, expiration).Result()
+}
+
+func (this *Connection) PExpireAt(key string, tm time.Time) (bool, error) {
+	return this.client.PExpireAt(context.Background(), key, tm).Result()
+}
+
+func (this *Connection) Migrate(host, port, key string, db int, timeout time.Duration) (string, error) {
+	return this.client.Migrate(context.Background(), host, port, key, db, timeout).Result()
+}
+
+func (this *Connection) Move(key string, db int) (bool, error) {
+	return this.client.Move(context.Background(), key, db).Result()
+}
+
+func (this *Connection) Persist(key string) (bool, error) {
+	return this.client.Persist(context.Background(), key).Result()
+}
+
+func (this *Connection) PTTL(key string) (time.Duration, error) {
+	return this.client.PTTL(context.Background(), key).Result()
+}
+
+func (this *Connection) TTL(key string) (time.Duration, error) {
+	return this.client.TTL(context.Background(), key).Result()
+}
+
+func (this *Connection) RandomKey() (string, error) {
+	return this.client.RandomKey(context.Background()).Result()
+}
+
+func (this *Connection) Rename(key, newKey string) (string, error) {
+	return this.client.Rename(context.Background(), key, newKey).Result()
+}
+
+func (this *Connection) RenameNX(key, newKey string) (bool, error) {
+	return this.client.RenameNX(context.Background(), key, newKey).Result()
+}
+
+func (this *Connection) Type(key string) (string, error) {
+	return this.client.Type(context.Background(), key).Result()
+}
+
+func (this *Connection) Wait(numSlaves int, timeout time.Duration) (int64, error) {
+	return this.client.Wait(context.Background(), numSlaves, timeout).Result()
+}
+
+func (this *Connection) Scan(cursor uint64, match string, count int64) ([]string, uint64, error) {
+	return this.client.Scan(context.Background(), cursor, match, count).Result()
+}
+
+// keys end
+
 // setter start
 func (this *Connection) Set(key string, value interface{}, expiration time.Duration) (string, error) {
 	return this.client.Set(context.Background(), key, value, expiration).Result()
@@ -116,14 +192,6 @@ func (this *Connection) SetBit(key string, offset int64, value int) (int64, erro
 
 func (this *Connection) SetRange(key string, offset int64, value string) (int64, error) {
 	return this.client.SetRange(context.Background(), key, offset, value).Result()
-}
-
-func (this *Connection) Del(keys ...string) (int64, error) {
-	return this.client.Del(context.Background(), keys...).Result()
-}
-
-func (this *Connection) Exists(keys ...string) (int64, error) {
-	return this.client.Exists(context.Background(), keys...).Result()
 }
 
 func (this *Connection) Incr(key string) (int64, error) {
