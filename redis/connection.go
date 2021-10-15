@@ -84,8 +84,28 @@ func (this *Connection) Get(key string) (string, error) {
 	return this.client.Get(context.Background(), key).Result()
 }
 
+func (this *Connection) MGet(keys ...string) ([]interface{}, error) {
+	return this.client.MGet(context.Background(), keys...).Result()
+}
+
 func (this *Connection) GetBit(key string, offset int64) (int64, error) {
 	return this.client.GetBit(context.Background(), key, offset).Result()
+}
+
+func (this *Connection) BitOpAnd(destKey string, keys ...string) (int64, error) {
+	return this.client.BitOpAnd(context.Background(),destKey, keys...).Result()
+}
+
+func (this *Connection) BitOpNot(destKey string, key string) (int64, error) {
+	return this.client.BitOpNot(context.Background(),destKey, key).Result()
+}
+
+func (this *Connection) BitOpOr(destKey string, keys ...string) (int64, error) {
+	return this.client.BitOpOr(context.Background(),destKey, keys...).Result()
+}
+
+func (this *Connection) BitOpXor(destKey string, keys ...string) (int64, error) {
+	return this.client.BitOpXor(context.Background(),destKey, keys...).Result()
 }
 
 func (this *Connection) GetDel(key string) (string, error) {
@@ -191,11 +211,27 @@ func (this *Connection) Scan(cursor uint64, match string, count int64) ([]string
 	return this.client.Scan(context.Background(), cursor, match, count).Result()
 }
 
+func (this *Connection) BitCount(key string, count *goredis.BitCount) (int64, error) {
+	return this.client.BitCount(context.Background(), key, count).Result()
+}
+
 // keys end
 
 // setter start
 func (this *Connection) Set(key string, value interface{}, expiration time.Duration) (string, error) {
 	return this.client.Set(context.Background(), key, value, expiration).Result()
+}
+
+func (this *Connection) Append(key, value string) (int64, error) {
+	return this.client.Append(context.Background(), key, value).Result()
+}
+
+func (this *Connection) MSet(values ...interface{}) (string, error) {
+	return this.client.MSet(context.Background(), values...).Result()
+}
+
+func (this *Connection) MSetNX(values ...interface{}) (bool, error) {
+	return this.client.MSetNX(context.Background(), values...).Result()
 }
 
 func (this *Connection) SetNX(key string, value interface{}, expiration time.Duration) (bool, error) {
@@ -208,6 +244,10 @@ func (this *Connection) SetEX(key string, value interface{}, expiration time.Dur
 
 func (this *Connection) SetBit(key string, offset int64, value int) (int64, error) {
 	return this.client.SetBit(context.Background(), key, offset, value).Result()
+}
+
+func (this *Connection) BitPos(key string, bit int64, pos ...int64) (int64, error) {
+	return this.client.BitPos(context.Background(), key, bit, pos...).Result()
 }
 
 func (this *Connection) SetRange(key string, offset int64, value string) (int64, error) {
@@ -598,4 +638,5 @@ func (this *Connection) ZUnionStore(key string, store *goredis.ZStore) (int64, e
 func (this *Connection) ZScan(key string, cursor uint64, match string, count int64) ([]string, uint64, error) {
 	return this.client.ZScan(context.Background(), key, cursor, match, count).Result()
 }
+
 // zset end
