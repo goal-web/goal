@@ -345,3 +345,39 @@ func (this *Connection) SUnionStore(destination string, keys ...string) (int64, 
 }
 
 // set end
+
+// geo start
+
+func (this *Connection) GeoAdd(key string, geoLocation ...*goredis.GeoLocation) (int64, error) {
+	return this.client.GeoAdd(context.Background(), key, geoLocation...).Result()
+}
+
+func (this *Connection) GeoHash(key string, members ...string) ([]string, error) {
+	return this.client.GeoHash(context.Background(), key, members...).Result()
+}
+
+func (this *Connection) GeoPos(key string, members ...string) ([]*goredis.GeoPos, error) {
+	return this.client.GeoPos(context.Background(), key, members...).Result()
+}
+
+func (this *Connection) GeoDist(key string, member1, member2, unit string) (float64, error) {
+	return this.client.GeoDist(context.Background(), key, member1, member2, unit).Result()
+}
+
+func (this *Connection) GeoRadius(key string, longitude, latitude float64, query *goredis.GeoRadiusQuery) ([]goredis.GeoLocation, error) {
+	return this.client.GeoRadius(context.Background(), key, longitude, latitude, query).Result()
+}
+
+func (this *Connection) GeoRadiusStore(key string, longitude, latitude float64, query *goredis.GeoRadiusQuery) (int64, error) {
+	return this.client.GeoRadiusStore(context.Background(), key, longitude, latitude, query).Result()
+}
+
+func (this *Connection) GeoRadiusByMember(key, member string, query *goredis.GeoRadiusQuery) ([]goredis.GeoLocation, error) {
+	return this.client.GeoRadiusByMember(context.Background(), key, member, query).Result()
+}
+
+func (this *Connection) GeoRadiusByMemberStore(key, member string, query *goredis.GeoRadiusQuery) (int64, error) {
+	return this.client.GeoRadiusByMemberStore(context.Background(), key, member, query).Result()
+}
+
+// geo end
