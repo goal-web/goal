@@ -381,3 +381,79 @@ func (this *Connection) GeoRadiusByMemberStore(key, member string, query *goredi
 }
 
 // geo end
+
+// lists start
+
+func (this *Connection) BLPop(timeout time.Duration, keys ...string) ([]string, error) {
+	return this.client.BLPop(context.Background(), timeout, keys...).Result()
+}
+
+func (this *Connection) BRPop(timeout time.Duration, keys ...string) ([]string, error) {
+	return this.client.BRPop(context.Background(), timeout, keys...).Result()
+}
+
+func (this *Connection) BRPopLPush(source, destination string, timeout time.Duration) (string, error) {
+	return this.client.BRPopLPush(context.Background(), source, destination, timeout).Result()
+}
+
+func (this *Connection) LIndex(key string, index int64) (string, error) {
+	return this.client.LIndex(context.Background(), key, index).Result()
+}
+
+func (this *Connection) LInsert(key, op string, pivot, value interface{}) (int64, error) {
+	return this.client.LInsert(context.Background(), key, op, pivot, value).Result()
+}
+
+func (this *Connection) LLen(key string) (int64, error) {
+	return this.client.LLen(context.Background(), key).Result()
+}
+
+func (this *Connection) LPop(key string) (string, error) {
+	return this.client.LPop(context.Background(), key).Result()
+}
+
+func (this *Connection) LPush(key string, values ...interface{}) (int64, error) {
+	return this.client.LPush(context.Background(), key, values...).Result()
+}
+
+func (this *Connection) LPushX(key string, values ...interface{}) (int64, error) {
+	return this.client.LPushX(context.Background(), key, values...).Result()
+}
+
+func (this *Connection) LRange(key string, start, stop int64) ([]string, error) {
+	return this.client.LRange(context.Background(), key, start, stop).Result()
+}
+
+func (this *Connection) LRem(key string, count int64, value interface{}) (int64, error) {
+	return this.client.LRem(context.Background(), key, count, value).Result()
+}
+
+func (this *Connection) LSet(key string, index int64, value interface{}) (string, error) {
+	return this.client.LSet(context.Background(), key, index, value).Result()
+}
+
+func (this *Connection) LTrim(key string, start, stop int64) (string, error) {
+	return this.client.LTrim(context.Background(), key, start, stop).Result()
+}
+
+func (this *Connection) RPop(key string) (string, error) {
+	return this.client.RPop(context.Background(), key).Result()
+}
+
+func (this *Connection) RPopCount(key string, count int) ([]string, error) {
+	return this.client.RPopCount(context.Background(), key, count).Result()
+}
+
+func (this *Connection) RPopLPush(source, destination string) (string, error) {
+	return this.client.RPopLPush(context.Background(), source, destination).Result()
+}
+
+func (this *Connection) RPush(key string, values ...interface{}) (int64, error) {
+	return this.client.RPush(context.Background(), key, values...).Result()
+}
+
+func (this *Connection) RPushX(key string, values ...interface{}) (int64, error) {
+	return this.client.RPushX(context.Background(), key, values...).Result()
+}
+
+// lists end
