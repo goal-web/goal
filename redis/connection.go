@@ -477,3 +477,29 @@ func (this *Connection) RPushX(key string, values ...interface{}) (int64, error)
 }
 
 // lists end
+
+// scripting start
+func (this *Connection) Eval(script string, keys []string, args ...interface{}) (interface{}, error) {
+	return this.client.Eval(context.Background(), script, keys, args...).Result()
+}
+
+func (this *Connection) EvalSha(sha1 string, keys []string, args ...interface{}) (interface{}, error) {
+	return this.client.EvalSha(context.Background(), sha1, keys, args...).Result()
+}
+
+func (this *Connection) ScriptExists(hashes ...string) ([]bool, error) {
+	return this.client.ScriptExists(context.Background(), hashes...).Result()
+}
+
+func (this *Connection) ScriptFlush() (string, error) {
+	return this.client.ScriptFlush(context.Background()).Result()
+}
+
+func (this *Connection) ScriptKill() (string, error) {
+	return this.client.ScriptKill(context.Background()).Result()
+}
+
+func (this *Connection) ScriptLoad(script string) (string, error) {
+	return this.client.ScriptLoad(context.Background(), script).Result()
+}
+// scripting end
