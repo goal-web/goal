@@ -143,6 +143,14 @@ func (this *Connection) Del(keys ...string) (int64, error) {
 	return this.client.Del(context.Background(), keys...).Result()
 }
 
+func (this *Connection) FlushAll() (string, error) {
+	return this.client.FlushAll(context.Background()).Result()
+}
+
+func (this *Connection) FlushDB() (string, error) {
+	return this.client.FlushDB(context.Background()).Result()
+}
+
 func (this *Connection) Dump(key string) (string, error) {
 	return this.client.Dump(context.Background(), key).Result()
 }
