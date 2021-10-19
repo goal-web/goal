@@ -18,8 +18,10 @@ func (this *Factory) Connection(names ...string) contracts.RedisConnection {
 	if len(names) > 0 {
 		name = names[0]
 	} else {
-		name = utils.StringOr(this.config.GetString("redis.default"), "default")
+		name = this.config.GetString("redis.default")
 	}
+
+	name = utils.StringOr(name, "default")
 
 	if connection, existsConnection := this.connections[name]; existsConnection {
 		return connection

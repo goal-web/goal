@@ -15,11 +15,11 @@ func (this ServiceProvider) Register(app contracts.Container) {
 			exceptionHandler: handler,
 			connections:      make(map[string]contracts.RedisConnection),
 		}
-	})
+	}, "redis")
 
 	app.ProvideSingleton(func(factory contracts.RedisFactory) contracts.RedisConnection {
 		return factory.Connection()
-	})
+	}, "redis.connection")
 
 	app.ProvideSingleton(func(redis contracts.RedisConnection) *Connection {
 		return redis.(*Connection)

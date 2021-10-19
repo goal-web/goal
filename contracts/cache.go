@@ -2,8 +2,11 @@ package contracts
 
 import "time"
 
+type CacheStoreProvider func(cacheConfig Fields) CacheStore
+
 type CacheFactory interface {
 	Store(name ...string) CacheStore
+	Extend(drive string, cacheStoreProvider CacheStoreProvider)
 }
 
 type CacheStore interface {

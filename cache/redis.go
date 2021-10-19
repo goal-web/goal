@@ -2,12 +2,11 @@ package cache
 
 import (
 	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/redis"
 	"time"
 )
 
 type RedisStore struct {
-	connection *redis.Connection
+	connection contracts.RedisConnection
 	prefix     string
 }
 
