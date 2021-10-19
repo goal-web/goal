@@ -3,8 +3,8 @@ package utils
 import "strconv"
 
 // 把能转换成 int64 的值转换成 int64
-func ConvertToInt64(i interface{}, defaultValue int64) int64 {
-	switch value := i.(type) {
+func ConvertToInt64(rawValue interface{}, defaultValue int64) int64 {
+	switch value := rawValue.(type) {
 	case int64:
 		return value
 	case int:
@@ -28,8 +28,8 @@ func ConvertToInt64(i interface{}, defaultValue int64) int64 {
 }
 
 // 把能转换成 float64 的值转换成 float64
-func ConvertToFloat64(f interface{}, defaultValue float64) float64 {
-	switch value := f.(type) {
+func ConvertToFloat64(rawValue interface{}, defaultValue float64) float64 {
+	switch value := rawValue.(type) {
 	case float64:
 		return value
 	case int64:
@@ -51,3 +51,23 @@ func ConvertToFloat64(f interface{}, defaultValue float64) float64 {
 
 	return defaultValue
 }
+
+// 把能转换成 bool 的值转换成 bool
+func ConvertToBool(rawValue interface{}, defaultValue bool) bool {
+	switch value := rawValue.(type) {
+	case bool:
+		return value
+	case string:
+		if value == "false" || value == "(false)" || value == "0" {
+			return false
+		}
+		if value == "true" || value == "(true)" || value == "1" {
+			return true
+		}
+	case float64, int, int64, int8, float32:
+		return ConvertToInt64(value, 0) > 0 || defaultValue
+	}
+
+	return defaultValue
+}
+

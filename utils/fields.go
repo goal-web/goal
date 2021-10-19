@@ -30,6 +30,17 @@ func GetInt64Field(fields contracts.Fields, key string, defaultValues ...int64) 
 		}
 		return ConvertToInt64(value, defaultValue)
 	} else {
-		return ConvertToInt64(value, defaultValue)
+		return defaultValue
 	}
+}
+
+func GetBoolField(fields contracts.Fields, key string, defaultValues ...bool) bool {
+	var defaultValue = false
+	if len(defaultValues) > 0 {
+		defaultValue = defaultValues[0]
+	}
+	if fieldValue, existsValue := fields[key]; existsValue {
+		return ConvertToBool(fieldValue, defaultValue)
+	}
+	return defaultValue
 }

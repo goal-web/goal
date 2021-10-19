@@ -8,10 +8,10 @@ import (
 	"strings"
 )
 
-func New(env string) contracts.Config {
+func New(e string) contracts.Config {
 	return &config{
-		env:       env,
-		envValues: make(map[string]string),
+		env:       e,
+		envValues: make(map[string]env),
 		fields:    make(contracts.Fields),
 		configs:   make(map[string]contracts.Config, 0),
 	}
@@ -20,7 +20,7 @@ func New(env string) contracts.Config {
 func WithFields(fields contracts.Fields) contracts.Config {
 	return &config{
 		env:       "",
-		envValues: make(map[string]string),
+		envValues: make(map[string]env),
 		fields:    fields,
 		configs:   make(map[string]contracts.Config, 0),
 	}
@@ -30,15 +30,22 @@ type config struct {
 	env       string
 	fields    contracts.Fields
 	configs   map[string]contracts.Config
-	envValues map[string]string
+	envValues map[string]env
+}
+
+type env struct {
+	value string
 }
 
 func (this *config) GetEnv(key string) string {
-	if this.envValues[key] == "" {
-		this.envValues[key] = os.Getenv(key)
+	if v, existsEnv := this.envValues[key]; existsEnv {
+		return v.value
+	} else if value := os.Getenv(key); value != "" {
+		this.envValues[key] = env{value}
+		return value
 	}
 
-	return this.envValues[key]
+	return ""
 }
 
 func (this *config) Load(provider contracts.FieldsProvider) {
@@ -69,6 +76,18 @@ func (this *config) Get(key string, defaultValue ...interface{}) interface{} {
 
 	if field, existsField := this.fields[key]; existsField {
 		return field
+	}
+
+	// 尝试获取 fields
+	fields := contracts.Fields{}
+	prefix := key + "."
+	for fieldKey, fieldValue := range this.fields {
+		if strings.HasPrefix(fieldKey, prefix) {
+			fields[strings.Replace(fieldKey, prefix, "", 1)] = fieldValue
+		}
+	}
+	if len(fields) > 0 {
+		return fields
 	}
 
 	keys := strings.Split(key, ".")
@@ -125,6 +144,15 @@ func (this *config) GetInt(key string) int64 {
 	return 0
 }
 
+func (this *config) Unset(key string) {
+	if this.env != "" && !strings.Contains(key, ":") {
+		this.Unset(fmt.Sprintf("%s:%s", this.env, key))
+	}
+	delete(this.envValues, key)
+	delete(this.fields, key)
+	delete(this.configs, key)
+}
+
 func (this *config) GetFloat(key string) float64 {
 	if field := this.Get(key); field != nil {
 		value := utils.ConvertToFloat64(field, 0)
@@ -139,22 +167,9 @@ func (this *config) GetFloat(key string) float64 {
 
 func (this *config) GetBool(key string) bool {
 	if field := this.Get(key); field != nil {
-		switch value := field.(type) {
-		case bool:
-			return value
-		case string:
-			if value == "false" || value == "(false)" || value == "0" {
-				this.Set(key, false) // 缓存结果
-				return false
-			}
-			if value == "true" || value == "(true)" || value == "1" {
-				this.Set(key, true) // 缓存结果
-				return true
-			}
-			return len(value) > 0
-		case int, float64, int64, int16, int8, float32, int32:
-			return utils.ConvertToInt64(value, 0) >= 1
-		}
+		result := utils.ConvertToBool(field, false)
+		this.Set(key, result)
+		return result
 	}
 
 	return false
