@@ -7,25 +7,32 @@ import (
 	"github.com/qbhy/goal/utils"
 )
 
-type CacheFactory struct {
+type Factory struct {
 	config           contracts.Config
 	exceptionHandler contracts.ExceptionHandler
 	stores           map[string]contracts.CacheStore
 	drivers          map[string]contracts.CacheStoreProvider
 }
 
-func (this *CacheFactory) getDefaultDriver() string {
-	return utils.StringOr(this.config.GetString("cache.default"), "default")
-}
-
-func (this *CacheFactory) Store(names ...string) contracts.CacheStore {
+func (this *Factory) getName(names ...string) string {
 	var name string
 	if len(names) > 0 {
 		name = names[0]
 	} else {
-		name = this.getDefaultDriver()
+		name = this.config.GetString("cache.default")
 	}
 
+	return utils.StringOr(name, "default")
+}
+
+func (this Factory) getConfig(name string) contracts.Fields {
+	return this.config.GetFields(
+		utils.IfString(name == "default", "cache", fmt.Sprintf("cache.stores.%s", name)),
+	)
+}
+
+func (this *Factory) Store(names ...string) contracts.CacheStore {
+	name := this.getName(names...)
 	if cacheStore, existsStore := this.stores[name]; existsStore {
 		return cacheStore
 	}
@@ -35,17 +42,11 @@ func (this *CacheFactory) Store(names ...string) contracts.CacheStore {
 	return this.stores[name]
 }
 
-func (this CacheFactory) getConfig(name string) contracts.Fields {
-	return this.config.GetFields(
-		utils.IfString(name == "default", "cache", fmt.Sprintf("cache.stores.%s", name)),
-	)
-}
-
-func (this *CacheFactory) Extend(drive string, cacheStoreProvider contracts.CacheStoreProvider) {
+func (this *Factory) Extend(drive string, cacheStoreProvider contracts.CacheStoreProvider) {
 	this.drivers[drive] = cacheStoreProvider
 }
 
-func (this *CacheFactory) get(name string) contracts.CacheStore {
+func (this *Factory) get(name string) contracts.CacheStore {
 	config := this.getConfig(name)
 	drive := utils.GetStringField(config, "driver", "redis")
 	driveProvider, existsProvider := this.drivers[drive]

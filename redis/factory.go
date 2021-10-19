@@ -13,21 +13,32 @@ type Factory struct {
 	connections      map[string]contracts.RedisConnection
 }
 
-func (this *Factory) Connection(names ...string) contracts.RedisConnection {
+func (this *Factory) getName(names ...string) string {
 	var name string
 	if len(names) > 0 {
 		name = names[0]
 	} else {
-		name = this.config.GetString("redis.default")
+		name = this.config.GetString("cache.default")
 	}
 
-	name = utils.StringOr(name, "default")
+	return utils.StringOr(name, "default")
+}
+
+func (this Factory) getConfig(name string) contracts.Fields {
+	return this.config.GetFields(
+		utils.IfString(name == "default", "redis", fmt.Sprintf("redis.stores.%s", name)),
+	)
+}
+
+
+func (this *Factory) Connection(names ...string) contracts.RedisConnection {
+	name := this.getName(names...)
 
 	if connection, existsConnection := this.connections[name]; existsConnection {
 		return connection
 	}
 
-	config := this.config.GetFields(utils.IfString(name == "default", "redis", fmt.Sprintf("redis.stores.%s", name)))
+	config := this.getConfig(name)
 
 	// todo: 待优化 redis 配置
 	this.connections[name] = &Connection{
