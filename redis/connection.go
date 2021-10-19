@@ -93,19 +93,19 @@ func (this *Connection) GetBit(key string, offset int64) (int64, error) {
 }
 
 func (this *Connection) BitOpAnd(destKey string, keys ...string) (int64, error) {
-	return this.client.BitOpAnd(context.Background(),destKey, keys...).Result()
+	return this.client.BitOpAnd(context.Background(), destKey, keys...).Result()
 }
 
 func (this *Connection) BitOpNot(destKey string, key string) (int64, error) {
-	return this.client.BitOpNot(context.Background(),destKey, key).Result()
+	return this.client.BitOpNot(context.Background(), destKey, key).Result()
 }
 
 func (this *Connection) BitOpOr(destKey string, keys ...string) (int64, error) {
-	return this.client.BitOpOr(context.Background(),destKey, keys...).Result()
+	return this.client.BitOpOr(context.Background(), destKey, keys...).Result()
 }
 
 func (this *Connection) BitOpXor(destKey string, keys ...string) (int64, error) {
-	return this.client.BitOpXor(context.Background(),destKey, keys...).Result()
+	return this.client.BitOpXor(context.Background(), destKey, keys...).Result()
 }
 
 func (this *Connection) GetDel(key string) (string, error) {
@@ -219,8 +219,11 @@ func (this *Connection) Scan(cursor uint64, match string, count int64) ([]string
 	return this.client.Scan(context.Background(), cursor, match, count).Result()
 }
 
-func (this *Connection) BitCount(key string, count *goredis.BitCount) (int64, error) {
-	return this.client.BitCount(context.Background(), key, count).Result()
+func (this *Connection) BitCount(key string, count *contracts.BitCount) (int64, error) {
+	return this.client.BitCount(context.Background(), key, &goredis.BitCount{
+		Start: count.Start,
+		End:   count.End,
+	}).Result()
 }
 
 // keys end
@@ -416,36 +419,116 @@ func (this *Connection) SUnionStore(destination string, keys ...string) (int64, 
 
 // geo start
 
-func (this *Connection) GeoAdd(key string, geoLocation ...*goredis.GeoLocation) (int64, error) {
-	return this.client.GeoAdd(context.Background(), key, geoLocation...).Result()
+func (this *Connection) GeoAdd(key string, geoLocation ...*contracts.GeoLocation) (int64, error) {
+	goredisLocations := make([]*goredis.GeoLocation, 0)
+	for locationKey, value := range geoLocation {
+		goredisLocations[locationKey] = &goredis.GeoLocation{
+			Name:      value.Name,
+			Longitude: value.Longitude,
+			Latitude:  value.Latitude,
+			Dist:      value.Dist,
+			GeoHash:   value.GeoHash,
+		}
+	}
+	return this.client.GeoAdd(context.Background(), key, goredisLocations...).Result()
 }
 
 func (this *Connection) GeoHash(key string, members ...string) ([]string, error) {
 	return this.client.GeoHash(context.Background(), key, members...).Result()
 }
 
-func (this *Connection) GeoPos(key string, members ...string) ([]*goredis.GeoPos, error) {
-	return this.client.GeoPos(context.Background(), key, members...).Result()
+func (this *Connection) GeoPos(key string, members ...string) ([]*contracts.GeoPos, error) {
+	results := make([]*contracts.GeoPos, 0)
+	goredisResults, err := this.client.GeoPos(context.Background(), key, members...).Result()
+	for resultKey, value := range goredisResults {
+		results[resultKey] = &contracts.GeoPos{
+			Longitude: value.Longitude,
+			Latitude:  value.Latitude,
+		}
+	}
+	return results, err
 }
 
 func (this *Connection) GeoDist(key string, member1, member2, unit string) (float64, error) {
 	return this.client.GeoDist(context.Background(), key, member1, member2, unit).Result()
 }
 
-func (this *Connection) GeoRadius(key string, longitude, latitude float64, query *goredis.GeoRadiusQuery) ([]goredis.GeoLocation, error) {
-	return this.client.GeoRadius(context.Background(), key, longitude, latitude, query).Result()
+func (this *Connection) GeoRadius(key string, longitude, latitude float64, query *contracts.GeoRadiusQuery) ([]contracts.GeoLocation, error) {
+	results := make([]contracts.GeoLocation, 0)
+	goredisResults, err := this.client.GeoRadius(context.Background(), key, longitude, latitude, &goredis.GeoRadiusQuery{
+		Radius:      query.Radius,
+		Unit:        query.Unit,
+		WithCoord:   query.WithCoord,
+		WithDist:    query.WithDist,
+		WithGeoHash: query.WithGeoHash,
+		Count:       query.Count,
+		Sort:        query.Sort,
+		Store:       query.Store,
+		StoreDist:   query.StoreDist,
+	}).Result()
+	for resultKey, value := range goredisResults {
+		results[resultKey] = contracts.GeoLocation{
+			Name:      value.Name,
+			Longitude: value.Longitude,
+			Latitude:  value.Latitude,
+			Dist:      value.Dist,
+			GeoHash:   value.GeoHash,
+		}
+	}
+	return results, err
 }
 
-func (this *Connection) GeoRadiusStore(key string, longitude, latitude float64, query *goredis.GeoRadiusQuery) (int64, error) {
-	return this.client.GeoRadiusStore(context.Background(), key, longitude, latitude, query).Result()
+func (this *Connection) GeoRadiusStore(key string, longitude, latitude float64, query *contracts.GeoRadiusQuery) (int64, error) {
+	return this.client.GeoRadiusStore(context.Background(), key, longitude, latitude, &goredis.GeoRadiusQuery{
+		Radius:      query.Radius,
+		Unit:        query.Unit,
+		WithCoord:   query.WithCoord,
+		WithDist:    query.WithDist,
+		WithGeoHash: query.WithGeoHash,
+		Count:       query.Count,
+		Sort:        query.Sort,
+		Store:       query.Store,
+		StoreDist:   query.StoreDist,
+	}).Result()
 }
 
-func (this *Connection) GeoRadiusByMember(key, member string, query *goredis.GeoRadiusQuery) ([]goredis.GeoLocation, error) {
-	return this.client.GeoRadiusByMember(context.Background(), key, member, query).Result()
+func (this *Connection) GeoRadiusByMember(key, member string, query *contracts.GeoRadiusQuery) ([]contracts.GeoLocation, error) {
+	results := make([]contracts.GeoLocation, 0)
+	goredisResults, err := this.client.GeoRadiusByMember(context.Background(), key, member, &goredis.GeoRadiusQuery{
+		Radius:      query.Radius,
+		Unit:        query.Unit,
+		WithCoord:   query.WithCoord,
+		WithDist:    query.WithDist,
+		WithGeoHash: query.WithGeoHash,
+		Count:       query.Count,
+		Sort:        query.Sort,
+		Store:       query.Store,
+		StoreDist:   query.StoreDist,
+	}).Result()
+	for resultKey, value := range goredisResults {
+		results[resultKey] = contracts.GeoLocation{
+			Name:      value.Name,
+			Longitude: value.Longitude,
+			Latitude:  value.Latitude,
+			Dist:      value.Dist,
+			GeoHash:   value.GeoHash,
+		}
+	}
+	return results, err
 }
 
-func (this *Connection) GeoRadiusByMemberStore(key, member string, query *goredis.GeoRadiusQuery) (int64, error) {
-	return this.client.GeoRadiusByMemberStore(context.Background(), key, member, query).Result()
+func (this *Connection) GeoRadiusByMemberStore(key, member string, query *contracts.GeoRadiusQuery) (int64, error) {
+	return this.client.GeoRadiusByMemberStore(context.Background(), key, member, &goredis.GeoRadiusQuery{
+		Radius:      query.Radius,
+		Unit:        query.Unit,
+		WithCoord:   query.WithCoord,
+		WithDist:    query.WithDist,
+		WithGeoHash: query.WithGeoHash,
+		Count:       query.Count,
+		Sort:        query.Sort,
+		Store:       query.Store,
+		StoreDist:   query.StoreDist,
+	}).Result()
 }
 
 // geo end
@@ -555,8 +638,15 @@ func (this *Connection) ScriptLoad(script string) (string, error) {
 
 // zset start
 
-func (this *Connection) ZAdd(key string, members ...*goredis.Z) (int64, error) {
-	return this.client.ZAdd(context.Background(), key, members...).Result()
+func (this *Connection) ZAdd(key string, members ...*contracts.Z) (int64, error) {
+	goredisMembers := make([]*goredis.Z, 0)
+	for memberKey, value := range members {
+		goredisMembers[memberKey] = &goredis.Z{
+			Score:  value.Score,
+			Member: value.Member,
+		}
+	}
+	return this.client.ZAdd(context.Background(), key, goredisMembers...).Result()
 }
 
 func (this *Connection) ZCard(key string) (int64, error) {
@@ -571,36 +661,71 @@ func (this *Connection) ZIncrBy(key string, increment float64, member string) (f
 	return this.client.ZIncrBy(context.Background(), key, increment, member).Result()
 }
 
-func (this *Connection) ZInterStore(destination string, store *goredis.ZStore) (int64, error) {
-	return this.client.ZInterStore(context.Background(), destination, store).Result()
+func (this *Connection) ZInterStore(destination string, store *contracts.ZStore) (int64, error) {
+	return this.client.ZInterStore(context.Background(), destination, &goredis.ZStore{
+		Keys:      store.Keys,
+		Weights:   store.Weights,
+		Aggregate: store.Aggregate,
+	}).Result()
 }
 
 func (this *Connection) ZLexCount(key, min, max string) (int64, error) {
 	return this.client.ZLexCount(context.Background(), key, min, max).Result()
 }
 
-func (this *Connection) ZPopMax(key string, count ...int64) ([]goredis.Z, error) {
-	return this.client.ZPopMax(context.Background(), key, count...).Result()
+func (this *Connection) ZPopMax(key string, count ...int64) ([]contracts.Z, error) {
+	results := make([]contracts.Z, 0)
+	goredisResults, err := this.client.ZPopMax(context.Background(), key, count...).Result()
+	for resultKey, value := range goredisResults {
+		results[resultKey] = contracts.Z{
+			Score:  value.Score,
+			Member: value.Member,
+		}
+	}
+	return results, err
 }
 
-func (this *Connection) ZPopMin(key string, count ...int64) ([]goredis.Z, error) {
-	return this.client.ZPopMin(context.Background(), key, count...).Result()
+func (this *Connection) ZPopMin(key string, count ...int64) ([]contracts.Z, error) {
+	results := make([]contracts.Z, 0)
+	goredisResults, err := this.client.ZPopMin(context.Background(), key, count...).Result()
+	for resultKey, value := range goredisResults {
+		results[resultKey] = contracts.Z{
+			Score:  value.Score,
+			Member: value.Member,
+		}
+	}
+	return results, err
 }
 
 func (this *Connection) ZRange(key string, start, stop int64) ([]string, error) {
 	return this.client.ZRange(context.Background(), key, start, stop).Result()
 }
 
-func (this *Connection) ZRangeByLex(key string, opt *goredis.ZRangeBy) ([]string, error) {
-	return this.client.ZRangeByLex(context.Background(), key, opt).Result()
+func (this *Connection) ZRangeByLex(key string, opt *contracts.ZRangeBy) ([]string, error) {
+	return this.client.ZRangeByLex(context.Background(), key, &goredis.ZRangeBy{
+		Min:    opt.Min,
+		Max:    opt.Max,
+		Offset: opt.Offset,
+		Count:  opt.Count,
+	}).Result()
 }
 
-func (this *Connection) ZRevRangeByLex(key string, opt *goredis.ZRangeBy) ([]string, error) {
-	return this.client.ZRevRangeByLex(context.Background(), key, opt).Result()
+func (this *Connection) ZRevRangeByLex(key string, opt *contracts.ZRangeBy) ([]string, error) {
+	return this.client.ZRevRangeByLex(context.Background(), key, &goredis.ZRangeBy{
+		Min:    opt.Min,
+		Max:    opt.Max,
+		Offset: opt.Offset,
+		Count:  opt.Count,
+	}).Result()
 }
 
-func (this *Connection) ZRangeByScore(key string, opt *goredis.ZRangeBy) ([]string, error) {
-	return this.client.ZRangeByScore(context.Background(), key, opt).Result()
+func (this *Connection) ZRangeByScore(key string, opt *contracts.ZRangeBy) ([]string, error) {
+	return this.client.ZRangeByScore(context.Background(), key, &goredis.ZRangeBy{
+		Min:    opt.Min,
+		Max:    opt.Max,
+		Offset: opt.Offset,
+		Count:  opt.Count,
+	}).Result()
 }
 
 func (this *Connection) ZRank(key, member string) (int64, error) {
@@ -627,8 +752,13 @@ func (this *Connection) ZRevRange(key string, start, stop int64) ([]string, erro
 	return this.client.ZRevRange(context.Background(), key, start, stop).Result()
 }
 
-func (this *Connection) ZRevRangeByScore(key string, opt *goredis.ZRangeBy) ([]string, error) {
-	return this.client.ZRevRangeByScore(context.Background(), key, opt).Result()
+func (this *Connection) ZRevRangeByScore(key string, opt *contracts.ZRangeBy) ([]string, error) {
+	return this.client.ZRevRangeByScore(context.Background(), key, &goredis.ZRangeBy{
+		Min:    opt.Min,
+		Max:    opt.Max,
+		Offset: opt.Offset,
+		Count:  opt.Count,
+	}).Result()
 }
 
 func (this *Connection) ZRevRank(key, member string) (int64, error) {
@@ -639,8 +769,12 @@ func (this *Connection) ZScore(key, member string) (float64, error) {
 	return this.client.ZScore(context.Background(), key, member).Result()
 }
 
-func (this *Connection) ZUnionStore(key string, store *goredis.ZStore) (int64, error) {
-	return this.client.ZUnionStore(context.Background(), key, store).Result()
+func (this *Connection) ZUnionStore(key string, store *contracts.ZStore) (int64, error) {
+	return this.client.ZUnionStore(context.Background(), key, &goredis.ZStore{
+		Keys:      store.Keys,
+		Weights:   store.Weights,
+		Aggregate: store.Aggregate,
+	}).Result()
 }
 
 func (this *Connection) ZScan(key string, cursor uint64, match string, count int64) ([]string, uint64, error) {
