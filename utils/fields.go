@@ -13,10 +13,8 @@ func GetStringField(fields contracts.Fields, key string, defaultValues ...string
 		if str, isString := value.(string); isString {
 			return str
 		}
-		return StringOr(defaultValues...)
-	} else {
-		return StringOr(defaultValues...)
 	}
+	return StringOr(defaultValues...)
 }
 
 func GetInt64Field(fields contracts.Fields, key string, defaultValues ...int64) int64 {
