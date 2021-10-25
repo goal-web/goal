@@ -1,6 +1,10 @@
 package utils
 
-import "github.com/qbhy/goal/contracts"
+import (
+	"errors"
+	"github.com/qbhy/goal/contracts"
+	"reflect"
+)
 
 func MergeFields(fields contracts.Fields, finalFields contracts.Fields) {
 	for key, value := range finalFields {
@@ -41,4 +45,53 @@ func GetBoolField(fields contracts.Fields, key string, defaultValues ...bool) bo
 		return ConvertToBool(fieldValue, defaultValue)
 	}
 	return defaultValue
+}
+
+func ConvertToFields(anyValue interface{}) (contracts.Fields, error) {
+	fields := contracts.Fields{}
+	switch paramValue := anyValue.(type) {
+	case contracts.Fields:
+		fields = paramValue
+	case map[string]interface{}:
+		for key, value := range paramValue {
+			fields[key] = value
+		}
+	case map[string]int:
+		for key, value := range paramValue {
+			fields[key] = value
+		}
+	case map[string]float64:
+		for key, value := range paramValue {
+			fields[key] = value
+		}
+	case map[string]string:
+		for key, value := range paramValue {
+			fields[key] = value
+		}
+	case map[string]bool:
+		for key, value := range paramValue {
+			fields[key] = value
+		}
+	default:
+		paramType := reflect.ValueOf(anyValue)
+
+		switch paramType.Kind() {
+		case reflect.Struct: // 结构体
+			EachStructField(anyValue, func(field reflect.StructField, value reflect.Value) {
+				fields[SnakeString(field.Name)] = value.Interface()
+			})
+		case reflect.Map: // 自定义的 map
+			if paramType.Type().Key().Kind() == reflect.String {
+				for _, key := range paramType.MapKeys() {
+					name := key.String()
+					fields[name] = paramType.MapIndex(key).Interface()
+				}
+			} else {
+				return nil, errors.New("不支持 string 以外的类型作为 key 的 map")
+			}
+		default:
+			return nil, errors.New("不支持转 contracts.Fields 的类型： " + paramType.String())
+		}
+	}
+	return fields, nil
 }

@@ -12,7 +12,7 @@ type EnvFieldsProvider struct {
 	Sep   string
 }
 
-func (e EnvFieldsProvider) Get() contracts.Fields {
+func (e EnvFieldsProvider) GetFields() contracts.Fields {
 	var (
 		files  []string
 		fields = make(contracts.Fields)

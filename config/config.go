@@ -49,7 +49,7 @@ func (this *config) GetEnv(key string) string {
 }
 
 func (this *config) Load(provider contracts.FieldsProvider) {
-	utils.MergeFields(this.fields, provider.Get())
+	utils.MergeFields(this.fields, provider.GetFields())
 }
 
 func (this *config) Merge(key string, config contracts.Config) {

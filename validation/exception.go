@@ -1,17 +1,17 @@
-package validate
+package validation
 
 import "github.com/qbhy/goal/contracts"
 
 type ValidatorException struct {
-	param  interface{}
-	errors contracts.ValidateErrors
+	param  contracts.Fields
+	errors contracts.ValidatedErrors
 }
 
-func (this ValidatorException) GetParam() interface{} {
+func (this ValidatorException) GetParam() contracts.Fields {
 	return this.param
 }
 
-func NewValidatorException(param interface{}, errors contracts.ValidateErrors) ValidatorException {
+func NewValidatorException(param contracts.Fields, errors contracts.ValidatedErrors) ValidatorException {
 	return ValidatorException{param, errors}
 }
 

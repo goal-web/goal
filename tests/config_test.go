@@ -108,7 +108,7 @@ func TestDotEnv(t *testing.T) {
 		Sep:   "=",
 	}
 
-	fields := env.Get()
+	fields := env.GetFields()
 
 	assert.True(t, fields["testing:name"] == "testing goal")
 }

@@ -8,7 +8,7 @@ type FieldsProvider struct {
 	Fields contracts.Fields
 }
 
-func (provider FieldsProvider) Get() contracts.Fields {
+func (provider FieldsProvider) GetFields() contracts.Fields {
 	return provider.Fields
 }
 
