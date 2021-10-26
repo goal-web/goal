@@ -8,27 +8,27 @@ import (
 	"github.com/qbhy/goal/validation"
 )
 
-// StringLength 字符串长度校验
-type StringLength struct {
+// stringLength 字符串长度校验
+type stringLength struct {
 	Min     int
 	Max     int
 	Message string
 }
 
-func StrLen(min, max int) StringLength {
-	return StringLength{
+func StrLen(min, max int) contracts.Checker {
+	return stringLength{
 		Min:     min,
 		Max:     max,
 		Message: "",
 	}
 }
 
-func (this StringLength) SetMessage(message string) contracts.Checker {
+func (this stringLength) SetMessage(message string) contracts.Checker {
 	this.Message = message
 	return this
 }
 
-func (this StringLength) Check(value interface{}) error {
+func (this stringLength) Check(value interface{}) error {
 	switch str := value.(type) {
 	case string:
 		size := len([]rune(str))

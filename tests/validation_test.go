@@ -62,7 +62,7 @@ func TestValidatorForm(t *testing.T) {
 func TestValidatorCustomMap(t *testing.T) {
 	form := map[string]int{"a": 1}
 	result := validation.Make(form, contracts.Rules{
-		"a": {checkers.Between{"",5, 10}},
+		"a": {checkers.Between(5, 10)},
 	}).Names(map[string]string{
 		"a": "自定义的A",
 	})
@@ -74,7 +74,7 @@ func TestValidatorCustomMap(t *testing.T) {
 func TestValidatorCustomChecker(t *testing.T) {
 	form := map[string]int{"a": 1}
 	result := validation.Make(form, contracts.Rules{
-		"a": {checkers.Between{"",5, 10}},
+		"a": {checkers.Between(5, 10)},
 	}).Names(map[string]string{
 		"a": "自定义的A",
 	})

@@ -8,19 +8,27 @@ import (
 	"github.com/qbhy/goal/validation"
 )
 
-// Between 数字范围
-type Between struct {
+func Between(min, max float64) contracts.Checker {
+	return between{
+		Message: "",
+		Min:     min,
+		Max:     max,
+	}
+}
+
+// between 数字范围
+type between struct {
 	Message string
 	Min     float64
 	Max     float64
 }
 
-func (this Between) SetMessage(message string) contracts.Checker {
+func (this between) SetMessage(message string) contracts.Checker {
 	this.Message = message
 	return this
 }
 
-func (this Between) Check(value interface{}) error {
+func (this between) Check(value interface{}) error {
 	var num float64
 	switch tmpValue := value.(type) {
 	case int:
