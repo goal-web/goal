@@ -14,7 +14,7 @@ func WithError(err error) contracts.Logger {
 }
 
 func WithException(exception contracts.Exception) contracts.Logger {
-	return &ApexLogger{Entry: log.WithError(exception).WithFields(log.Fields(exception.Fields()))}
+	return &ApexLogger{Entry: log.WithError(exception).WithFields(log.Fields(exception.GetFields()))}
 }
 
 func Default() contracts.Logger {

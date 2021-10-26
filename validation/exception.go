@@ -7,10 +7,6 @@ type ValidatorException struct {
 	errors contracts.ValidatedErrors
 }
 
-func (this ValidatorException) GetParam() contracts.Fields {
-	return this.param
-}
-
 func NewValidatorException(param contracts.Fields, errors contracts.ValidatedErrors) ValidatorException {
 	return ValidatorException{param, errors}
 }
@@ -24,10 +20,10 @@ func (this ValidatorException) Error() (str string) {
 	return
 }
 
-func (this ValidatorException) Fields() contracts.Fields {
-	var fields = make(contracts.Fields, 0)
-	for key, err := range this.errors {
-		fields[key] = err
-	}
-	return fields
+func (this ValidatorException) GetFields() contracts.Fields {
+	return this.param
+}
+
+func (this ValidatorException) GetErrors() contracts.ValidatedErrors {
+	return this.errors
 }

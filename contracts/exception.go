@@ -2,7 +2,7 @@ package contracts
 
 type Exception interface {
 	error
-	Fields() Fields
+	FieldsProvider
 }
 
 type ExceptionHandler interface {

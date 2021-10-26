@@ -61,11 +61,13 @@ func TestValidatorForm(t *testing.T) {
 // 自定义map校验
 func TestValidatorCustomMap(t *testing.T) {
 	form := map[string]int{"a": 1}
+
 	result := validation.Make(form, contracts.Rules{
 		"a": {checkers.Between(5, 10)},
 	}).Names(map[string]string{
 		"a": "自定义的A",
 	})
+
 	fmt.Println(result.Errors())
 	assert.True(t, result.IsFail())
 }

@@ -48,11 +48,11 @@ func (a *ApexLogger) WithError(err error) contracts.Logger {
 func (a *ApexLogger) WithException(err contracts.Exception) contracts.Logger {
 	if a == nil || a.Entry == nil {
 		a = &ApexLogger{
-			Entry: log.WithError(err).WithFields(log.Fields(err.Fields())),
+			Entry: log.WithError(err).WithFields(log.Fields(err.GetFields())),
 		}
 	}
 
-	a.Entry = a.Entry.WithError(err).WithFields(log.Fields(err.Fields()))
+	a.Entry = a.Entry.WithError(err).WithFields(log.Fields(err.GetFields()))
 
 	return a
 }

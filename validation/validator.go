@@ -3,6 +3,8 @@ package validation
 import (
 	"errors"
 	"github.com/qbhy/goal/contracts"
+	"github.com/qbhy/goal/utils"
+	"strings"
 )
 
 var (
@@ -37,13 +39,16 @@ func (this *Validator) IsSuccessful() (result bool) {
 	return len(this.errors) == 0
 }
 
-func (this *Validator) Errors() contracts.ValidatedErrors {
+func (this *Validator) Errors() (results contracts.ValidatedErrors) {
 	if this.isValidated {
 		return this.errors
 	}
 
 	defer func() { // 抛异常也就是失败了
 		if err := recover(); err != nil {
+			if exception ,isValidateException := err.(ValidatorException); isValidateException{
+				results = exception.errors
+			}
 		}
 	}()
 
@@ -65,7 +70,7 @@ func (this *Validator) Validate() contracts.Fields {
 		if fieldCheckers, ok := this.rules[key]; ok {
 			for _, checker := range fieldCheckers {
 				if err := checker.Check(value); err != nil {
-					this.errors[key] = append(this.errors[key], err.Error())
+					this.errors[key] = append(this.errors[key], strings.ReplaceAll(err.Error(), "{field}", utils.StringOr(this.fieldsNamesMap[key], key)))
 				}
 			}
 		}

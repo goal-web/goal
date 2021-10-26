@@ -14,6 +14,6 @@ func (h HttpException) Error() string {
 	return h.Exception.Error()
 }
 
-func (h HttpException) Fields() contracts.Fields {
-	return h.Exception.Fields()
+func (h HttpException) GetFields() contracts.Fields {
+	return h.Exception.GetFields()
 }
