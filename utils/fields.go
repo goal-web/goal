@@ -36,6 +36,21 @@ func GetInt64Field(fields contracts.Fields, key string, defaultValues ...int64) 
 	}
 }
 
+func GetIntField(fields contracts.Fields, key string, defaultValues ...int) int {
+	var defaultValue = 0
+	if len(defaultValues) > 0 {
+		defaultValue = defaultValues[0]
+	}
+	if value, existsValue := fields[key]; existsValue {
+		if intValue, isInt := value.(int); isInt {
+			return intValue
+		}
+		return int(ConvertToInt64(value, int64(defaultValue)))
+	} else {
+		return defaultValue
+	}
+}
+
 func GetBoolField(fields contracts.Fields, key string, defaultValues ...bool) bool {
 	var defaultValue = false
 	if len(defaultValues) > 0 {

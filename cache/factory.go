@@ -42,8 +42,8 @@ func (this *Factory) Store(names ...string) contracts.CacheStore {
 	return this.stores[name]
 }
 
-func (this *Factory) Extend(drive string, cacheStoreProvider contracts.CacheStoreProvider) {
-	this.drivers[drive] = cacheStoreProvider
+func (this *Factory) Extend(driver string, cacheStoreProvider contracts.CacheStoreProvider) {
+	this.drivers[driver] = cacheStoreProvider
 }
 
 func (this *Factory) get(name string) contracts.CacheStore {
