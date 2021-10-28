@@ -31,14 +31,22 @@ func (this Factory) getConfig(name string) contracts.Fields {
 	)
 }
 
-func (this *Factory) Driver(driver string) contracts.Hasher {
-	config := this.getConfig(driver)
-	driver = utils.GetStringField(config, "driver", "bcrypt")
+func (this *Factory) Driver(name string) contracts.Hasher {
+	if hasher, existsHasher := this.hashers[name]; existsHasher {
+		return hasher
+	}
+
+	config := this.getConfig(name)
+	driver := utils.GetStringField(config, "driver", "bcrypt")
 	driveProvider, existsProvider := this.drivers[driver]
+
 	if !existsProvider {
 		logs.WithFields(nil).Fatal(fmt.Sprintf("不支持的哈希驱动：%s", driver))
 	}
-	return driveProvider(config)
+
+	this.hashers[name] =  driveProvider(config)
+
+	return this.hashers[name]
 }
 
 func (this *Factory) Extend(driver string, hasherProvider contracts.HasherProvider) {
