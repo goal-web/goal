@@ -33,7 +33,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * view 视图模块 [未完成]
 * translation 多语言模块 [未完成]
 * database 数据库操作模块 [未完成]
-* eloquent ORM模块，计划 golang 1.18 后完成，因为泛型 [未完成]
+* eloquent ORM模块，计划 golang 1.18 发布后完成，因为泛型 [未完成]
 
 ## 参与项目
 
