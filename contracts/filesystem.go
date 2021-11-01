@@ -11,7 +11,8 @@ type FileVisibility int
 type FileSystemProvider func(config Fields) FileSystem
 
 type File interface {
-	fs.File
+	fs.FileInfo
+	Get() string
 }
 
 type FileSystemFactory interface {
@@ -25,13 +26,13 @@ type FileSystem interface {
 	Exists(path string) bool
 
 	Get(path string) (string, error)
-	ReadStream(path string) (bufio.Reader, error)
+	ReadStream(path string) (*bufio.Reader, error)
 
 	Put(path, contents string) error
-	WriteStream(path string, writer bufio.Reader) error
+	WriteStream(path string, contents string) error
 
 	GetVisibility(path string) FileVisibility
-	SetVisibility(path string) error
+	SetVisibility(path string, perm fs.FileMode) error
 
 	Prepend(path, contents string) error
 
@@ -43,7 +44,7 @@ type FileSystem interface {
 
 	Move(from, to string) error
 
-	Size(path string) (int, error)
+	Size(path string) (int64, error)
 
 	LastModified(path string) (time.Time, error)
 
