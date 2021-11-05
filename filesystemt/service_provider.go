@@ -1,0 +1,34 @@
+package filesystemt
+
+import (
+	"github.com/qbhy/goal/contracts"
+	"github.com/qbhy/goal/utils"
+	"io/fs"
+)
+
+type ServiceProvider struct {
+}
+
+func (this ServiceProvider) Register(container contracts.Container) {
+	container.ProvideSingleton(func(config contracts.Config) contracts.FileSystemFactory {
+		factory := &Factory{
+			config:  config,
+			disks:   make(map[string]contracts.FileSystem),
+			drivers: make(map[string]contracts.FileSystemProvider),
+		}
+
+		factory.Extend("local", func(localConfig contracts.Fields) contracts.FileSystem {
+			return &local{
+				name: utils.GetStringField(localConfig, "name"),
+				root: utils.GetStringField(localConfig, "root"),
+				perm: fs.FileMode(utils.GetIntField(localConfig, "perm")),
+			}
+		})
+
+		return factory
+	})
+
+	container.ProvideSingleton(func(factory contracts.FileSystemFactory) contracts.FileSystem {
+		return factory
+	})
+}

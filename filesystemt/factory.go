@@ -16,25 +16,13 @@ type Factory struct {
 	drivers map[string]contracts.FileSystemProvider
 }
 
-func (this *Factory) getName(names ...string) string {
-	var name string
-	if len(names) > 0 {
-		name = names[0]
-	} else {
-		name = this.config.GetString("filesystem.default")
-	}
-
-	return utils.StringOr(name, "default")
-}
-
 func (this Factory) getConfig(name string) contracts.Fields {
 	return this.config.GetFields(
 		utils.IfString(name == "default", "filesystem", fmt.Sprintf("filesystem.disks.%s", name)),
 	)
 }
 
-func (this *Factory) Disk(names ...string) contracts.FileSystem {
-	name := this.getName(names...)
+func (this *Factory) Disk(name string) contracts.FileSystem {
 	if disk, existsStore := this.disks[name]; existsStore {
 		return disk
 	}
@@ -50,7 +38,7 @@ func (this *Factory) Extend(driver string, provider contracts.FileSystemProvider
 
 func (this *Factory) get(name string) contracts.FileSystem {
 	config := this.getConfig(name)
-	drive := utils.GetStringField(config, "driver", "redis")
+	drive := utils.GetStringField(config, "driver", "local")
 	driveProvider, existsProvider := this.drivers[drive]
 	if !existsProvider {
 		logs.WithFields(nil).Fatal(fmt.Sprintf("不支持的文件系统驱动：%s", drive))

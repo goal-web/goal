@@ -29,7 +29,7 @@ func (this *Container) Provide(provider interface{}, aliases ...string) {
 	key := utils.GetTypeKey(resultType)
 
 	this.Bind(key, func() interface{} {
-		return reflect.ValueOf(provider).Call(nil)[0].Interface()
+		return this.Call(provider)[0]
 	})
 
 	if alias := utils.StringOr(aliases...); alias != "" {
