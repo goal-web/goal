@@ -14,11 +14,12 @@ import (
 )
 
 type local struct {
+	name string
 	root string
 	perm fs.FileMode
 }
 
-func NewLocalFileSystem(root string, perm fs.FileMode) contracts.FileSystem {
+func NewLocalFileSystem(name, root string, perm fs.FileMode) contracts.FileSystem {
 	stat, err := os.Stat(root)
 
 	if err != nil {
@@ -37,6 +38,7 @@ func NewLocalFileSystem(root string, perm fs.FileMode) contracts.FileSystem {
 	return &local{
 		root: root,
 		perm: perm,
+		name: name,
 	}
 }
 
@@ -46,6 +48,10 @@ func (this local) filepath(path string) string {
 		path = string(runes[1:])
 	}
 	return this.root + path
+}
+
+func (this *local) Name() string {
+	return this.name
 }
 
 func (this *local) Exists(path string) bool {
@@ -74,18 +80,22 @@ func (this *local) Put(path, contents string) error {
 }
 
 func (this *local) WriteStream(path string, contents string) error {
-	file, err := os.OpenFile(this.filepath(path), os.O_APPEND, this.perm)
+	path = this.filepath(path)
+	file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, this.perm)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
-	_, err = bufio.NewWriter(file).WriteString(contents)
-	return err
+	writer := bufio.NewWriter(file)
+	_, err = writer.WriteString(contents)
+	if err != nil {
+		return err
+	}
+	return writer.Flush()
 }
 
 func (this *local) GetVisibility(path string) contracts.FileVisibility {
-	err := syscall.Access(this.filepath(path), syscall.O_RDWR)
-	if err != nil {
+	if syscall.Access(this.filepath(path), syscall.O_RDWR) != nil {
 		return INVISIBLE
 	}
 	return VISIBLE
@@ -106,12 +116,13 @@ func (this *local) Prepend(path, contents string) error {
 }
 
 func (this *local) Append(path, contents string) error {
-	file, err := os.OpenFile(this.filepath(path), os.O_APPEND|os.O_CREATE, this.perm)
+	path = this.filepath(path)
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, os.ModeAppend|this.perm)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
-	_, err = file.Write([]byte(contents))
+	_, err = file.WriteString(contents)
 	return err
 }
 
@@ -152,9 +163,10 @@ func (this *local) Files(directory string) (results []contracts.File) {
 	}
 
 	for _, fileInfo := range fileInfos {
-		if fileInfo.IsDir() {
+		if !fileInfo.IsDir() {
 			results = append(results, &file{
 				FileInfo: fileInfo,
+				disk:     this.name,
 			})
 		}
 	}
@@ -168,6 +180,7 @@ func (this *local) AllFiles(directory string) (results []contracts.File) {
 	for _, fileInfo := range fileInfos {
 		results = append(results, &file{
 			FileInfo: fileInfo,
+			disk:     this.name,
 		})
 	}
 

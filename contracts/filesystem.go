@@ -13,6 +13,7 @@ type FileSystemProvider func(config Fields) FileSystem
 type File interface {
 	fs.FileInfo
 	Get() string
+	Disk() string
 }
 
 type FileSystemFactory interface {
@@ -23,6 +24,8 @@ type FileSystemFactory interface {
 }
 
 type FileSystem interface {
+	Name() string
+
 	Exists(path string) bool
 
 	Get(path string) (string, error)

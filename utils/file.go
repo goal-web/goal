@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func CopyFile(from, to string, bufferSize int64) error {
@@ -54,7 +55,7 @@ func CopyFile(from, to string, bufferSize int64) error {
 
 func AllFiles(path string) (results []fs.FileInfo) {
 	_ = filepath.Walk(path, func(path string, info fs.FileInfo, err error) error {
-		if err == nil {
+		if err == nil && !info.IsDir() {
 			results = append(results, info)
 		}
 		return nil
@@ -62,10 +63,10 @@ func AllFiles(path string) (results []fs.FileInfo) {
 	return results
 }
 
-func AllDirectories(path string) (results []string) {
-	_ = filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
-		if err == nil {
-			results = append(results, d.Name())
+func AllDirectories(directory string) (results []string) {
+	_ = filepath.WalkDir(directory, func(path string, dir fs.DirEntry, err error) error {
+		if err == nil && dir.IsDir() && path != directory {
+			results = append(results, strings.ReplaceAll(path, directory, ""))
 		}
 		return nil
 	})
