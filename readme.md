@@ -21,13 +21,13 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * hashing 哈希模块
 * validation 数据校验模块
 * events 事件模块
+* filesystem 文件系统模块
 * http http相关模块，请求、响应、路由、中间件等
 * scheduling 任务调度模块 [未完成]
 * auth 用户授权模块 [未完成]
 * websocket socket通信模块 [未完成]
   * socket.io socket.io 实现 [未完成]
 * sse server-sent-events模块(简称sse) [未完成]
-* filesystem 文件系统模块 [未完成]
 * mail 邮件模块 [未完成]
 * queue 消息队列模块 [未完成]
 * view 视图模块 [未完成]
