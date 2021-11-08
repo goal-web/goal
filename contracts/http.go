@@ -9,5 +9,6 @@ type HttpResponse interface {
 
 type HttpRequest interface {
 	Getter
+	FieldsProvider
 	echo.Context
 }
