@@ -56,6 +56,9 @@ func (this *Request) Get(key string) (value interface{}) {
 }
 
 func (this *Request) Fields() contracts.Fields {
+	if this.fields != nil {
+		return this.fields
+	}
 	data := make(contracts.Fields)
 
 	for key, query := range this.QueryParams() {
