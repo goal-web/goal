@@ -27,6 +27,31 @@ func ConvertToInt64(rawValue interface{}, defaultValue int64) int64 {
 	return defaultValue
 }
 
+// 把能转换成 int 的值转换成 int
+func ConvertToInt(rawValue interface{}, defaultValue int) int {
+	switch value := rawValue.(type) {
+	case int64:
+		return int(value)
+	case int:
+		return (value)
+	case int8:
+		return int(value)
+	case int16:
+		return int(value)
+	case int32:
+		return int(value)
+	case float64:
+		return int(value)
+	case float32:
+		return int(value)
+	case string:
+		i64, _ := strconv.ParseInt(value, 10, 32)
+		return int(i64)
+	}
+
+	return defaultValue
+}
+
 // 把能转换成 float64 的值转换成 float64
 func ConvertToFloat64(rawValue interface{}, defaultValue float64) float64 {
 	switch value := rawValue.(type) {
@@ -47,6 +72,31 @@ func ConvertToFloat64(rawValue interface{}, defaultValue float64) float64 {
 	case string:
 		f64, _ := strconv.ParseFloat(value, 64)
 		return f64
+	}
+
+	return defaultValue
+}
+
+// 把能转换成 float32 的值转换成 float32
+func ConvertToFloat(rawValue interface{}, defaultValue float32) float32 {
+	switch value := rawValue.(type) {
+	case float64:
+		return float32(value)
+	case int64:
+		return float32(value)
+	case int:
+		return float32(value)
+	case int8:
+		return float32(value)
+	case int16:
+		return float32(value)
+	case int32:
+		return float32(value)
+	case float32:
+		return value
+	case string:
+		f64, _ := strconv.ParseFloat(value, 32)
+		return float32(f64)
 	}
 
 	return defaultValue

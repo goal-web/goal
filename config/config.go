@@ -32,7 +32,6 @@ type config struct {
 	configs   map[string]contracts.Config
 	envValues map[string]env
 }
-
 type env struct {
 	value string
 }
@@ -48,8 +47,12 @@ func (this *config) GetEnv(key string) string {
 	return ""
 }
 
+func (this *config) Fields() contracts.Fields {
+	return this.fields
+}
+
 func (this *config) Load(provider contracts.FieldsProvider) {
-	utils.MergeFields(this.fields, provider.GetFields())
+	utils.MergeFields(this.fields, provider.Fields())
 }
 
 func (this *config) Merge(key string, config contracts.Config) {
@@ -132,7 +135,18 @@ func (this *config) GetString(key string) string {
 	return ""
 }
 
-func (this *config) GetInt(key string) int64 {
+func (this *config) GetInt(key string) int {
+	if field := this.Get(key); field != nil {
+		value := utils.ConvertToInt(field, 0)
+		if value != 0 { // 缓存转换结果
+			this.Set(key, value)
+		}
+		return value
+	}
+
+	return 0
+}
+func (this *config) GetInt64(key string) int64 {
 	if field := this.Get(key); field != nil {
 		value := utils.ConvertToInt64(field, 0)
 		if value != 0 { // 缓存转换结果
@@ -153,7 +167,18 @@ func (this *config) Unset(key string) {
 	delete(this.configs, key)
 }
 
-func (this *config) GetFloat(key string) float64 {
+func (this *config) GetFloat(key string) float32 {
+	if field := this.Get(key); field != nil {
+		value := utils.ConvertToFloat(field, 0)
+		if value != 0 { // 缓存转换结果
+			this.Set(key, value)
+		}
+		return float32(value)
+	}
+
+	return 0
+}
+func (this *config) GetFloat64(key string) float64 {
 	if field := this.Get(key); field != nil {
 		value := utils.ConvertToFloat64(field, 0)
 		if value != 0 { // 缓存转换结果

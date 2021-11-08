@@ -12,7 +12,7 @@ func TestBaseConfig(t *testing.T) {
 
 	conf := config.New("testing")
 
-	conf.Load(config.FieldsProvider{Fields: map[string]interface{}{
+	conf.Load(config.FieldsProvider{Data: map[string]interface{}{
 		"a": "a",
 	}})
 
@@ -108,7 +108,7 @@ func TestDotEnv(t *testing.T) {
 		Sep:   "=",
 	}
 
-	fields := env.GetFields()
+	fields := env.Fields()
 
 	assert.True(t, fields["testing:name"] == "testing goal")
 }

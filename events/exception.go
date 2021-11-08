@@ -17,6 +17,6 @@ func (e EventException) Error() string {
 	return e.exception.Error()
 }
 
-func (e EventException) GetFields() contracts.Fields {
-	return e.exception.GetFields()
+func (e EventException) Fields() contracts.Fields {
+	return e.exception.Fields()
 }

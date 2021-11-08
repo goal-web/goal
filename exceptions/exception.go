@@ -21,6 +21,6 @@ func (e Exception) Error() string {
 	return e.err
 }
 
-func (e Exception) GetFields() contracts.Fields {
+func (e Exception) Fields() contracts.Fields {
 	return e.fields
 }

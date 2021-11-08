@@ -31,7 +31,7 @@ func Make(data interface{}, rules contracts.Rules) contracts.Validator {
 
 func Valid(form contracts.ValidatableForm) contracts.Validator {
 	validator := &Validator{
-		fields:         form.GetFields(),
+		fields:         form.Fields(),
 		rules:          form.Rules(),
 		fieldsNamesMap: make(map[string]string),
 		isValidated:    false,

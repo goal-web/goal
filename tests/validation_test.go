@@ -20,7 +20,7 @@ func TestValidator(t *testing.T) {
 	}
 	assert.True(t, validation.Make(DemoParam{Id: "55555"}, demoCheckers).IsSuccessful())
 
-	assert.False(t, len(validation.Make(DemoParam{Id: "666666"}, demoCheckers).Errors()) > 0)
+	assert.True(t, len(validation.Make(DemoParam{Id: "666666"}, demoCheckers).Errors()) > 0)
 
 	assert.True(t, validation.Make(contracts.Fields{
 		"id": "55555",
@@ -103,7 +103,7 @@ func (d DemoValidatable) Rules() contracts.Rules {
 	}
 }
 
-func (d DemoValidatable) GetFields() contracts.Fields {
+func (d DemoValidatable) Fields() contracts.Fields {
 	return d.fields
 }
 

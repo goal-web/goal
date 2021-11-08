@@ -20,7 +20,7 @@ func (this ValidatorException) Error() (str string) {
 	return
 }
 
-func (this ValidatorException) GetFields() contracts.Fields {
+func (this ValidatorException) Fields() contracts.Fields {
 	return this.param
 }
 

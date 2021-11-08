@@ -41,6 +41,7 @@ func TestCacheFactory(t *testing.T) {
 
 	cacheFactory := app.Get("cache").(contracts.CacheFactory)
 
-	assert.True(t, cacheFactory.Store().Forever("a", "testing") == nil)
+	err := cacheFactory.Store().Forever("a", "testing")
+	assert.Nil(t, err, err)
 	assert.True(t, cacheFactory.Store().Get("a") == "testing")
 }

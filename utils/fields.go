@@ -51,6 +51,36 @@ func GetIntField(fields contracts.Fields, key string, defaultValues ...int) int 
 	}
 }
 
+func GetFloatField(fields contracts.Fields, key string, defaultValues ...float32) float32 {
+	var defaultValue float32 = 0
+	if len(defaultValues) > 0 {
+		defaultValue = defaultValues[0]
+	}
+	if value, existsValue := fields[key]; existsValue {
+		if intValue, isInt := value.(float32); isInt {
+			return intValue
+		}
+		return ConvertToFloat(value, defaultValue)
+	} else {
+		return defaultValue
+	}
+}
+
+func GetFloat64Field(fields contracts.Fields, key string, defaultValues ...float64) float64 {
+	var defaultValue float64 = 0
+	if len(defaultValues) > 0 {
+		defaultValue = defaultValues[0]
+	}
+	if value, existsValue := fields[key]; existsValue {
+		if intValue, isInt := value.(float64); isInt {
+			return intValue
+		}
+		return ConvertToFloat64(value, defaultValue)
+	} else {
+		return defaultValue
+	}
+}
+
 func GetBoolField(fields contracts.Fields, key string, defaultValues ...bool) bool {
 	var defaultValue = false
 	if len(defaultValues) > 0 {
@@ -105,7 +135,7 @@ func ConvertToFields(anyValue interface{}) (contracts.Fields, error) {
 				return nil, errors.New("不支持 string 以外的类型作为 key 的 map")
 			}
 		default:
-			return nil, errors.New("不支持转 contracts.GetFields 的类型： " + paramType.String())
+			return nil, errors.New("不支持转 contracts.Fields 的类型： " + paramType.String())
 		}
 	}
 	return fields, nil

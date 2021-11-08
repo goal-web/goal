@@ -8,9 +8,41 @@ import (
 
 type Request struct {
 	echo.Context
+	fields contracts.Fields
 }
 
-func (this Request) Get(key string) (value interface{}) {
+func (this *Request) GetString(key string) string {
+	return utils.GetStringField(this.All(), key)
+}
+
+func (this *Request) GetInt64(key string) int64 {
+	return utils.GetInt64Field(this.All(), key)
+}
+
+func (this *Request) GetInt(key string) int {
+	return utils.GetIntField(this.All(), key)
+}
+
+func (this *Request) GetFloat64(key string) float64 {
+	return utils.GetFloat64Field(this.All(), key)
+}
+
+func (this *Request) GetFloat(key string) float32 {
+	return utils.GetFloatField(this.All(), key)
+}
+
+func (this *Request) GetBool(key string) bool {
+	return utils.GetBoolField(this.All(), key)
+}
+
+func (this *Request) GetFields(key string) contracts.Fields {
+	if field, isTypeRight := this.All()[key].(contracts.Fields); isTypeRight {
+		return field
+	}
+	return nil
+}
+
+func (this *Request) Get(key string) (value interface{}) {
 	if value = this.Context.Get(key); value != nil {
 		return value
 	}
@@ -23,7 +55,7 @@ func (this Request) Get(key string) (value interface{}) {
 	return this.FormValue(key)
 }
 
-func (this Request) All() contracts.Fields {
+func (this *Request) All() contracts.Fields {
 	data := make(contracts.Fields)
 
 	for key, query := range this.QueryParams() {

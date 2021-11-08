@@ -5,10 +5,10 @@ import (
 )
 
 type FieldsProvider struct {
-	Fields contracts.Fields
+	Data contracts.Fields
 }
 
-func (provider FieldsProvider) GetFields() contracts.Fields {
-	return provider.Fields
+func (provider FieldsProvider) Fields() contracts.Fields {
+	return provider.Data
 }
 

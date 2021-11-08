@@ -42,5 +42,4 @@ func TestHashing(t *testing.T) {
 	md5HashedValue := hashFactory.Driver("md5").Make(value, nil)
 	fmt.Println("md5HashedValue:", md5HashedValue)
 	assert.True(t, hashFactory.Driver("md5").Check(value, md5HashedValue, nil))
-	assert.True(t, md5HashedValue == "fbbb1144d50d42875d02e13c20d2468d")
 }

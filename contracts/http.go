@@ -8,6 +8,6 @@ type HttpResponse interface {
 }
 
 type HttpRequest interface {
+	Getter
 	echo.Context
-	All() Fields
 }
