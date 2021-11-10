@@ -20,23 +20,23 @@ func (this *Auth) SetUser(authorizable contracts.Authorizable) {
 }
 
 func (this *Auth) User() contracts.Authorizable {
-	return this.Guard("guard").User()
+	return this.Guard("default").User()
 }
 
 func (this *Auth) Id() string {
-	return this.Guard("guard").Id()
+	return this.Guard("default").Id()
 }
 
 func (this *Auth) Check() bool {
-	return this.Guard("guard").Check()
+	return this.Guard("default").Check()
 }
 
 func (this *Auth) Guest() bool {
-	return this.Guard("guard").Guest()
+	return this.Guard("default").Guest()
 }
 
 func (this *Auth) Validate(credentials contracts.Fields) bool {
-	return this.Guard("guard").Validate(credentials)
+	return this.Guard("default").Validate(credentials)
 }
 
 func (this *Auth) ExtendUserProvider(key string, provider contracts.UserProviderProvider) {
