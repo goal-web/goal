@@ -1,10 +1,13 @@
 package contracts
 
+type GuardProvider func(config Fields) Guard
+type UserProviderProvider func(config Fields) UserProvider
+
 type Auth interface {
 	Guard
 
-	ExtendUserProvider(key string, provider UserProvider)
-	ExtendGuard(key string, guard Guard)
+	ExtendUserProvider(key string, provider UserProviderProvider)
+	ExtendGuard(key string, guard GuardProvider)
 
 	Guard(key string) Guard
 	UserProvider(key string) UserProvider

@@ -48,10 +48,10 @@ func (this *Factory) Extend(driver string, cacheStoreProvider contracts.CacheSto
 
 func (this *Factory) get(name string) contracts.CacheStore {
 	config := this.getConfig(name)
-	drive := utils.GetStringField(config, "driver", "redis")
-	driveProvider, existsProvider := this.drivers[drive]
+	driver := utils.GetStringField(config, "driver", "redis")
+	driveProvider, existsProvider := this.drivers[driver]
 	if !existsProvider {
-		logs.WithFields(nil).Fatal(fmt.Sprintf("不支持的缓存驱动：%s", drive))
+		logs.WithFields(nil).Fatal(fmt.Sprintf("不支持的缓存驱动：%s", driver))
 	}
 	return driveProvider(config)
 }
