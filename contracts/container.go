@@ -14,13 +14,8 @@ type Container interface {
 	Get(string) interface{}
 	Call(interface{}, ...interface{}) []interface{}
 	DI(object interface{}, args ...interface{})
-	RegisterServices(provider ...ServiceProvider)
 }
 
 type Component interface {
 	ShouldInject()
-}
-
-type ServiceProvider interface {
-	Register(container Container)
 }

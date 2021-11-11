@@ -2,8 +2,8 @@ package tests
 
 import (
 	"fmt"
+	"github.com/qbhy/goal/application"
 	"github.com/qbhy/goal/config"
-	"github.com/qbhy/goal/container"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/hashing"
 	"github.com/stretchr/testify/assert"
@@ -13,7 +13,7 @@ import (
 
 func TestHashing(t *testing.T) {
 	// 初始化容器
-	app := container.Singleton()
+	app := application.Singleton()
 
 	path, _ := os.Getwd()
 

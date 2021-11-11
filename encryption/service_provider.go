@@ -7,7 +7,16 @@ import (
 type ServiceProvider struct {
 }
 
-func (this ServiceProvider) Register(container contracts.Container) {
+func (this ServiceProvider) OnStop() {
+
+}
+
+func (this ServiceProvider) OnStart() error {
+	return nil
+}
+
+
+func (this ServiceProvider) Register(container contracts.Application) {
 	container.ProvideSingleton(func(config contracts.Config) contracts.EncryptorFactory {
 		factory := &Factory{encryptors: make(map[string]contracts.Encryptor)}
 

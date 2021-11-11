@@ -10,8 +10,16 @@ type ServiceProvider struct {
 	Sep   string
 }
 
-func (provider ServiceProvider) Register(container contracts.Container) {
-	container.ProvideSingleton(func() contracts.Config {
+func (this ServiceProvider) OnStop() {
+
+}
+
+func (this ServiceProvider) OnStart() error {
+	return nil
+}
+
+func (provider ServiceProvider) Register(application contracts.Application) {
+	application.ProvideSingleton(func() contracts.Config {
 
 		configInstance := New(provider.Env)
 

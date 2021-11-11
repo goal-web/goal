@@ -119,11 +119,11 @@ func (this *router) Start(address string) error {
 	this.Use(func(request http.Request, next echo.HandlerFunc) (result error) {
 		defer func() {
 			if err := recover(); err != nil {
-				this.errHandler(exceptions.ResolveException(err), request)
+				this.errHandler(exceptions.ResolveException(err), &request)
 				result = ignoreError
 			}
 		}()
-		return next(request)
+		return next(&request)
 	})
 
 	this.echo.HTTPErrorHandler = this.errHandler
@@ -142,7 +142,7 @@ func (this *router) mountRoutes(routes []contracts.Route, middlewares ...interfa
 					if result, isErr := results[0].(error); isErr {
 						return result
 					}
-					http.HandleResponse(results[0], request)
+					http.HandleResponse(results[0], &request)
 					return ignoreError
 				}
 				return nil
@@ -162,7 +162,7 @@ func (this *router) resolveMiddlewares(interfaceMiddlewares []interface{}) []ech
 		(func(middleware interface{}) {
 			middlewares = append(middlewares, func(next echo.HandlerFunc) echo.HandlerFunc {
 				return func(context echo.Context) (err error) {
-					rawResult := this.app.Call(middlewareItem, http.Request{context}, next)[0]
+					rawResult := this.app.Call(middlewareItem, http.NewRequest(context), next)[0]
 					switch result := rawResult.(type) {
 					case error:
 						return result

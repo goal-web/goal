@@ -9,9 +9,11 @@ import (
 
 type Auth struct {
 	config        contracts.Config
+
 	guardDrivers  map[string]contracts.GuardProvider
-	userDrivers   map[string]contracts.UserProviderProvider
 	guards        map[string]contracts.Guard
+
+	userDrivers   map[string]contracts.UserProviderProvider
 	userProviders map[string]contracts.UserProvider
 }
 

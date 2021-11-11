@@ -229,9 +229,3 @@ func (this *Container) DI(object interface{}, args ...interface{}) {
 
 	return
 }
-
-func (this *Container) RegisterServices(services ...contracts.ServiceProvider) {
-	for _, service := range services {
-		service.Register(this)
-	}
-}

@@ -1,9 +1,9 @@
 package tests
 
 import (
+	"github.com/qbhy/goal/application"
 	"github.com/qbhy/goal/cache"
 	"github.com/qbhy/goal/config"
-	"github.com/qbhy/goal/container"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/exceptions"
 	"github.com/qbhy/goal/redis"
@@ -14,7 +14,7 @@ import (
 
 func TestCacheFactory(t *testing.T) {
 	// 初始化容器
-	app := container.Singleton()
+	app := application.Singleton()
 
 	path, _ := os.Getwd()
 

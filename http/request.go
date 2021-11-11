@@ -11,6 +11,13 @@ type Request struct {
 	fields contracts.Fields
 }
 
+func NewRequest(ctx echo.Context) contracts.HttpRequest {
+	return &Request{
+		Context: ctx,
+		fields:  nil,
+	}
+}
+
 func (this *Request) GetString(key string) string {
 	return utils.GetStringField(this.Fields(), key)
 }

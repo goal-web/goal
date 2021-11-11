@@ -7,7 +7,16 @@ import (
 type ServiceProvider struct {
 }
 
-func (this ServiceProvider) Register(app contracts.Container) {
+func (this ServiceProvider) OnStop() {
+
+}
+
+func (this ServiceProvider) OnStart() error {
+	return nil
+}
+
+
+func (this ServiceProvider) Register(app contracts.Application) {
 
 	app.ProvideSingleton(func(config contracts.Config, handler contracts.ExceptionHandler) contracts.RedisFactory {
 		return &Factory{
