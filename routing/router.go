@@ -1,4 +1,4 @@
-package routes
+package routing
 
 import (
 	"errors"
@@ -107,7 +107,7 @@ func (this *router) Add(method interface{}, path string, handler interface{}, mi
 	})
 }
 
-// Start 启动 server
+// start 启动 server
 func (this *router) Start(address string) error {
 	this.mountRoutes(this.routes)
 
@@ -115,15 +115,15 @@ func (this *router) Start(address string) error {
 		this.mountRoutes(routeGroup.Routes(), routeGroup.Middlewares()...)
 	}
 
-	// recovery
-	this.Use(func(request http.Request, next echo.HandlerFunc) (result error) {
+	// recovery 。 这里为了 contracts 不依赖 echo ，要求 request 必须继承自 echo.Context !!!
+	this.Use(func(request contracts.HttpRequest, next echo.HandlerFunc) (result error) {
 		defer func() {
 			if err := recover(); err != nil {
-				this.errHandler(exceptions.ResolveException(err), &request)
+				this.errHandler(exceptions.ResolveException(err), (request).(echo.Context))
 				result = ignoreError
 			}
 		}()
-		return next(&request)
+		return next((request).(echo.Context))
 	})
 
 	this.echo.HTTPErrorHandler = this.errHandler

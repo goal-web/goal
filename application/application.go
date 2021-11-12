@@ -2,7 +2,9 @@ package application
 
 import (
 	"github.com/qbhy/goal/contracts"
+	"github.com/qbhy/goal/utils"
 	"github.com/qbhy/parallel"
+	"reflect"
 )
 
 type application struct {
@@ -10,7 +12,8 @@ type application struct {
 	services []contracts.ServiceProvider
 }
 
-func (this *application) Start() (errors []error) {
+func (this *application) Start() map[string]error {
+	errors := make(map[string]error)
 	queue := parallel.NewParallel(len(this.services))
 
 	for _, service := range this.services {
@@ -21,18 +24,20 @@ func (this *application) Start() (errors []error) {
 		})(service)
 	}
 
-	for _, result := range queue.Wait() {
+	results := queue.Wait()
+	for serviceIndex, result := range results {
 		if err, isErr := result.(error); isErr {
-			errors = append(errors, err)
+			errors[utils.GetTypeKey(reflect.TypeOf(this.services[serviceIndex]))] = err
 		}
 	}
 
-	return
+	return errors
 }
 
 func (this *application) OnStop() {
-	for _, service := range this.services {
-		service.OnStop()
+	// 倒序执行各服务的关闭
+	for serviceIndex := len(this.services) - 1; serviceIndex > -1; serviceIndex-- {
+		this.services[serviceIndex].OnStop()
 	}
 }
 

@@ -1,4 +1,4 @@
-package routes
+package routing
 
 import (
 	"fmt"
@@ -8,13 +8,18 @@ import (
 
 type ServiceProvider struct {
 	app contracts.Application
+
+	RouteCollectors []interface{}
 }
 
-func (this ServiceProvider) OnStop() {
+func (this *ServiceProvider) OnStop() {
 
 }
 
-func (this ServiceProvider) OnStart() error {
+func (this *ServiceProvider) OnStart() error {
+	for _, collector := range this.RouteCollectors {
+		this.app.Call(collector)
+	}
 	return this.app.Call(func(router contracts.Router, config contracts.Config) error {
 		return router.Start(
 			utils.StringOr(
@@ -28,9 +33,11 @@ func (this ServiceProvider) OnStart() error {
 	})[0].(error)
 }
 
-func (provider ServiceProvider) Register(container contracts.Application) {
-	routerInstance := New(container)
-	container.ProvideSingleton(func() contracts.Router {
+func (this *ServiceProvider) Register(app contracts.Application) {
+	this.app = app
+
+	app.ProvideSingleton(func() contracts.Router {
+		routerInstance := New(this.app)
 		return routerInstance
 	}, "router")
 }

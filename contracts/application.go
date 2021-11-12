@@ -5,7 +5,7 @@ type Application interface {
 
 	RegisterServices(provider ...ServiceProvider)
 
-	Start() []error
+	Start() map[string]error
 
 	OnStop()
 }

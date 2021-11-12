@@ -1,4 +1,4 @@
-package routes
+package routing
 
 type route struct {
 	method      []string
