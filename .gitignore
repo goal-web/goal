@@ -5,3 +5,5 @@ main.go
 
 /*.env
 
+goal.pid
+
