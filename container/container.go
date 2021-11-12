@@ -13,47 +13,17 @@ var (
 )
 
 type Container struct {
-	binds      map[string]contracts.InstanceProvider
-	singletons map[string]contracts.InstanceProvider
+	binds      map[string]contracts.MagicalFunc
+	singletons map[string]contracts.MagicalFunc
 	instances  map[string]interface{}
 	aliases    map[string]string
 }
 
-func (this *Container) Provide(provider interface{}, aliases ...string) {
-	providerType := reflect.TypeOf(provider)
-	if providerType.Kind() != reflect.Func || providerType.NumOut() != 1 {
-		panic(CallerTypeError)
+func newInstanceProvider(provider interface{}) contracts.MagicalFunc {
+	if magicalFn := NewMagicalFunc(provider); magicalFn.NumOut() == 1 {
+		return magicalFn
 	}
-
-	resultType := providerType.Out(0)
-	key := utils.GetTypeKey(resultType)
-
-	this.Bind(key, func() interface{} {
-		return this.Call(provider)[0]
-	})
-
-	if alias := utils.StringOr(aliases...); alias != "" {
-		this.Alias(key, alias)
-	}
-}
-
-func (this *Container) ProvideSingleton(provider interface{}, aliases ...string) {
-	providerType := reflect.TypeOf(provider)
-
-	if providerType.Kind() != reflect.Func || providerType.NumOut() != 1 {
-		panic(CallerTypeError)
-	}
-
-	resultType := providerType.Out(0)
-	key := utils.GetTypeKey(resultType)
-
-	this.Singleton(key, func() interface{} {
-		return this.Call(provider)[0]
-	})
-
-	if alias := utils.StringOr(aliases...); alias != "" {
-		this.Alias(key, alias)
-	}
+	panic(CallerTypeError)
 }
 
 func New() contracts.Container {
@@ -62,16 +32,20 @@ func New() contracts.Container {
 	return container
 }
 
-func (this *Container) Bind(key string, provider contracts.InstanceProvider) {
-	this.binds[this.GetKey(key)] = provider
+func (this *Container) Bind(key string, provider interface{}) {
+	magicalFn := newInstanceProvider(provider)
+	this.binds[this.GetKey(key)] = magicalFn
+	this.Alias(key, utils.GetTypeKey(magicalFn.Returns()[0]))
 }
 
 func (this *Container) Instance(key string, instance interface{}) {
 	this.instances[this.GetKey(key)] = instance
 }
 
-func (this *Container) Singleton(key string, provider contracts.InstanceProvider) {
-	this.singletons[this.GetKey(key)] = provider
+func (this *Container) Singleton(key string, provider interface{}) {
+	magicalFn := newInstanceProvider(provider)
+	this.singletons[this.GetKey(key)] = magicalFn
+	this.Alias(key, utils.GetTypeKey(magicalFn.Returns()[0]))
 }
 
 func (this *Container) HasBound(key string) bool {
@@ -98,8 +72,8 @@ func (this *Container) GetKey(alias string) string {
 
 func (this *Container) Flush() {
 	this.instances = make(map[string]interface{}, 0)
-	this.singletons = make(map[string]contracts.InstanceProvider, 0)
-	this.binds = make(map[string]contracts.InstanceProvider, 0)
+	this.singletons = make(map[string]contracts.MagicalFunc, 0)
+	this.binds = make(map[string]contracts.MagicalFunc, 0)
 	this.aliases = make(map[string]string, 0)
 }
 
@@ -109,28 +83,21 @@ func (this *Container) Get(key string) interface{} {
 		return tempInstance
 	}
 	if singletonProvider, existsProvider := this.singletons[key]; existsProvider {
-		this.instances[key] = singletonProvider()
+		this.instances[key] = this.Call(singletonProvider)[0]
 		return this.instances[key]
 	}
 	if instanceProvider, existsProvider := this.binds[key]; existsProvider {
-		return instanceProvider()
+		return this.Call(instanceProvider)[0]
 	}
 	return nil
 }
 
-func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
-	fnType := reflect.TypeOf(fn)
+func (this *Container) Call(fn contracts.MagicalFunc, args ...interface{}) []interface{} {
 	argsTypeMap := NewArgumentsTypeMap(append(args, this))
-
-	if fnType.Kind() != reflect.Func {
-		panic(CallerTypeError)
-	}
-
 	fnArgs := make([]reflect.Value, 0)
 
-	for i := 0; i < fnType.NumIn(); i++ {
+	for _, arg := range fn.Arguments() {
 		var (
-			arg      = fnType.In(i)
 			key      = utils.GetTypeKey(arg)
 			argValue reflect.Value
 		)
@@ -159,7 +126,7 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 
 	results := make([]interface{}, 0)
 
-	for _, result := range reflect.ValueOf(fn).Call(fnArgs) {
+	for _, result := range fn.Call(fnArgs) {
 		results = append(results, result.Interface())
 	}
 

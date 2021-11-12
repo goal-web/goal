@@ -16,9 +16,8 @@ func (this ServiceProvider) OnStart() error {
 	return nil
 }
 
-
 func (this ServiceProvider) Register(container contracts.Application) {
-	container.ProvideSingleton(func(
+	container.Singleton("cache", func(
 		config contracts.Config,
 		redis contracts.RedisFactory,
 		handler contracts.ExceptionHandler) contracts.CacheFactory {
@@ -37,8 +36,8 @@ func (this ServiceProvider) Register(container contracts.Application) {
 		})
 
 		return factory
-	}, "cache")
-	container.ProvideSingleton(func(factory contracts.CacheFactory) contracts.CacheStore {
+	})
+	container.Singleton("cache.store", func(factory contracts.CacheFactory) contracts.CacheStore {
 		return factory.Store()
-	}, "cache.store")
+	})
 }

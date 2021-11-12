@@ -10,7 +10,7 @@ type ServiceProvider struct {
 
 func (provider ServiceProvider) Register(container contracts.Container) {
 
-	container.ProvideSingleton(func() contracts.ExceptionHandler {
+	container.Singleton("exception.handler", func() contracts.ExceptionHandler {
 		return NewDefaultHandler(provider.DontReportExceptions)
 	})
 }

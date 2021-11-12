@@ -17,9 +17,8 @@ func (this ServiceProvider) OnStart() error {
 	return nil
 }
 
-
 func (this ServiceProvider) Register(container contracts.Application) {
-	container.ProvideSingleton(func(config contracts.Config) contracts.FileSystemFactory {
+	container.Singleton("filesystem", func(config contracts.Config) contracts.FileSystemFactory {
 		factory := &Factory{
 			config:  config,
 			disks:   make(map[string]contracts.FileSystem),
@@ -37,7 +36,7 @@ func (this ServiceProvider) Register(container contracts.Application) {
 		return factory
 	})
 
-	container.ProvideSingleton(func(factory contracts.FileSystemFactory) contracts.FileSystem {
+	container.Singleton("system.default", func(factory contracts.FileSystemFactory) contracts.FileSystem {
 		return factory
 	})
 }

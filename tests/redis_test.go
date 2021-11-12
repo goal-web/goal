@@ -3,6 +3,7 @@ package tests
 import (
 	"github.com/qbhy/goal/application"
 	"github.com/qbhy/goal/config"
+	"github.com/qbhy/goal/container"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/exceptions"
 	"github.com/qbhy/goal/redis"
@@ -22,7 +23,7 @@ func TestRedisFactory(t *testing.T) {
 	app.Instance("path", path)
 
 	// 注册异常处理器
-	app.ProvideSingleton(func() contracts.ExceptionHandler {
+	app.Singleton("exception.handler", func() contracts.ExceptionHandler {
 		return exceptions.NewDefaultHandler(nil)
 	})
 
@@ -37,7 +38,7 @@ func TestRedisFactory(t *testing.T) {
 		redis.ServiceProvider{},
 	)
 
-	app.Call(func(factory contracts.RedisFactory) {
+	app.Call(container.NewMagicalFunc(func(factory contracts.RedisFactory) {
 		defaultConnection := factory.Connection()
 
 		_, err := defaultConnection.Set("a", "default", time.Minute * 5)
@@ -53,5 +54,5 @@ func TestRedisFactory(t *testing.T) {
 		aValue ,err = cacheConnection.Get("a")
 		assert.True(t, err == nil)
 		assert.True(t, aValue == "cache")
-	})
+	}))
 }

@@ -15,7 +15,7 @@ func (this ServiceProvider) OnStart() error {
 
 
 func (provider ServiceProvider) Register(container contracts.Application) {
-	container.ProvideSingleton(func(handler contracts.ExceptionHandler) contracts.EventDispatcher {
+	container.Singleton("events", func(handler contracts.ExceptionHandler) contracts.EventDispatcher {
 		return NewDispatcher(handler)
 	})
 }

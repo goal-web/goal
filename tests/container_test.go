@@ -32,28 +32,28 @@ func TestBaseContainer(t *testing.T) {
 	assert.True(t, app.Get("A") == "a")
 	assert.True(t, app.HasBound("A"))
 
-	app.Provide(func() DemoParam {
+	app.Bind("DemoParam", func() DemoParam {
 		return DemoParam{Id: "测试一下"}
 	})
 
 	assert.True(t, app.Get(utils.GetTypeKey(reflect.TypeOf(DemoParam{}))).(DemoParam).Id == "测试一下")
 
-	app.Call(func(param DemoParam) {
+	app.Call(container.NewMagicalFunc(func(param DemoParam) {
 		assert.True(t, param.Id == "测试一下")
-	})
+	}))
 
 }
 
 func TestContainer(t *testing.T) {
 	app := container.New()
 
-	app.Provide(func() DemoParam {
+	app.Bind("DemoParam", func() DemoParam {
 		return DemoParam{Id: "没有外部参数的话，从容器中获取"}
 	})
 
-	fn := func(param DemoParam) string {
+	fn := container.NewMagicalFunc(func(param DemoParam) string {
 		return param.Id
-	}
+	})
 
 	// 自己传参
 	assert.True(t, app.Call(fn, DemoParam{Id: "优先使用外部参数"})[0] == "优先使用外部参数")
@@ -73,7 +73,7 @@ func TestContainerMake(t *testing.T) {
 
 	app.Instance("config", "通过容器设置的配置")
 
-	app.Provide(func() DemoParam {
+	app.Bind("DemoParam", func() DemoParam {
 		return DemoParam{Id: "没有外部参数的话，从容器中获取"}
 	})
 
@@ -87,17 +87,17 @@ func TestContainerMake(t *testing.T) {
 func TestAliasType(t *testing.T) {
 	app := container.New()
 
-	app.ProvideSingleton(func() DemoParam {
+	app.Singleton("param", func() DemoParam {
 		return DemoParam{
 			Id: "a",
 		}
-	}, "param")
+	})
 
 	type AliasParam DemoParam
 
-	app.Call(func(param AliasParam) {
+	app.Call(container.NewMagicalFunc(func(param AliasParam) {
 		fmt.Println(param)
-	}, app.Get("param"))
+	}), app.Get("param"))
 }
 
 type DemoStruct2 struct {
@@ -111,12 +111,12 @@ func (d DemoStruct2) ShouldInject() {
 func TestAutoContainer(t *testing.T) {
 	app := container.New()
 
-	app.ProvideSingleton(func() DemoStruct {
+	app.Singleton("struct", func() DemoStruct {
 		return DemoStruct{
 			Param:  DemoParam{Id: "id"},
 			Config: "config",
 		}
-	}, "struct")
+	})
 
 	//struct2Type := reflect.TypeOf(DemoStruct2{})
 	//struct2Value := reflect.New(struct2Type).Interface()
@@ -124,13 +124,13 @@ func TestAutoContainer(t *testing.T) {
 
 	app.DI(struct2Value)
 
-	app.Call(func(struct2 DemoStruct2) {
+	app.Call(container.NewMagicalFunc(func(struct2 DemoStruct2) {
 		assert.True(t, struct2.Config == "config" && struct2.Param.Id == "id")
-	}, app.Get("struct"))
+	}), app.Get("struct"))
 
-	app.Call(func(struct2 DemoStruct2) {
+	app.Call(container.NewMagicalFunc(func(struct2 DemoStruct2) {
 		assert.True(t, struct2.Config == "config22" && struct2.Param.Id == "custom")
-	}, DemoStruct{
+	}), DemoStruct{
 		Param:  DemoParam{Id: "custom"},
 		Config: "config22",
 	})
@@ -151,7 +151,7 @@ func (this *DemoController) PrintDep() {
 
 func TestControllerCall(t *testing.T) {
 	app := container.New()
-	app.ProvideSingleton(func() DemoDependent {
+	app.Singleton("DemoDependent", func() DemoDependent {
 		return DemoDependent{
 			Id: "id ddd",
 		}
@@ -161,13 +161,13 @@ func TestControllerCall(t *testing.T) {
 
 	app.DI(controller)
 
-	app.Call(controller.PrintDep)
+	app.Call(container.NewMagicalFunc(controller.PrintDep))
 }
 
 func TestCallAndDIContainer(t *testing.T) {
 	app := container.New()
 
-	app.Call(func(container2 contracts.Container)  {
+	app.Call(container.NewMagicalFunc(func(container2 contracts.Container) {
 		fmt.Println(container2)
-	})
+	}))
 }

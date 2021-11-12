@@ -3,6 +3,7 @@ package routing
 import (
 	"errors"
 	"github.com/labstack/echo/v4"
+	"github.com/qbhy/goal/container"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/exceptions"
 	"github.com/qbhy/goal/http"
@@ -10,6 +11,11 @@ import (
 
 var (
 	ignoreError = errors.New("忽略该错误") // 用于中间件直接返回响应
+
+	// magical functions
+	exceptionHandler = container.NewMagicalFunc(func(handler contracts.ExceptionHandler, exception http.HttpException) {
+		handler.Handle(exception)
+	})
 )
 
 func New(container contracts.Container) contracts.Router {
@@ -44,9 +50,7 @@ func (this *router) errHandler(err error, context echo.Context) {
 	}
 
 	// 调用容器内的异常处理器
-	this.app.Call(func(handler contracts.ExceptionHandler, exception http.HttpException) {
-		handler.Handle(exception)
-	}, httpException)
+	this.app.Call(exceptionHandler, httpException)
 }
 
 func (this *router) Group(prefix string, middlewares ...interface{}) contracts.RouteGroup {
@@ -103,7 +107,7 @@ func (this *router) Add(method interface{}, path string, handler interface{}, mi
 		method:      methods,
 		path:        path,
 		middlewares: middlewares,
-		handler:     handler,
+		handler:     container.NewMagicalFunc(handler),
 	})
 }
 
@@ -162,7 +166,7 @@ func (this *router) resolveMiddlewares(interfaceMiddlewares []interface{}) []ech
 		(func(middleware interface{}) {
 			middlewares = append(middlewares, func(next echo.HandlerFunc) echo.HandlerFunc {
 				return func(context echo.Context) (err error) {
-					rawResult := this.app.Call(middlewareItem, http.NewRequest(context), next)[0]
+					rawResult := this.app.Call(container.NewMagicalFunc(middlewareItem), http.NewRequest(context), next)[0]
 					switch result := rawResult.(type) {
 					case error:
 						return result

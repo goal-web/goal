@@ -19,7 +19,7 @@ func (this ServiceProvider) OnStart() error {
 }
 
 func (provider ServiceProvider) Register(application contracts.Application) {
-	application.ProvideSingleton(func() contracts.Config {
+	application.Singleton("config", func() contracts.Config {
 
 		configInstance := New(provider.Env)
 

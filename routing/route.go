@@ -1,10 +1,12 @@
 package routing
 
+import "github.com/qbhy/goal/contracts"
+
 type route struct {
 	method      []string
 	path        string
 	middlewares []interface{}
-	handler     interface{}
+	handler     contracts.MagicalFunc
 }
 
 func (route *route) Middlewares() []interface{} {
@@ -19,6 +21,6 @@ func (route *route) Path() string {
 	return route.path
 }
 
-func (route *route) Handler() interface{} {
+func (route *route) Handler() contracts.MagicalFunc {
 	return route.handler
 }

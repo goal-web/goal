@@ -18,7 +18,7 @@ func (this ServiceProvider) OnStart() error {
 
 
 func (this ServiceProvider) Register(container contracts.Application) {
-	container.ProvideSingleton(func(config contracts.Config) contracts.HasherFactory {
+	container.Singleton( "hash", func(config contracts.Config) contracts.HasherFactory {
 		return &Factory{
 			config:  config,
 			hashers: make(map[string]contracts.Hasher),
@@ -36,9 +36,9 @@ func (this ServiceProvider) Register(container contracts.Application) {
 				},
 			},
 		}
-	}, "hash")
+	})
 
-	container.ProvideSingleton(func(factory contracts.HasherFactory) contracts.Hasher {
+	container.Singleton("hashing", func(factory contracts.HasherFactory) contracts.Hasher {
 		return factory
 	})
 }

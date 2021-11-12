@@ -1,10 +1,25 @@
 package utils
 
 import (
+	"errors"
 	"github.com/qbhy/goal/contracts"
 	"reflect"
 	"strings"
 )
+
+var (
+	UnCallable = errors.New("不可调用的参数！")
+)
+
+func GetCallable(arg interface{}) (reflect.Value, error) {
+	argValue := reflect.ValueOf(arg)
+
+	if argValue.Kind() == reflect.Func {
+		return argValue, nil
+	}
+
+	return argValue, UnCallable
+}
 
 // IsSameStruct 判断是否同一个结构体
 func IsSameStruct(v1, v2 interface{}) bool {

@@ -22,7 +22,7 @@ func TestCacheFactory(t *testing.T) {
 	app.Instance("path", path)
 
 	// 注册异常处理器
-	app.ProvideSingleton(func() contracts.ExceptionHandler {
+	app.Singleton("exception.handler", func() contracts.ExceptionHandler {
 		return exceptions.NewDefaultHandler(nil)
 	})
 

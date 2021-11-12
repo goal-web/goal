@@ -17,7 +17,7 @@ func (this ServiceProvider) OnStart() error {
 
 
 func (this ServiceProvider) Register(container contracts.Application) {
-	container.ProvideSingleton(func(config contracts.Config) contracts.EncryptorFactory {
+	container.Singleton("encryption", func(config contracts.Config) contracts.EncryptorFactory {
 		factory := &Factory{encryptors: make(map[string]contracts.Encryptor)}
 
 		factory.Extend("default", AES(config.GetString("app.key")))
@@ -25,7 +25,7 @@ func (this ServiceProvider) Register(container contracts.Application) {
 		return factory
 	})
 
-	container.ProvideSingleton(func(factory contracts.EncryptorFactory) contracts.Encryptor {
+	container.Singleton("encryption.default", func(factory contracts.EncryptorFactory) contracts.Encryptor {
 		return factory.Driver("default")
 	})
 }

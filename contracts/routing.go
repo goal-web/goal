@@ -4,7 +4,7 @@ type Route interface {
 	Middlewares() []interface{}
 	Method() []string
 	Path() string
-	Handler() interface{}
+	Handler() MagicalFunc
 }
 
 type RouteGroup interface {
