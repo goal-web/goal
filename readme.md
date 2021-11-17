@@ -22,7 +22,9 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * validation 数据校验模块
 * events 事件模块
 * filesystem 文件系统模块
-* http http相关模块，请求、响应、路由、中间件等
+* signal 信号监听，goal 实现了优雅关闭功能
+* http http相关模块，请求、响应、中间件等
+  * routing http 路由服务
 * scheduling 任务调度模块 [未完成]
 * auth 用户授权模块 [未完成]
 * websocket socket通信模块 [未完成]
