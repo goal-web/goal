@@ -29,4 +29,5 @@ type Router interface {
 	Trace(path string, handler interface{}, middlewares ...interface{})
 	Group(prefix string, middlewares ...interface{}) RouteGroup
 	Start(string) error
+	Close() error
 }

@@ -12,7 +12,7 @@ type Container interface {
 	Alias(string, string)
 	Flush()
 	Get(string) interface{}
-	Call(MagicalFunc, ...interface{}) []interface{}
+	Call(fn interface{}, args ...interface{}) []interface{}
 	DI(object interface{}, args ...interface{})
 }
 

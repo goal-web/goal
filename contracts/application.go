@@ -7,16 +7,11 @@ type Application interface {
 
 	Start() map[string]error
 
-	OnStop()
-
-	// Listen 添加事件监听
-	Listen(key string, handler interface{})
-	// Trigger 触发事件
-	Trigger(arguments ...interface{})
+	Stop()
 }
 
 type ServiceProvider interface {
 	Register(application Application)
-	OnStart() error
-	OnStop()
+	Start() error
+	Stop()
 }

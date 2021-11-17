@@ -1,8 +1,9 @@
-package routing
+package http
 
 import (
 	"errors"
 	"github.com/labstack/echo/v4"
+	"github.com/qbhy/goal/container"
 	"github.com/qbhy/goal/contracts"
 )
 
@@ -46,7 +47,7 @@ func (group *group) Add(method interface{}, path string, handler interface{}, mi
 		method:      methods,
 		path:        group.prefix + path,
 		middlewares: middlewares,
-		handler:     handler,
+		handler:     container.NewMagicalFunc(handler),
 	})
 
 	return group

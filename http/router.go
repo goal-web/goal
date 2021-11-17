@@ -1,4 +1,4 @@
-package routing
+package http
 
 import (
 	"errors"
@@ -6,14 +6,13 @@ import (
 	"github.com/qbhy/goal/container"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/exceptions"
-	"github.com/qbhy/goal/http"
 )
 
 var (
 	ignoreError = errors.New("忽略该错误") // 用于中间件直接返回响应
 
 	// magical functions
-	exceptionHandler = container.NewMagicalFunc(func(handler contracts.ExceptionHandler, exception http.HttpException) {
+	exceptionHandler = container.NewMagicalFunc(func(handler contracts.ExceptionHandler, exception contracts.Exception) {
 		handler.Handle(exception)
 	})
 )
@@ -38,12 +37,12 @@ func (this *router) errHandler(err error, context echo.Context) {
 	if ignoreError == err {
 		return
 	}
-	var httpException http.HttpException
+	var httpException HttpException
 	switch rawErr := err.(type) {
-	case http.HttpException:
+	case HttpException:
 		httpException = rawErr
 	default:
-		httpException = http.HttpException{
+		httpException = HttpException{
 			Exception: exceptions.ResolveException(err),
 			Context:   context,
 		}
@@ -59,6 +58,10 @@ func (this *router) Group(prefix string, middlewares ...interface{}) contracts.R
 	this.groups = append(this.groups, groupInstance)
 
 	return groupInstance
+}
+
+func (this *router) Close() error {
+	return this.echo.Close()
 }
 
 func (this *router) Get(path string, handler interface{}, middlewares ...interface{}) {
@@ -140,13 +143,13 @@ func (this *router) mountRoutes(routes []contracts.Route, middlewares ...interfa
 	for _, routeItem := range routes {
 		(func(routeInstance contracts.Route) {
 			this.echo.Match(routeInstance.Method(), routeInstance.Path(), func(context echo.Context) error {
-				request := http.Request{Context: context}
+				request := Request{Context: context}
 				results := this.app.Call(routeInstance.Handler(), request)
 				if len(results) > 0 {
 					if result, isErr := results[0].(error); isErr {
 						return result
 					}
-					http.HandleResponse(results[0], &request)
+					HandleResponse(results[0], &request)
 					return ignoreError
 				}
 				return nil
@@ -166,12 +169,12 @@ func (this *router) resolveMiddlewares(interfaceMiddlewares []interface{}) []ech
 		(func(middleware interface{}) {
 			middlewares = append(middlewares, func(next echo.HandlerFunc) echo.HandlerFunc {
 				return func(context echo.Context) (err error) {
-					rawResult := this.app.Call(container.NewMagicalFunc(middlewareItem), http.NewRequest(context), next)[0]
+					rawResult := this.app.Call(container.NewMagicalFunc(middlewareItem), NewRequest(context), next)[0]
 					switch result := rawResult.(type) {
 					case error:
 						return result
 					default:
-						http.HandleResponse(result, context)
+						HandleResponse(result, context)
 						return ignoreError
 					}
 				}

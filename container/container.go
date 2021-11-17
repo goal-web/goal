@@ -92,11 +92,15 @@ func (this *Container) Get(key string) interface{} {
 	return nil
 }
 
-func (this *Container) Call(fn contracts.MagicalFunc, args ...interface{}) []interface{} {
+func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
+	magicalFn, isMagicalFunc := fn.(contracts.MagicalFunc)
+	if !isMagicalFunc {
+		magicalFn = NewMagicalFunc(fn)
+	}
 	argsTypeMap := NewArgumentsTypeMap(append(args, this))
 	fnArgs := make([]reflect.Value, 0)
 
-	for _, arg := range fn.Arguments() {
+	for _, arg := range magicalFn.Arguments() {
 		var (
 			key      = utils.GetTypeKey(arg)
 			argValue reflect.Value
@@ -126,7 +130,7 @@ func (this *Container) Call(fn contracts.MagicalFunc, args ...interface{}) []int
 
 	results := make([]interface{}, 0)
 
-	for _, result := range fn.Call(fnArgs) {
+	for _, result := range magicalFn.Call(fnArgs) {
 		results = append(results, result.Interface())
 	}
 

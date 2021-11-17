@@ -1,4 +1,4 @@
-package routing
+package http
 
 import "github.com/qbhy/goal/contracts"
 

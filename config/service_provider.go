@@ -10,11 +10,11 @@ type ServiceProvider struct {
 	Sep   string
 }
 
-func (this ServiceProvider) OnStop() {
+func (this ServiceProvider) Stop() {
 
 }
 
-func (this ServiceProvider) OnStart() error {
+func (this ServiceProvider) Start() error {
 	return nil
 }
 

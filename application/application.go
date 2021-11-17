@@ -1,7 +1,6 @@
 package application
 
 import (
-	"github.com/qbhy/goal/container"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/utils"
 	"github.com/qbhy/parallel"
@@ -11,16 +10,6 @@ import (
 type application struct {
 	contracts.Container
 	services []contracts.ServiceProvider
-
-	listeners map[string]contracts.MagicalFunc
-}
-
-func (this *application) Listen(key string, handler interface{}) {
-	this.listeners[key] = container.NewMagicalFunc(handler)
-}
-
-func (this *application) Trigger(arguments ...interface{}) {
-	panic("implement me")
 }
 
 func (this *application) Start() map[string]error {
@@ -30,7 +19,7 @@ func (this *application) Start() map[string]error {
 	for _, service := range this.services {
 		(func(service contracts.ServiceProvider) {
 			queue.Add(func() interface{} {
-				return service.OnStart()
+				return service.Start()
 			})
 		})(service)
 	}
@@ -45,10 +34,10 @@ func (this *application) Start() map[string]error {
 	return errors
 }
 
-func (this *application) OnStop() {
+func (this *application) Stop() {
 	// 倒序执行各服务的关闭
 	for serviceIndex := len(this.services) - 1; serviceIndex > -1; serviceIndex-- {
-		this.services[serviceIndex].OnStop()
+		this.services[serviceIndex].Stop()
 	}
 }
 
