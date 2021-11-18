@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-var (
+const (
 	SIGNAL_RECEIVED = contracts.EventName("SIGNAL_RECEIVED")
 )
 
