@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/qbhy/goal/contracts"
 	"reflect"
+	"strings"
 )
 
 func MergeFields(fields contracts.Fields, finalFields contracts.Fields) {
@@ -19,6 +20,32 @@ func GetStringField(fields contracts.Fields, key string, defaultValues ...string
 		}
 	}
 	return StringOr(defaultValues...)
+}
+
+func GetSubField(fields contracts.Fields, key string, defaultValues ...contracts.Fields) contracts.Fields {
+
+	if subField, isField := fields[key].(contracts.Fields); isField {
+		return subField
+	}
+
+	if len(defaultValues) > 0 {
+		return defaultValues[0]
+	}
+
+	subField := make(contracts.Fields)
+	prefix := key + "."
+
+	for fieldKey, fieldValue := range fields {
+		if strings.HasPrefix(fieldKey, prefix) {
+			subField[strings.ReplaceAll(fieldKey, prefix, "")] = fieldValue
+		}
+	}
+
+	if len(subField) > 0 {
+		fields[key] = subField
+	}
+
+	return subField
 }
 
 func GetInt64Field(fields contracts.Fields, key string, defaultValues ...int64) int64 {
@@ -135,7 +162,7 @@ func ConvertToFields(anyValue interface{}) (contracts.Fields, error) {
 				return nil, errors.New("不支持 string 以外的类型作为 key 的 map")
 			}
 		default:
-			return nil, errors.New("不支持转 contracts.Fields 的类型： " + paramType.String())
+			return nil, errors.New("不支持转 contracts.BaseFields 的类型： " + paramType.String())
 		}
 	}
 	return fields, nil

@@ -17,10 +17,7 @@ func TestBaseConfig(t *testing.T) {
 	}})
 
 	path, _ := os.Getwd()
-	conf.Load(config.EnvFieldsProvider{
-		Paths: []string{path},
-		Sep:   "=",
-	})
+	conf.Load(config.NewEnv([]string{path}, "="))
 
 	assert.True(t, conf.GetFields("app")["name"] == "goal")
 
@@ -29,11 +26,11 @@ func TestBaseConfig(t *testing.T) {
 	assert.True(t, conf.GetString("app.name") == "goal")
 
 	// 测试从环境变量获取配置
-	assert.Nil(t, os.Setenv("app.name","ggboy"))
+	assert.Nil(t, os.Setenv("app.name", "ggboy"))
 	assert.True(t, conf.GetString("app.name") == "ggboy")
 
 	// 测试 env 覆盖配置文件配置
-	assert.Nil(t, os.Setenv("int","new_int"))
+	assert.Nil(t, os.Setenv("int", "new_int"))
 	assert.True(t, conf.GetString("int") == "new_int")
 	conf.Unset("int")
 	assert.Nil(t, os.Unsetenv("int"))
@@ -103,12 +100,11 @@ func TestBaseConfig(t *testing.T) {
 func TestDotEnv(t *testing.T) {
 	path, _ := os.Getwd()
 
-	env := config.EnvFieldsProvider{
-		Paths: []string{path + "/..", path},
-		Sep:   "=",
-	}
+	env := config.NewEnv([]string{path + "/..", path}, "=")
 
 	fields := env.Fields()
+
+	assert.True(t, len(env.GetFields("redis")) > 0)
 
 	assert.True(t, fields["testing:name"] == "testing goal")
 }

@@ -19,14 +19,15 @@ func (this ServiceProvider) Start() error {
 }
 
 func (provider ServiceProvider) Register(application contracts.Application) {
-	application.Singleton("config", func() contracts.Config {
+	application.Singleton("env", func() contracts.Env {
+		return NewEnv(provider.Paths, provider.Sep)
+	})
+
+	application.Singleton("config", func(env contracts.Env) contracts.Config {
 
 		configInstance := New(provider.Env)
 
-		configInstance.Load(EnvFieldsProvider{
-			Paths: provider.Paths,
-			Sep:   provider.Sep,
-		})
+		configInstance.Load(env)
 
 		return configInstance
 	})

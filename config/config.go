@@ -32,6 +32,7 @@ type config struct {
 	configs   map[string]contracts.Config
 	envValues map[string]env
 }
+
 type env struct {
 	value string
 }

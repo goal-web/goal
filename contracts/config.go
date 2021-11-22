@@ -11,3 +11,11 @@ type Config interface {
 	Unset(key string)
 	GetConfig(key string) Config
 }
+
+type Env interface {
+	Getter
+
+	FieldsProvider
+
+	Load() Fields
+}

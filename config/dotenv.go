@@ -3,33 +3,58 @@ package config
 import (
 	"fmt"
 	"github.com/qbhy/goal/contracts"
+	"github.com/qbhy/goal/supports"
 	"github.com/qbhy/goal/utils"
 	"path/filepath"
 )
 
-type EnvFieldsProvider struct {
-	Paths []string
-	Sep   string
+type envProvider struct {
+	supports.BaseFields
+	Paths  []string
+	Sep    string
+	fields contracts.Fields
 }
 
-func (e EnvFieldsProvider) Fields() contracts.Fields {
+func NewEnv(paths []string, sep string) contracts.Env {
+	provider := &envProvider{
+		BaseFields: supports.BaseFields{},
+		Paths:      paths,
+		Sep:        sep,
+		fields:     nil,
+	}
+
+	provider.BaseFields.FieldsProvider = provider
+	return provider
+}
+
+func (this *envProvider) Fields() contracts.Fields {
+	if this.fields != nil {
+		return this.fields
+	}
+
+	this.fields = this.Load()
+
+	return this.fields
+}
+
+func (this *envProvider) Load() contracts.Fields {
 	var (
 		files  []string
 		fields = make(contracts.Fields)
 	)
-	for _, path := range e.Paths {
+	for _, path := range this.Paths {
 		tmpFiles, _ := filepath.Glob(path + "/*.env")
 		files = append(files, tmpFiles...)
 	}
 
 	for _, file := range files {
-		tempFields, _ := utils.LoadEnv(file, utils.StringOr(e.Sep, "="))
+		tempFields, _ := utils.LoadEnv(file, utils.StringOr(this.Sep, "="))
 		if tempFields["env"] != nil { // 加载成功并且设置了 env
 			newFields := make(contracts.Fields)
-			env := tempFields["env"].(string)
+			envValue := tempFields["env"].(string)
 			for key, field := range tempFields {
 				if key != "env" {
-					newFields[fmt.Sprintf("%s:%s", env, key)] = field
+					newFields[fmt.Sprintf("%s:%s", envValue, key)] = field
 				}
 			}
 			tempFields = newFields
