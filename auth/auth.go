@@ -17,8 +17,8 @@ type Auth struct {
 	userProviders map[string]contracts.UserProvider
 }
 
-func (this *Auth) SetUser(authorizable contracts.Authorizable) {
-	this.Guard("default").SetUser(authorizable)
+func (this *Auth) Once(authorizable contracts.Authorizable) {
+	this.Guard("default").Once(authorizable)
 }
 
 func (this *Auth) User() contracts.Authorizable {
@@ -72,7 +72,7 @@ func (this *Auth) UserProvider(key string) contracts.UserProvider {
 		return userProvider
 	}
 
-	config := this.config.GetFields(fmt.Sprintf("auth.userProviders.%s", key))
+	config := this.config.GetFields(fmt.Sprintf("auth.users.%s", key))
 	driver := utils.GetStringField(config, "driver")
 
 	if userDriver, existsProvider := this.userDrivers[driver]; existsProvider {

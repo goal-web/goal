@@ -18,7 +18,7 @@ type Authorizable interface {
 }
 
 type Guard interface {
-	SetUser(authorizable Authorizable)
+	Once(authorizable Authorizable)
 	User() Authorizable
 	Id() string
 	Check() bool
