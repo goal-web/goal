@@ -1,9 +1,7 @@
 package contracts
 
-type EventName string
-
 type Event interface {
-	Name() EventName
+	Event() string
 }
 
 type SyncEvent interface {
@@ -16,6 +14,6 @@ type EventListener interface {
 }
 
 type EventDispatcher interface {
-	Register(name EventName, listener EventListener)
+	Register(name string, listener EventListener)
 	Dispatch(event Event)
 }

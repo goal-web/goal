@@ -10,12 +10,16 @@ import (
 	"testing"
 )
 
-const Demo contracts.EventName = "demo"
+const Demo string = "demo"
 
 type DemoEvent struct {
 }
 
-func (d DemoEvent) Name() contracts.EventName {
+func (d DemoEvent) Sync() bool {
+	return true
+}
+
+func (d DemoEvent) Event() string {
 	return Demo
 }
 
