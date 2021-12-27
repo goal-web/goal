@@ -3,18 +3,18 @@ package session
 import "github.com/qbhy/goal/contracts"
 
 type ServiceProvider struct {
+	app contracts.Application
 }
 
 func (this *ServiceProvider) Register(application contracts.Application) {
-	panic("implement me")
+	this.app = application
 }
 
 func (this *ServiceProvider) Start() error {
-	//TODO implement me
-	panic("implement me")
+	this.app.Call(func(dispatcher contracts.EventDispatcher) {
+	})
+	return nil
 }
 
 func (this *ServiceProvider) Stop() {
-	//TODO implement me
-	panic("implement me")
 }
