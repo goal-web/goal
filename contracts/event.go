@@ -6,6 +6,11 @@ type Event interface {
 	Name() EventName
 }
 
+type SyncEvent interface {
+	Event
+	Sync() bool
+}
+
 type EventListener interface {
 	Handle(event Event)
 }

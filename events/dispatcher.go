@@ -24,7 +24,7 @@ func (dispatcher EventDispatcher) Register(name contracts.EventName, listener co
 }
 
 func (dispatcher EventDispatcher) Dispatch(event contracts.Event) {
-	// 加个协程
+	// 处理异常
 	defer func() {
 		if err := recover(); err != nil {
 			go func() {
@@ -35,7 +35,18 @@ func (dispatcher EventDispatcher) Dispatch(event contracts.Event) {
 			}()
 		}
 	}()
-	for _, listener := range dispatcher.eventListenersMap[event.Name()] {
-		listener.Handle(event)
+
+	if _, isSync := event.(contracts.SyncEvent); isSync {
+		// 同步执行事件
+		for _, listener := range dispatcher.eventListenersMap[event.Name()] {
+			listener.Handle(event)
+		}
+	} else {
+		// 协程执行
+		go func() {
+			for _, listener := range dispatcher.eventListenersMap[event.Name()] {
+				listener.Handle(event)
+			}
+		}()
 	}
 }
