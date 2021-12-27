@@ -20,6 +20,7 @@ var (
 func New(container contracts.Container) contracts.Router {
 	return &router{
 		app:    container,
+		events: container.Get("events").(contracts.EventDispatcher),
 		echo:   echo.New(),
 		routes: make([]contracts.Route, 0),
 		groups: make([]contracts.RouteGroup, 0),
@@ -27,6 +28,7 @@ func New(container contracts.Container) contracts.Router {
 }
 
 type router struct {
+	events contracts.EventDispatcher
 	app    contracts.Container
 	echo   *echo.Echo
 	groups []contracts.RouteGroup
@@ -123,15 +125,22 @@ func (this *router) Start(address string) error {
 	}
 
 	// recovery 。 这里为了 contracts 不依赖 echo ，要求 request 必须继承自 echo.Context !!!
-	this.Use(func(request contracts.HttpRequest, next echo.HandlerFunc) (result error) {
-		defer func() {
-			if err := recover(); err != nil {
-				this.errHandler(exceptions.ResolveException(err), (request).(echo.Context))
-				result = ignoreError
-			}
-		}()
-		return next((request).(echo.Context))
-	})
+	this.Use(
+		func(request contracts.HttpRequest, next echo.HandlerFunc) (result error) {
+			defer func() {
+				if err := recover(); err != nil {
+					this.errHandler(exceptions.ResolveException(err), (request).(echo.Context))
+					result = ignoreError
+				}
+			}()
+
+			// 触发钩子
+			this.events.Dispatch(&RequestBefore{request})
+			result = next((request).(echo.Context))
+			this.events.Dispatch(&RequestAfter{request})
+			return
+		},
+	)
 
 	this.echo.HTTPErrorHandler = this.errHandler
 
