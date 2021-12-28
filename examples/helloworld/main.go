@@ -5,11 +5,11 @@ import (
 	"github.com/qbhy/goal/auth"
 	"github.com/qbhy/goal/cache"
 	"github.com/qbhy/goal/config"
+	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/encryption"
 	"github.com/qbhy/goal/events"
-	appExceptions "github.com/qbhy/goal/examples/helloworld/exceptions"
+	"github.com/qbhy/goal/examples/helloworld/exceptions"
 	"github.com/qbhy/goal/examples/helloworld/routes"
-	"github.com/qbhy/goal/exceptions"
 	"github.com/qbhy/goal/filesystemt"
 	"github.com/qbhy/goal/hashing"
 	"github.com/qbhy/goal/http"
@@ -24,14 +24,16 @@ func main() {
 	pwd, _ := os.Getwd()
 	app.Instance("path", pwd)
 
+	// 设置异常处理器
+	app.Singleton("exceptions.handler", func() contracts.ExceptionHandler {
+		return exceptions.NewHandler()
+	})
+
 	app.RegisterServices(
 		config.ServiceProvider{
 			Env:   os.Getenv("env"),
 			Paths: []string{pwd},
 			Sep:   "=",
-		},
-		exceptions.ServiceProvider{
-			DontReportExceptions: appExceptions.DontReportExceptions,
 		},
 		hashing.ServiceProvider{},
 		encryption.ServiceProvider{},

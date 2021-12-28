@@ -10,10 +10,15 @@ type HttpException struct {
 	Context   echo.Context
 }
 
-func (h HttpException) Error() string {
-	return h.Exception.Error()
+func (this HttpException) Error() string {
+	return this.Exception.Error()
 }
 
-func (h HttpException) Fields() contracts.Fields {
-	return h.Exception.Fields()
+func (this HttpException) Fields() contracts.Fields {
+	return contracts.Fields{
+		"method": this.Context.Request().Method,
+		"path":   this.Context.Path(),
+		"query":  this.Context.QueryParams(),
+		"fields": NewRequest(this.Context).Fields(),
+	}
 }

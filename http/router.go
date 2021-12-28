@@ -177,11 +177,13 @@ func (this *router) resolveMiddlewares(interfaceMiddlewares []interface{}) []ech
 		(func(middleware interface{}) {
 			middlewares = append(middlewares, func(next echo.HandlerFunc) echo.HandlerFunc {
 				return func(context echo.Context) (err error) {
-					rawResult := this.app.Call(container.NewMagicalFunc(middlewareItem), NewRequest(context), next)[0]
+					request := NewRequest(context)
+					rawResult := this.app.Call(container.NewMagicalFunc(middlewareItem), request, next)[0]
 					switch result := rawResult.(type) {
 					case error:
 						return result
 					default:
+						this.events.Dispatch(&RequestAfter{request})
 						HandleResponse(result, context)
 						return ignoreError
 					}
