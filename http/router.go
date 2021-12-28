@@ -130,9 +130,7 @@ func (this *router) Start(address string) error {
 
 			// 触发钩子
 			this.events.Dispatch(&RequestBefore{request})
-			result = next((request).(echo.Context))
-			this.events.Dispatch(&RequestAfter{request})
-			return
+			return next((request).(echo.Context))
 		},
 	)
 
@@ -158,6 +156,7 @@ func (this *router) mountRoutes(routes []contracts.Route, middlewares ...interfa
 					if result, isErr := results[0].(error); isErr {
 						return result
 					}
+					this.events.Dispatch(&RequestAfter{request})
 					HandleResponse(results[0], request)
 					return ignoreError
 				}

@@ -59,7 +59,6 @@ func (this *Session) Start() bool {
 }
 
 func (this *Session) loadSession() {
-
 	for _, cookie := range this.request.Cookies() {
 		if index := strings.Index(cookie.Name, this.name); index == 0 {
 			this.attributes[strings.ReplaceAll(cookie.Name, this.name, "")] = cookie.Value
@@ -74,13 +73,9 @@ func (this *Session) CookieKey(key string) string {
 func (this *Session) Save() {
 	for key, value := range this.attributes {
 		this.request.SetCookie(&http.Cookie{
-			Name:  this.CookieKey(key),
-			Value: value,
-			Path:  this.path,
-			//Domain:     this.domain,
-			MaxAge:   10086,
-			Expires:  time.Now().Add(time.Hour),
-			SameSite: http.SameSiteLaxMode,
+			Name:    this.CookieKey(key),
+			Value:   value,
+			Expires: time.Now().Add(time.Hour * 24),
 		})
 	}
 }
