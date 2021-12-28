@@ -7,7 +7,8 @@ import (
 )
 
 func V1Routes(router contracts.Router) {
-	v1 := router.Group("/", session.StartSession)
+	v1 := router.Group("", session.StartSession)
 
 	v1.Get("/", controllers.HelloWorld)
+	v1.Get("/counter", controllers.Counter)
 }
