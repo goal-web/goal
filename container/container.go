@@ -77,17 +77,17 @@ func (this *Container) Flush() {
 	this.aliases = make(map[string]string, 0)
 }
 
-func (this *Container) Get(key string) interface{} {
+func (this *Container) Get(key string, args ...interface{}) interface{} {
 	key = this.GetKey(key)
 	if tempInstance, existsInstance := this.instances[key]; existsInstance {
 		return tempInstance
 	}
 	if singletonProvider, existsProvider := this.singletons[key]; existsProvider {
-		this.instances[key] = this.Call(singletonProvider)[0]
+		this.instances[key] = this.Call(singletonProvider, args...)[0]
 		return this.instances[key]
 	}
 	if instanceProvider, existsProvider := this.binds[key]; existsProvider {
-		return this.Call(instanceProvider)[0]
+		return this.Call(instanceProvider, args...)[0]
 	}
 	return nil
 }
@@ -106,9 +106,11 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 			argValue reflect.Value
 		)
 
-		tempInstance := utils.NotNil(argsTypeMap.Pull(key), func() interface{} {
-			return this.Get(key)
-		})
+		tempInstance := argsTypeMap.Pull(key)
+
+		if tempInstance == nil {
+			tempInstance = this.Get(key, args...)
+		}
 
 		if tempInstance == nil {
 			// 1. 尝试从外部参数注入
@@ -138,6 +140,7 @@ func (this *Container) Call(fn interface{}, args ...interface{}) []interface{} {
 }
 
 func (this *Container) DI(object interface{}, args ...interface{}) {
+	fmt.Println(utils.GetTypeKey(reflect.TypeOf(object)))
 	var (
 		objectValue = reflect.ValueOf(object)
 	)
@@ -145,7 +148,7 @@ func (this *Container) DI(object interface{}, args ...interface{}) {
 	switch objectValue.Kind() {
 	case reflect.Ptr:
 		if objectValue.Elem().Kind() != reflect.Struct {
-			panic(errors.New("参数必须是结构体指针 !"))
+			panic(errors.New("参数必须是结构体指针!"))
 		}
 		objectValue = objectValue.Elem()
 	default:

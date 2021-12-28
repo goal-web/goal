@@ -13,6 +13,9 @@ func (this *RequestBefore) Event() string {
 func (this *RequestBefore) Sync() bool {
 	return true
 }
+func (this *RequestBefore) Request() contracts.HttpRequest {
+	return this.request
+}
 
 type RequestAfter struct {
 	request contracts.HttpRequest
@@ -20,6 +23,10 @@ type RequestAfter struct {
 
 func (this *RequestAfter) Event() string {
 	return "REQUEST_AFTER"
+}
+
+func (this *RequestAfter) Request() contracts.HttpRequest {
+	return this.request
 }
 
 func (this *RequestAfter) Sync() bool {

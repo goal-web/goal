@@ -118,12 +118,6 @@ func (this *router) Add(method interface{}, path string, handler interface{}, mi
 
 // start 启动 server
 func (this *router) Start(address string) error {
-	this.mountRoutes(this.routes)
-
-	for _, routeGroup := range this.groups {
-		this.mountRoutes(routeGroup.Routes(), routeGroup.Middlewares()...)
-	}
-
 	// recovery 。 这里为了 contracts 不依赖 echo ，要求 request 必须继承自 echo.Context !!!
 	this.Use(
 		func(request contracts.HttpRequest, next echo.HandlerFunc) (result error) {
@@ -142,6 +136,12 @@ func (this *router) Start(address string) error {
 		},
 	)
 
+	this.mountRoutes(this.routes)
+
+	for _, routeGroup := range this.groups {
+		this.mountRoutes(routeGroup.Routes(), routeGroup.Middlewares()...)
+	}
+
 	this.echo.HTTPErrorHandler = this.errHandler
 
 	return this.echo.Start(address)
@@ -152,13 +152,13 @@ func (this *router) mountRoutes(routes []contracts.Route, middlewares ...interfa
 	for _, routeItem := range routes {
 		(func(routeInstance contracts.Route) {
 			this.echo.Match(routeInstance.Method(), routeInstance.Path(), func(context echo.Context) error {
-				request := Request{Context: context}
+				request := &Request{Context: context}
 				results := this.app.Call(routeInstance.Handler(), request)
 				if len(results) > 0 {
 					if result, isErr := results[0].(error); isErr {
 						return result
 					}
-					HandleResponse(results[0], &request)
+					HandleResponse(results[0], request)
 					return ignoreError
 				}
 				return nil

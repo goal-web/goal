@@ -11,7 +11,7 @@ type Container interface {
 	HasBound(string) bool
 	Alias(string, string)
 	Flush()
-	Get(string) interface{}
+	Get(key string, args ...interface{}) interface{}
 	Call(fn interface{}, args ...interface{}) []interface{}
 	DI(object interface{}, args ...interface{})
 }

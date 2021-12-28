@@ -3,23 +3,32 @@ package session
 import (
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/utils"
+	"net/http"
 	"strings"
+	"time"
 )
 
+// 后期会拆成 session 和 session store ，支持用 redis 、memcache、database 等其他方式存储 session
 type Session struct {
 	id         string
 	name       string
 	started    bool
+	path       string
+	domain     string
+	lifetime   string
 	attributes map[string]string
 	request    contracts.HttpRequest
 }
 
-func New(name, id string, request contracts.HttpRequest) contracts.Session {
+func New(name, id string, config contracts.Config, request contracts.HttpRequest) contracts.Session {
 	return &Session{
 		id:         id,
 		name:       name,
 		started:    false,
 		request:    request,
+		path:       request.Path(),
+		domain:     config.GetString("session.domain"),
+		lifetime:   config.GetString("session.lifetime"),
 		attributes: map[string]string{},
 	}
 }
@@ -41,6 +50,7 @@ func (this *Session) SetId(id string) {
 }
 
 func (this *Session) Start() bool {
+	this.loadSession()
 	if !this.Has("_token") {
 		this.RegenerateToken()
 	}
@@ -55,10 +65,24 @@ func (this *Session) loadSession() {
 			this.attributes[strings.ReplaceAll(cookie.Name, this.name, "")] = cookie.Value
 		}
 	}
+}
 
+func (this *Session) CookieKey(key string) string {
+	return this.name + key
 }
 
 func (this *Session) Save() {
+	for key, value := range this.attributes {
+		this.request.SetCookie(&http.Cookie{
+			Name:  this.CookieKey(key),
+			Value: value,
+			Path:  this.path,
+			//Domain:     this.domain,
+			MaxAge:   10086,
+			Expires:  time.Now().Add(time.Hour),
+			SameSite: http.SameSiteLaxMode,
+		})
+	}
 }
 
 func (this *Session) All() map[string]string {
