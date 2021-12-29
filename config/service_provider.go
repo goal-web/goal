@@ -4,28 +4,38 @@ import (
 	"github.com/qbhy/goal/contracts"
 )
 
+type ConfigProvider =  func(env contracts.Env) interface{}
+
 type ServiceProvider struct {
-	Env   string
-	Paths []string
-	Sep   string
+	app             contracts.Application
+	Env             string
+	Paths           []string
+	Sep             string
+	ConfigProviders map[string]ConfigProvider
 }
 
-func (this ServiceProvider) Stop() {
+func (this *ServiceProvider) Stop() {
 
 }
 
-func (this ServiceProvider) Start() error {
+func (this *ServiceProvider) Start() error {
+	envInstance := this.app.Get("env").(contracts.Env)
+	configInstance := this.app.Get("config").(contracts.Config)
+	for key, provider := range this.ConfigProviders {
+		configInstance.Set(key, provider(envInstance))
+	}
 	return nil
 }
 
-func (provider ServiceProvider) Register(application contracts.Application) {
+func (this *ServiceProvider) Register(application contracts.Application) {
+	this.app = application
 	application.Singleton("env", func() contracts.Env {
-		return NewEnv(provider.Paths, provider.Sep)
+		return NewEnv(this.Paths, this.Sep)
 	})
 
 	application.Singleton("config", func(env contracts.Env) contracts.Config {
 
-		configInstance := New(provider.Env)
+		configInstance := New(this.Env)
 
 		configInstance.Load(env)
 

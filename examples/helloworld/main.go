@@ -35,10 +35,11 @@ func main() {
 	})
 
 	app.RegisterServices(
-		config.ServiceProvider{
+		&config.ServiceProvider{
 			Env:   os.Getenv("env"),
 			Paths: []string{path},
 			Sep:   "=",
+			ConfigProviders: config2.Configs(),
 		},
 		hashing.ServiceProvider{},
 		encryption.ServiceProvider{},
@@ -54,9 +55,6 @@ func main() {
 			routes.V1Routes,
 		}},
 	)
-
-	// 注册所有配置文件
-	app.Call(config2.RegisterConfigs)
 
 	pidPath := path + "/goal.pid"
 	// 写入 pid 文件
