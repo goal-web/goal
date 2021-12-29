@@ -9,6 +9,8 @@ import (
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/encryption"
 	"github.com/qbhy/goal/events"
+	_ "github.com/qbhy/goal/examples/helloworld/config"
+	config2 "github.com/qbhy/goal/examples/helloworld/config"
 	"github.com/qbhy/goal/examples/helloworld/exceptions"
 	"github.com/qbhy/goal/examples/helloworld/routes"
 	"github.com/qbhy/goal/filesystemt"
@@ -52,6 +54,9 @@ func main() {
 			routes.V1Routes,
 		}},
 	)
+
+	// 注册所有配置文件
+	app.Call(config2.RegisterConfigs)
 
 	pidPath := path + "/goal.pid"
 	// 写入 pid 文件
