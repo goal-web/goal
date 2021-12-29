@@ -15,6 +15,9 @@ func LoadEnv(envPath, sep string) (contracts.Fields, error) {
 
 	fields := make(contracts.Fields)
 	for _, line := range strings.Split(string(envBytes), "\n") {
+		if strings.HasPrefix(line, "#") { // 跳过注释
+			continue
+		}
 		values := strings.Split(line, sep)
 		if len(values) > 1 {
 			fields[values[0]] = strings.ReplaceAll(strings.Join(values[1:], sep), `"`, "")
