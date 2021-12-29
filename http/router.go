@@ -35,7 +35,11 @@ type router struct {
 	routes []contracts.Route
 }
 
-func (this *router) errHandler(err error, context echo.Context) {
+func (this *router) errHandler(err error, ctx echo.Context) {
+	request, isRequest := ctx.(contracts.HttpRequest)
+	if !isRequest {
+		request = NewRequest(ctx)
+	}
 	if ignoreError == err {
 		return
 	}
@@ -46,7 +50,7 @@ func (this *router) errHandler(err error, context echo.Context) {
 	default:
 		httpException = HttpException{
 			Exception: exceptions.ResolveException(err),
-			Context:   context,
+			Request:   request,
 		}
 	}
 
@@ -118,19 +122,19 @@ func (this *router) Add(method interface{}, path string, handler interface{}, mi
 
 // start 启动 server
 func (this *router) Start(address string) error {
-	// recovery 。 这里为了 contracts 不依赖 echo ，要求 request 必须继承自 echo.Context !!!
+	// recovery 。 这里为了 contracts 不依赖 echo ，要求 Request 必须继承自 echo.Context !!!
 	this.Use(
-		func(request contracts.HttpRequest, next echo.HandlerFunc) (result error) {
+		func(request *Request, next echo.HandlerFunc) (result error) {
 			defer func() {
 				if err := recover(); err != nil {
-					this.errHandler(exceptions.ResolveException(err), (request).(echo.Context))
+					this.errHandler(exceptions.ResolveException(err), request)
 					result = ignoreError
 				}
 			}()
 
 			// 触发钩子
 			this.events.Dispatch(&RequestBefore{request})
-			return next((request).(echo.Context))
+			return next(request)
 		},
 	)
 

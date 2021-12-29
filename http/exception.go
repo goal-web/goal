@@ -1,13 +1,12 @@
 package http
 
 import (
-	"github.com/labstack/echo/v4"
 	"github.com/qbhy/goal/contracts"
 )
 
 type HttpException struct {
 	Exception contracts.Exception
-	Context   echo.Context
+	Request   contracts.HttpRequest
 }
 
 func (this HttpException) Error() string {
@@ -16,9 +15,9 @@ func (this HttpException) Error() string {
 
 func (this HttpException) Fields() contracts.Fields {
 	return contracts.Fields{
-		"method": this.Context.Request().Method,
-		"path":   this.Context.Path(),
-		"query":  this.Context.QueryParams(),
-		"fields": NewRequest(this.Context).Fields(),
+		"method": this.Request.Request().Method,
+		"path":   this.Request.Path(),
+		"query":  this.Request.QueryParams(),
+		"fields": this.Request.Fields(),
 	}
 }

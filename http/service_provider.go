@@ -41,7 +41,8 @@ func (this *ServiceProvider) Start() error {
 	})[0].(error)
 
 	if err != nil && err != http.ErrServerClosed {
-		logs.WithError(err).Error("")
+		logs.WithError(err).Error("http 服务无法启动")
+		this.app.Stop()
 		return err
 	}
 
