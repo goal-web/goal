@@ -7,6 +7,7 @@ import (
 	"github.com/qbhy/goal/cache"
 	"github.com/qbhy/goal/config"
 	"github.com/qbhy/goal/contracts"
+	"github.com/qbhy/goal/database"
 	"github.com/qbhy/goal/encryption"
 	"github.com/qbhy/goal/events"
 	_ "github.com/qbhy/goal/examples/helloworld/config"
@@ -36,9 +37,9 @@ func main() {
 
 	app.RegisterServices(
 		&config.ServiceProvider{
-			Env:   os.Getenv("env"),
-			Paths: []string{path},
-			Sep:   "=",
+			Env:             os.Getenv("env"),
+			Paths:           []string{path},
+			Sep:             "=",
 			ConfigProviders: config2.Configs(),
 		},
 		hashing.ServiceProvider{},
@@ -54,6 +55,7 @@ func main() {
 			// 路由收集器
 			routes.V1Routes,
 		}},
+		&database.ServiceProvider{},
 	)
 
 	pidPath := path + "/goal.pid"
