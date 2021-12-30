@@ -1,6 +1,6 @@
 package contracts
 
-type DBConnectionProvider func(config Fields) DBConnection
+type DBConnector func(config Fields) DBConnection
 
 type Result interface {
 	LastInsertId() (int64, error)
@@ -10,7 +10,7 @@ type Result interface {
 type DBFactory interface {
 	Connection(key string) DBConnection
 
-	ExtendConnection(name string, driver DBConnectionProvider)
+	ExtendConnection(name string, driver DBConnector)
 }
 
 type DBConnection interface {

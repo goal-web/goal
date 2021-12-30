@@ -9,7 +9,7 @@ import (
 type Factory struct {
 	config      contracts.Config
 	connections map[string]contracts.DBConnection
-	drivers     map[string]contracts.DBConnectionProvider
+	drivers     map[string]contracts.DBConnector
 }
 
 func (this *Factory) Connection(name string) contracts.DBConnection {
@@ -22,7 +22,7 @@ func (this *Factory) Connection(name string) contracts.DBConnection {
 	return this.connections[name]
 }
 
-func (this *Factory) ExtendConnection(name string, driver contracts.DBConnectionProvider) {
+func (this *Factory) ExtendConnection(name string, driver contracts.DBConnector) {
 	this.drivers[name] = driver
 }
 
