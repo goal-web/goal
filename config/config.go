@@ -6,14 +6,16 @@ import (
 	"github.com/qbhy/goal/utils"
 	"os"
 	"strings"
+	"sync"
 )
 
 func New(e string) contracts.Config {
 	return &config{
-		env:       e,
-		envValues: make(map[string]env),
-		fields:    make(contracts.Fields),
-		configs:   make(map[string]contracts.Config, 0),
+		writeMutex: sync.RWMutex{},
+		env:        e,
+		envValues:  make(map[string]env),
+		fields:     make(contracts.Fields),
+		configs:    make(map[string]contracts.Config, 0),
 	}
 }
 
@@ -27,10 +29,11 @@ func WithFields(fields contracts.Fields) contracts.Config {
 }
 
 type config struct {
-	env       string
-	fields    contracts.Fields
-	configs   map[string]contracts.Config
-	envValues map[string]env
+	writeMutex sync.RWMutex
+	env        string
+	fields     contracts.Fields
+	configs    map[string]contracts.Config
+	envValues  map[string]env
 }
 
 type env struct {
@@ -61,10 +64,16 @@ func (this *config) Merge(key string, config contracts.Config) {
 }
 
 func (this *config) Set(key string, value interface{}) {
+	this.writeMutex.Lock()
 	this.fields[this.getKey(key)] = value
+	this.writeMutex.Unlock()
 }
 
 func (this *config) Get(key string, defaultValue ...interface{}) interface{} {
+	this.writeMutex.RLock()
+	defer func() {
+		this.writeMutex.RUnlock()
+	}()
 
 	// 环境变量优先级最高
 	if envValue := this.GetEnv(key); envValue != "" {

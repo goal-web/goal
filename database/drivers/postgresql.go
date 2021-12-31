@@ -20,7 +20,7 @@ func (this *PostgreSql) Exec(query string, args ...interface{}) (contracts.Resul
 
 func PostgreSqlConnector(config contracts.Fields) contracts.DBConnection {
 
-	db, err := sqlx.Connect("mysql", fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+	db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		utils.GetStringField(config, "host"),
 		utils.GetStringField(config, "port"),
 		utils.GetStringField(config, "username"),
@@ -34,5 +34,5 @@ func PostgreSqlConnector(config contracts.Fields) contracts.DBConnection {
 	if err != nil {
 		logs.WithError(err).WithField("config", config).Fatal("postgreSql 数据库初始化失败")
 	}
-	return &Mysql{db, utils.GetStringField(config, "prefix")}
+	return &PostgreSql{db, utils.GetStringField(config, "prefix")}
 }

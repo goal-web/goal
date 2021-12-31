@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/database/drivers"
 	"github.com/qbhy/goal/utils"
 	"strconv"
 )
@@ -18,13 +17,13 @@ func Counter(session contracts.Session) string {
 	return "hello, goal." + strconv.Itoa(count)
 }
 
-func DatabaseQuery(db contracts.DBConnection) contracts.Fields {
-	mysql := db.(*drivers.Mysql)
+func DatabaseQuery(db contracts.DBFactory, request contracts.HttpRequest) contracts.Fields {
+	connection := db.Connection(request.GetString("connection"))
 	var user struct {
 		Id   int    `db:"id"`
 		Name string `db:"name"`
 	}
-	err := mysql.Get(&user, "select * from users where name=?", "qbhy")
+	err := connection.Get(&user, "select * from users where name=?", "qbhy")
 	return contracts.Fields{
 		"users": user,
 		"err":   err,

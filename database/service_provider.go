@@ -14,7 +14,8 @@ func (this *ServiceProvider) Register(application contracts.Application) {
 			config:      config,
 			connections: make(map[string]contracts.DBConnection),
 			drivers: map[string]contracts.DBConnector{
-				"mysql": drivers.MysqlConnector,
+				"mysql":    drivers.MysqlConnector,
+				"postgres": drivers.PostgreSqlConnector,
 			},
 		}
 	})

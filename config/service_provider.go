@@ -4,7 +4,7 @@ import (
 	"github.com/qbhy/goal/contracts"
 )
 
-type ConfigProvider =  func(env contracts.Env) interface{}
+type ConfigProvider func(env contracts.Env) interface{}
 
 type ServiceProvider struct {
 	app             contracts.Application
