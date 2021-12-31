@@ -1,4 +1,4 @@
-package main
+package tests
 
 import (
 	"fmt"
@@ -10,13 +10,10 @@ import (
 	"github.com/qbhy/goal/database"
 	"github.com/qbhy/goal/encryption"
 	"github.com/qbhy/goal/events"
-	_ "github.com/qbhy/goal/examples/helloworld/config"
 	config2 "github.com/qbhy/goal/examples/helloworld/config"
 	"github.com/qbhy/goal/examples/helloworld/exceptions"
-	"github.com/qbhy/goal/examples/helloworld/routes"
 	"github.com/qbhy/goal/filesystemt"
 	"github.com/qbhy/goal/hashing"
-	"github.com/qbhy/goal/http"
 	"github.com/qbhy/goal/logs"
 	"github.com/qbhy/goal/redis"
 	"github.com/qbhy/goal/session"
@@ -25,9 +22,9 @@ import (
 	"os"
 )
 
-func main() {
-	app := application.Singleton()
-	path, _ := os.Getwd()
+func getApp(path string) contracts.Application {
+	env := "testing"
+	app := application.Singleton(env)
 	app.Instance("path", path)
 
 	// 设置异常处理器
@@ -37,7 +34,7 @@ func main() {
 
 	app.RegisterServices(
 		&config.ServiceProvider{
-			Env:             os.Getenv("env"),
+			Env:             env,
 			Paths:           []string{path},
 			Sep:             "=",
 			ConfigProviders: config2.Configs(),
@@ -52,20 +49,23 @@ func main() {
 		&session.ServiceProvider{},
 		auth.ServiceProvider{},
 		&database.ServiceProvider{},
-		&http.ServiceProvider{RouteCollectors: []interface{}{
-			// 路由收集器
-			routes.V1Routes,
-		}},
+		//&http.ServiceProvider{RouteCollectors: []interface{}{
+		//	// 路由收集器
+		//	routes.V1Routes,
+		//}},
 	)
 
 	pidPath := path + "/goal.pid"
 	// 写入 pid 文件
 	_ = ioutil.WriteFile(pidPath, []byte(fmt.Sprintf("%d", os.Getpid())), os.ModePerm)
 
-	if errors := app.Start(); len(errors) > 0 {
-		logs.WithField("errors", errors).Fatal("goal 异常关闭!")
-	} else {
-		_ = os.Remove(pidPath)
-		logs.WithInterface(nil).Info("goal 已关闭")
-	}
+	go func() {
+		if errors := app.Start(); len(errors) > 0 {
+			logs.WithField("errors", errors).Fatal("goal 异常关闭!")
+		} else {
+			_ = os.Remove(pidPath)
+			logs.WithInterface(nil).Info("goal 已关闭")
+		}
+	}()
+	return app
 }

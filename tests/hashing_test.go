@@ -2,10 +2,7 @@ package tests
 
 import (
 	"fmt"
-	"github.com/qbhy/goal/application"
-	"github.com/qbhy/goal/config"
 	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/hashing"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
@@ -13,23 +10,9 @@ import (
 
 func TestHashing(t *testing.T) {
 	// 初始化容器
-	app := application.Singleton()
 
 	path, _ := os.Getwd()
-
-	// 设置运行目录
-	app.Instance("path", path)
-
-	// 注册各种服务
-	app.RegisterServices(
-		// 配置服务
-		config.ServiceProvider{
-			Paths: []string{path},
-			Env:   "testing",
-		},
-		// 哈希服务
-		hashing.ServiceProvider{},
-	)
+	app := getApp(path)
 
 	hashFactory := app.Get("hash").(contracts.HasherFactory)
 	value := "goal hashing"

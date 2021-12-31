@@ -3,6 +3,8 @@ package contracts
 type Application interface {
 	Container
 
+	Environment() string
+
 	RegisterServices(provider ...ServiceProvider)
 
 	Start() map[string]error

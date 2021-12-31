@@ -8,8 +8,13 @@ import (
 )
 
 type application struct {
+	environment string
 	contracts.Container
 	services []contracts.ServiceProvider
+}
+
+func (this *application) Environment() string {
+	return this.environment
 }
 
 func (this *application) Start() map[string]error {
