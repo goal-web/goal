@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/utils"
 	"strconv"
@@ -23,10 +24,10 @@ func DatabaseQuery(db contracts.DBFactory, request contracts.HttpRequest) contra
 		Id   int    `db:"id"`
 		Name string `db:"name"`
 	}
-	err := connection.Get(&user, "select * from users where name=?", "qbhy")
+	err := connection.Get(&user, fmt.Sprintf("select * from users where name='%s'", "qbhy"))
 	return contracts.Fields{
-		"users": user,
-		"err":   err,
+		"user": user,
+		"err":  err,
 	}
 }
 
