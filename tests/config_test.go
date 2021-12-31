@@ -10,7 +10,7 @@ import (
 
 func TestBaseConfig(t *testing.T) {
 
-	conf := config.New("testing")
+	conf := config.NewConfig("testing")
 
 	conf.Load(config.FieldsProvider{Data: map[string]interface{}{
 		"a": "a",

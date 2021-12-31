@@ -9,7 +9,7 @@ import (
 	"sync"
 )
 
-func New(e string) contracts.Config {
+func NewConfig(e string) contracts.Config {
 	return &config{
 		writeMutex: sync.RWMutex{},
 		env:        e,

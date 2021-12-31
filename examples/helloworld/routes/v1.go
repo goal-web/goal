@@ -12,4 +12,5 @@ func V1Routes(router contracts.Router) {
 	v1.Get("/", controllers.HelloWorld)
 	v1.Get("/counter", controllers.Counter)
 	v1.Get("/db", controllers.DatabaseQuery)
+	v1.Get("/redis", controllers.RedisExample)
 }

@@ -29,13 +29,11 @@ func (this *ServiceProvider) Start() error {
 	}
 
 	err := this.app.Call(func(router contracts.Router, config contracts.Config) error {
+		httpConfig := config.Get("http").(Config)
 		return router.Start(
 			utils.StringOr(
-				config.GetString("server.address"),
-				fmt.Sprintf("%s:%s",
-					config.GetString("server.host"),
-					utils.StringOr(config.GetString("server.port"), "8000"),
-				),
+				httpConfig.Address,
+				fmt.Sprintf("%s:%s", httpConfig.Host, utils.StringOr(httpConfig.Port, "8000")),
 			),
 		)
 	})[0].(error)

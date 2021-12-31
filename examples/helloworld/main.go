@@ -51,11 +51,11 @@ func main() {
 		&signal.ServiceProvider{},
 		&session.ServiceProvider{},
 		auth.ServiceProvider{},
+		&database.ServiceProvider{},
 		&http.ServiceProvider{RouteCollectors: []interface{}{
 			// 路由收集器
 			routes.V1Routes,
 		}},
-		&database.ServiceProvider{},
 	)
 
 	pidPath := path + "/goal.pid"

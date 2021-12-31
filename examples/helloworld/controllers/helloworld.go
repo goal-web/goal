@@ -29,3 +29,11 @@ func DatabaseQuery(db contracts.DBFactory, request contracts.HttpRequest) contra
 		"err":   err,
 	}
 }
+
+func RedisExample(redis contracts.RedisConnection) contracts.Fields {
+	str, err := redis.Get("incr")
+	return contracts.Fields{
+		"value": str,
+		"err":   err,
+	}
+}

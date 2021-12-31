@@ -8,28 +8,18 @@ import (
 )
 
 type Factory struct {
-	config           contracts.Config
+	config           Config
 	exceptionHandler contracts.ExceptionHandler
 	connections      map[string]contracts.RedisConnection
 }
 
 func (this *Factory) getName(names ...string) string {
-	var name string
 	if len(names) > 0 {
-		name = names[0]
+		return names[0]
 	} else {
-		name = this.config.GetString("cache.default")
+		return this.config.Default
 	}
-
-	return utils.StringOr(name, "default")
 }
-
-func (this Factory) getConfig(name string) contracts.Fields {
-	return this.config.GetFields(
-		utils.IfString(name == "default", "redis", fmt.Sprintf("redis.stores.%s", name)),
-	)
-}
-
 
 func (this *Factory) Connection(names ...string) contracts.RedisConnection {
 	name := this.getName(names...)
@@ -38,7 +28,7 @@ func (this *Factory) Connection(names ...string) contracts.RedisConnection {
 		return connection
 	}
 
-	config := this.getConfig(name)
+	config := this.config.Stores[name]
 
 	// todo: 待优化 redis 配置
 	this.connections[name] = &Connection{
@@ -53,8 +43,8 @@ func (this *Factory) Connection(names ...string) contracts.RedisConnection {
 			OnConnect:          nil,
 			Username:           utils.GetStringField(config, "username"),
 			Password:           utils.GetStringField(config, "password"),
-			DB:                 int(utils.GetInt64Field(config, "db", 0)),
-			MaxRetries:         int(utils.GetInt64Field(config, "retries", 3)),
+			DB:                 utils.GetIntField(config, "db", 0),
+			MaxRetries:         utils.GetIntField(config, "retries", 3),
 			MinRetryBackoff:    0,
 			MaxRetryBackoff:    0,
 			DialTimeout:        0,

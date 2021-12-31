@@ -19,7 +19,7 @@ func (this ServiceProvider) Register(app contracts.Application) {
 
 	app.Singleton("redis.factory", func(config contracts.Config, handler contracts.ExceptionHandler) contracts.RedisFactory {
 		return &Factory{
-			config:           config,
+			config:           config.Get("redis").(Config),
 			exceptionHandler: handler,
 			connections:      make(map[string]contracts.RedisConnection),
 		}

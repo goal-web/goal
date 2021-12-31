@@ -22,7 +22,7 @@ func (this ServiceProvider) Register(container contracts.Application) {
 		redis contracts.RedisFactory,
 		handler contracts.ExceptionHandler) contracts.CacheFactory {
 		factory := &Factory{
-			config:           config,
+			config:           config.Get("cache").(Config),
 			exceptionHandler: handler,
 			stores:           make(map[string]contracts.CacheStore),
 			drivers:          make(map[string]contracts.CacheStoreProvider),

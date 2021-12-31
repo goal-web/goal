@@ -8,27 +8,22 @@ import (
 )
 
 type Factory struct {
-	config           contracts.Config
+	config           Config
 	exceptionHandler contracts.ExceptionHandler
 	stores           map[string]contracts.CacheStore
 	drivers          map[string]contracts.CacheStoreProvider
 }
 
 func (this *Factory) getName(names ...string) string {
-	var name string
 	if len(names) > 0 {
-		name = names[0]
-	} else {
-		name = this.config.GetString("cache.default")
+		return names[0]
 	}
+	return this.config.Default
 
-	return utils.StringOr(name, "default")
 }
 
 func (this Factory) getConfig(name string) contracts.Fields {
-	return this.config.GetFields(
-		utils.IfString(name == "default", "cache", fmt.Sprintf("cache.stores.%s", name)),
-	)
+	return this.config.Stores[name]
 }
 
 func (this *Factory) Store(names ...string) contracts.CacheStore {
@@ -37,7 +32,7 @@ func (this *Factory) Store(names ...string) contracts.CacheStore {
 		return cacheStore
 	}
 
-	this.stores[name] = this.get(name)
+	this.stores[name] = this.make(name)
 
 	return this.stores[name]
 }
@@ -46,12 +41,12 @@ func (this *Factory) Extend(driver string, cacheStoreProvider contracts.CacheSto
 	this.drivers[driver] = cacheStoreProvider
 }
 
-func (this *Factory) get(name string) contracts.CacheStore {
+func (this *Factory) make(name string) contracts.CacheStore {
 	config := this.getConfig(name)
-	driver := utils.GetStringField(config, "driver", "redis")
+	driver := utils.GetStringField(config, "driver")
 	driveProvider, existsProvider := this.drivers[driver]
 	if !existsProvider {
-		logs.WithFields(nil).Fatal(fmt.Sprintf("不支持的缓存驱动：%s", driver))
+		logs.WithFields(config).Fatal(fmt.Sprintf("不支持的缓存驱动：%s", driver))
 	}
 	return driveProvider(config)
 }
