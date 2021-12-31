@@ -24,6 +24,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * events 事件模块
 * filesystem 文件系统模块
 * signal 信号监听，goal 实现了优雅关闭功能
+* database 数据库操作模块
 * http http相关模块，请求、响应、中间件等
   * routing http 路由服务
   * session 会话服务
@@ -36,7 +37,6 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * queue 消息队列模块 [未完成]
 * view 视图模块 [未完成]
 * translation 多语言模块 [未完成]
-* database 数据库操作模块 [未完成]
 * eloquent ORM模块，计划 golang 1.18 发布后完成，因为泛型 [未完成]
 
 ## 参与项目
