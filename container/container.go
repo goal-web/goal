@@ -6,6 +6,7 @@ import (
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/utils"
 	"reflect"
+	"sync"
 )
 
 var (
@@ -15,7 +16,7 @@ var (
 type Container struct {
 	binds      map[string]contracts.MagicalFunc
 	singletons map[string]contracts.MagicalFunc
-	instances  map[string]interface{}
+	instances  sync.Map
 	aliases    map[string]string
 }
 
@@ -39,7 +40,7 @@ func (this *Container) Bind(key string, provider interface{}) {
 }
 
 func (this *Container) Instance(key string, instance interface{}) {
-	this.instances[this.GetKey(key)] = instance
+	this.instances.Store(this.GetKey(key), instance)
 }
 
 func (this *Container) Singleton(key string, provider interface{}) {
@@ -56,7 +57,7 @@ func (this *Container) HasBound(key string) bool {
 	if _, existsSingleton := this.singletons[key]; existsSingleton {
 		return true
 	}
-	if _, existsInstance := this.instances[key]; existsInstance {
+	if _, existsInstance := this.instances.Load(key); existsInstance {
 		return true
 	}
 	return false
@@ -71,7 +72,7 @@ func (this *Container) GetKey(alias string) string {
 }
 
 func (this *Container) Flush() {
-	this.instances = make(map[string]interface{}, 0)
+	this.instances = sync.Map{}
 	this.singletons = make(map[string]contracts.MagicalFunc, 0)
 	this.binds = make(map[string]contracts.MagicalFunc, 0)
 	this.aliases = make(map[string]string, 0)
@@ -79,12 +80,13 @@ func (this *Container) Flush() {
 
 func (this *Container) Get(key string, args ...interface{}) interface{} {
 	key = this.GetKey(key)
-	if tempInstance, existsInstance := this.instances[key]; existsInstance {
+	if tempInstance, existsInstance := this.instances.Load(key); existsInstance {
 		return tempInstance
 	}
 	if singletonProvider, existsProvider := this.singletons[key]; existsProvider {
-		this.instances[key] = this.Call(singletonProvider, args...)[0]
-		return this.instances[key]
+		value := this.Call(singletonProvider, args...)[0]
+		this.instances.Store(key, value)
+		return value
 	}
 	if instanceProvider, existsProvider := this.binds[key]; existsProvider {
 		return this.Call(instanceProvider, args...)[0]

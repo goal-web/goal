@@ -36,7 +36,7 @@ func init() {
 					"charset":         utils.StringOr(env.GetString("db.pgsql.charset"), "utf8mb4"),
 					"prefix":          env.GetString("db.pgsql.prefix"),
 					"schema":          utils.StringOr(env.GetString("db.pgsql.schema"), "public"),
-					"sslmode":         utils.StringOr(env.GetString("db.pgsql.sslmode"), "prefer"),
+					"sslmode":         utils.StringOr(env.GetString("db.pgsql.sslmode"), "disable"),
 					"max_connections": env.GetInt("db.pgsql.max_connections"),
 					"max_idles":       env.GetInt("db.pgsql.max_idles"),
 				},
