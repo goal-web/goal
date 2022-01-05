@@ -1,4 +1,4 @@
-package database
+package exceptions
 
 import "github.com/qbhy/goal/contracts"
 

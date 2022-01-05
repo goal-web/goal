@@ -1,7 +1,9 @@
 package encryption
 
-import "github.com/qbhy/goal/exceptions"
+import (
+	"github.com/qbhy/goal/contracts"
+)
 
 type EncryptException struct {
-	exceptions.Exception
+	contracts.Exception
 }

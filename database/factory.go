@@ -22,7 +22,7 @@ func (this *Factory) Connection(name string) contracts.DBConnection {
 	return this.connections[name]
 }
 
-func (this *Factory) ExtendConnection(name string, driver contracts.DBConnector) {
+func (this *Factory) Extend(name string, driver contracts.DBConnector) {
 	this.drivers[name] = driver
 }
 

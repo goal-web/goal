@@ -10,16 +10,10 @@ import (
 )
 
 type PostgreSql struct {
-	*sqlx.DB
-	prefix string
-}
-
-func (this *PostgreSql) Exec(query string, args ...interface{}) (contracts.Result, error) {
-	return this.DB.Exec(query, args...)
+	base
 }
 
 func PostgreSqlConnector(config contracts.Fields) contracts.DBConnection {
-
 	db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		utils.GetStringField(config, "host"),
 		utils.GetStringField(config, "port"),
@@ -34,5 +28,5 @@ func PostgreSqlConnector(config contracts.Fields) contracts.DBConnection {
 	if err != nil {
 		logs.WithError(err).WithField("config", config).Fatal("postgreSql 数据库初始化失败")
 	}
-	return &PostgreSql{db, utils.GetStringField(config, "prefix")}
+	return &PostgreSql{base{db}}
 }

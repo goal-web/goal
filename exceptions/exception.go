@@ -4,17 +4,25 @@ import (
 	"github.com/qbhy/goal/contracts"
 )
 
-func WithError(err error, fields contracts.Fields) Exception {
+func WithError(err error, fields contracts.Fields) contracts.Exception {
+	if e, isException := err.(contracts.Exception); isException {
+		return e
+	}
 	return New(err.Error(), fields)
 }
 
+func WithPrevious(err error, fields contracts.Fields, previous error) Exception {
+	return Exception{err.Error(), fields, WithError(previous, nil)}
+}
+
 func New(err string, fields contracts.Fields) Exception {
-	return Exception{err, fields}
+	return Exception{err, fields, nil}
 }
 
 type Exception struct {
-	err    string
-	fields contracts.Fields
+	err      string
+	fields   contracts.Fields
+	previous contracts.Exception
 }
 
 func (e Exception) Error() string {

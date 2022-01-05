@@ -1,4 +1,4 @@
-package database
+package tx
 
 import (
 	"github.com/jmoiron/sqlx"
