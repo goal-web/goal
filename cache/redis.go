@@ -6,22 +6,22 @@ import (
 )
 
 type RedisStore struct {
-	connection contracts.RedisConnection
-	prefix     string
+	redis  contracts.RedisConnection
+	prefix string
 }
 
 func (this *RedisStore) Get(key string) interface{} {
-	result, _ := this.connection.Get(this.getKey(key))
+	result, _ := this.redis.Get(this.getKey(key))
 	return result
 }
 
 func (this *RedisStore) Many(keys []string) []interface{} {
-	results, _ := this.connection.MGet(this.getKeys(keys)...)
+	results, _ := this.redis.MGet(this.getKeys(keys)...)
 	return results
 }
 
 func (this *RedisStore) Put(key string, value interface{}, seconds time.Duration) error {
-	_, err := this.connection.Set(this.getKey(key), value, seconds)
+	_, err := this.redis.Set(this.getKey(key), value, seconds)
 	return err
 }
 
@@ -32,19 +32,19 @@ func (this *RedisStore) Add(key string, value interface{}, ttls ...time.Duration
 	} else {
 		ttl = time.Second * 60 * 60 // default 1 hour
 	}
-	result, _ := this.connection.SetNX(this.getKey(key), value, ttl)
+	result, _ := this.redis.SetNX(this.getKey(key), value, ttl)
 
 	return result
 }
 
 func (this *RedisStore) Pull(key string, defaultValue ...interface{}) interface{} {
 	key = this.getKey(key)
-	result, err := this.connection.GetDel(key)
+	result, err := this.redis.GetDel(key)
 
 	if err != nil {
-		result, err = this.connection.Get(key)
+		result, err = this.redis.Get(key)
 		if result != "" {
-			_, _ = this.connection.Del(key)
+			_, _ = this.redis.Del(key)
 		}
 	}
 
@@ -60,10 +60,10 @@ func (this *RedisStore) PutMany(values map[string]interface{}, seconds time.Dura
 	for key, value := range values {
 		data[this.getKey(key)] = value
 	}
-	_, err := this.connection.MSet(data)
+	_, err := this.redis.MSet(data)
 
 	for key, _ := range data {
-		_, _ = this.connection.Expire(key, seconds)
+		_, _ = this.redis.Expire(key, seconds)
 	}
 
 	return err
@@ -72,31 +72,31 @@ func (this *RedisStore) PutMany(values map[string]interface{}, seconds time.Dura
 func (this *RedisStore) Increment(key string, value ...int64) (int64, error) {
 	key = this.getKey(key)
 	if len(value) > 0 {
-		return this.connection.IncrBy(key, value[0])
+		return this.redis.IncrBy(key, value[0])
 	}
-	return this.connection.Incr(key)
+	return this.redis.Incr(key)
 }
 
 func (this *RedisStore) Decrement(key string, value ...int64) (int64, error) {
 	key = this.getKey(key)
 	if len(value) > 0 {
-		return this.connection.DecrBy(key, value[0])
+		return this.redis.DecrBy(key, value[0])
 	}
-	return this.connection.Decr(key)
+	return this.redis.Decr(key)
 }
 
 func (this *RedisStore) Forever(key string, value interface{}) error {
-	_, err := this.connection.Set(this.getKey(key), value, -1)
+	_, err := this.redis.Set(this.getKey(key), value, -1)
 	return err
 }
 
 func (this *RedisStore) Forget(key string) error {
-	_, err := this.connection.Del(this.getKey(key))
+	_, err := this.redis.Del(this.getKey(key))
 	return err
 }
 
 func (this *RedisStore) Flush() error {
-	_, err := this.connection.FlushDB()
+	_, err := this.redis.FlushDB()
 	return err
 }
 
