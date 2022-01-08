@@ -5,14 +5,8 @@ import (
 	"github.com/qbhy/goal/console/commonds"
 )
 
-var commandProviders []console.CommandProvider
-
-func init() {
-	commandProviders = []console.CommandProvider{
+func GetCommandProviders() []console.CommandProvider {
+	return []console.CommandProvider{
 		commonds.Runner,
 	}
-}
-
-func GetCommandProviders() []console.CommandProvider {
-	return commandProviders
 }
