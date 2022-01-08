@@ -28,7 +28,8 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * http http相关模块，请求、响应、中间件等
   * routing http 路由服务
   * session 会话服务
-* scheduling 任务调度模块 [未完成]
+* console 命令行模块 [未完成]
+  * scheduling 任务调度模块 [未完成]
 * auth 用户授权模块 [未完成]
 * websocket socket通信模块 [未完成]
   * socket.io socket.io 实现 [未完成]
