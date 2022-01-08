@@ -3,6 +3,8 @@ package contracts
 type Application interface {
 	Container
 
+	IsProduction() bool
+
 	Environment() string
 
 	RegisterServices(provider ...ServiceProvider)

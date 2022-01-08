@@ -7,6 +7,8 @@ import (
 	"reflect"
 )
 
+const ENV_PRODUCTION = "production"
+
 type application struct {
 	environment string
 	contracts.Container
@@ -15,6 +17,10 @@ type application struct {
 
 func (this *application) Environment() string {
 	return this.environment
+}
+
+func (this *application) IsProduction() bool {
+	return this.environment == ENV_PRODUCTION
 }
 
 func (this *application) Start() map[string]error {
