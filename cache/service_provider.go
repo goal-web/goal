@@ -30,8 +30,8 @@ func (this ServiceProvider) Register(container contracts.Application) {
 
 		factory.Extend("redis", func(cacheConfig contracts.Fields) contracts.CacheStore {
 			return &RedisStore{
-				connection: redis.Connection(utils.GetStringField(cacheConfig, "connection")),
-				prefix:     utils.GetStringField(cacheConfig, "prefix"),
+				redis:  redis.Connection(utils.GetStringField(cacheConfig, "connection")),
+				prefix: utils.GetStringField(cacheConfig, "prefix"),
 			}
 		})
 

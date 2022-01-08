@@ -16,6 +16,7 @@ func (this *ServiceProvider) Register(application contracts.Application) {
 			drivers: map[string]contracts.DBConnector{
 				"mysql":    drivers.MysqlConnector,
 				"postgres": drivers.PostgreSqlConnector,
+				"sqlite":   drivers.SqliteConnector,
 			},
 		}
 	})

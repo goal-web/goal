@@ -19,12 +19,6 @@ func TestBaseConfig(t *testing.T) {
 	path, _ := os.Getwd()
 	conf.Load(config.NewEnv([]string{path}, "="))
 
-	assert.True(t, conf.GetFields("app")["name"] == "goal")
-
-	// 测试从 .env 文件获取配置
-	assert.True(t, conf.GetInt("int") == 10086)
-	assert.True(t, conf.GetString("app.name") == "goal")
-
 	// 测试从环境变量获取配置
 	assert.Nil(t, os.Setenv("app.name", "ggboy"))
 	assert.True(t, conf.GetString("app.name") == "ggboy")

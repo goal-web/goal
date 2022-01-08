@@ -10,12 +10,7 @@ import (
 )
 
 type Mysql struct {
-	*sqlx.DB
-	prefix string
-}
-
-func (this *Mysql) Exec(query string, args ...interface{}) (contracts.Result, error) {
-	return this.DB.Exec(query, args...)
+	base
 }
 
 func MysqlConnector(config contracts.Fields) contracts.DBConnection {
@@ -35,7 +30,7 @@ func MysqlConnector(config contracts.Fields) contracts.DBConnection {
 	db.SetMaxIdleConns(utils.GetIntField(config, "max_idles"))
 
 	if err != nil {
-		logs.WithError(err).WithField("config", config).Fatal("mysql数据库初始化失败")
+		logs.WithError(err).WithField("config", config).Fatal("mysql 数据库初始化失败")
 	}
-	return &Mysql{db, utils.GetStringField(config, "prefix")}
+	return &Mysql{base{db}}
 }

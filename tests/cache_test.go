@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"fmt"
 	"github.com/qbhy/goal/contracts"
 	"github.com/stretchr/testify/assert"
 	"os"
@@ -13,7 +14,9 @@ func TestCacheFactory(t *testing.T) {
 
 	cacheFactory := app.Get("cache").(contracts.CacheFactory)
 
+	fmt.Println(cacheFactory.Store())
 	err := cacheFactory.Store().Forever("a", "testing")
 	assert.Nil(t, err, err)
+	fmt.Println(cacheFactory.Store().Get("a"))
 	assert.True(t, cacheFactory.Store().Get("a") == "testing")
 }

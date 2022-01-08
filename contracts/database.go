@@ -9,13 +9,24 @@ type Result interface {
 
 type DBFactory interface {
 	Connection(key string) DBConnection
-
-	ExtendConnection(name string, driver DBConnector)
+	Extend(name string, driver DBConnector)
 }
 
-type DBConnection interface {
+type DBTx interface {
+	SqlExecutor
+	Commit() error
+	Rollback() error
+}
+
+type SqlExecutor interface {
 	Get(dest interface{}, query string, args ...interface{}) error
 	Select(dest interface{}, query string, args ...interface{}) error
 	Exec(query string, args ...interface{}) (Result, error)
+}
+
+type DBConnection interface {
+	SqlExecutor
+	Begin() (DBTx, error)
+	Transaction(func(executor SqlExecutor) error) error
 	DriverName() string
 }

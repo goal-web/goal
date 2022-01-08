@@ -11,6 +11,10 @@ func init() {
 		return database.Config{
 			Default: utils.StringOr(env.GetString("db.connection"), "mysql"),
 			Connections: map[string]contracts.Fields{
+				"sqlite": {
+					"driver":   "sqlite",
+					"database": env.GetString("sqlite.database"),
+				},
 				"mysql": {
 					"driver":          "mysql",
 					"host":            env.GetString("db.host"),
