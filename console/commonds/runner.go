@@ -25,7 +25,7 @@ func Runner(app contracts.Application) contracts.Command {
 	}
 }
 
-func (this *runner) Handle() interface{} {
+func (this *runner) Handle(arguments contracts.ConsoleArguments) interface{} {
 	path := this.app.Get("path").(string)
 	pidPath := path + "/goal.pid"
 	// 写入 pid 文件

@@ -14,10 +14,10 @@ func (this *ServiceProvider) Register(application contracts.Application) {
 
 		for _, commandProvider := range this.Commands {
 			command := commandProvider(application)
-			commands[command.Signature()] = command
+			commands[command.GetSignature()] = command
 		}
 
-		return &Console{application, commands}
+		return &Console{commands}
 	})
 }
 

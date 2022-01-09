@@ -7,15 +7,15 @@ type Base struct {
 	help        string
 }
 
-func (this *Base) Signature() string {
+func (this *Base) GetSignature() string {
 	return this.signature
 }
-func (this *Base) Description() string {
+func (this *Base) GetDescription() string {
 	return this.description
 }
-func (this *Base) Name() string {
+func (this *Base) GetName() string {
 	return this.name
 }
-func (this *Base) Help() string {
+func (this *Base) GetHelp() string {
 	return this.help
 }

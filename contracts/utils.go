@@ -15,3 +15,13 @@ type Getter interface {
 	GetBool(key string) bool
 	GetFields(key string) Fields
 }
+
+type OptionalGetter interface {
+	StringOption(key string, defaultValue string) string
+	Int64Option(key string, defaultValue int64) int64
+	IntOption(key string, defaultValue int) int
+	Float64Option(key string, defaultValue float64) float64
+	FloatOption(key string, defaultValue float32) float32
+	BoolOption(key string, defaultValue bool) bool
+	FieldsOption(key string, defaultValue Fields) Fields
+}

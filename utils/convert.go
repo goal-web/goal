@@ -1,6 +1,9 @@
 package utils
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 // 把能转换成 int64 的值转换成 int64
 func ConvertToInt64(rawValue interface{}, defaultValue int64) int64 {
@@ -121,3 +124,18 @@ func ConvertToBool(rawValue interface{}, defaultValue bool) bool {
 	return defaultValue
 }
 
+// 把能转换成 string 的值转换成 string
+func ConvertToString(rawValue interface{}, defaultValue string) string {
+	switch value := rawValue.(type) {
+	case bool:
+		return IfString(value, "true", "false")
+	case string:
+		return value
+	case int, int64, int8, uint, uint8, uint32, uint64:
+		return fmt.Sprintf("%d", value)
+	case float32, float64:
+		return fmt.Sprintf("%f", value)
+	}
+
+	return defaultValue
+}
