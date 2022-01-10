@@ -17,7 +17,7 @@ func (this *ServiceProvider) Register(application contracts.Application) {
 
 		for _, commandProvider := range this.Commands {
 			command := commandProvider(application)
-			commands[command.GetSignature()] = command
+			commands[command.GetName()] = command
 		}
 
 		return &Console{commands}
