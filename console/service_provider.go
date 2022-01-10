@@ -1,6 +1,9 @@
 package console
 
-import "github.com/qbhy/goal/contracts"
+import (
+	"github.com/qbhy/goal/console/input"
+	"github.com/qbhy/goal/contracts"
+)
 
 type CommandProvider func(application contracts.Application) contracts.Command
 
@@ -18,6 +21,9 @@ func (this *ServiceProvider) Register(application contracts.Application) {
 		}
 
 		return &Console{commands}
+	})
+	application.Singleton("console.input", func() contracts.ConsoleInput {
+		return input.NewOSArgsInput()
 	})
 }
 

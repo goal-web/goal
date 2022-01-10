@@ -6,16 +6,9 @@ import (
 )
 
 type ArgsInput struct {
+	StringArrayInput
 }
 
-func (this *ArgsInput) GetSignature() string {
-	if len(os.Args) > 1 {
-		return os.Args[1]
-	}
-	return ""
-}
-
-func (this *ArgsInput) GetArguments() contracts.ConsoleArguments {
-	// todo: parse arguments
-	return nil
+func NewOSArgsInput() contracts.ConsoleInput {
+	return &ArgsInput{StringArrayInput{ArgsArray: os.Args[1:]}}
 }

@@ -60,4 +60,7 @@ func main() {
 		},
 	)
 
+	app.Call(func(console3 contracts.Console, input contracts.ConsoleInput) {
+		console3.Run(input)
+	})
 }

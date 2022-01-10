@@ -9,17 +9,30 @@ import (
 
 type Arguments struct {
 	supports.BaseFields
-	fields contracts.Fields
+	args    []string
+	options contracts.Fields
 }
 
-func NewArguments(fields contracts.Fields) contracts.ConsoleArguments {
-	args := &Arguments{
+func (this *Arguments) GetArg(index int) string {
+	if index >= len(this.args) {
+		return ""
+	}
+	return this.args[index]
+}
+
+func (this *Arguments) GetArgs() []string {
+	return this.args
+}
+
+func NewArguments(args []string, options contracts.Fields) contracts.CommandArguments {
+	arguments := &Arguments{
+		args:       args,
 		BaseFields: supports.BaseFields{},
-		fields:     fields,
+		options:    options,
 	}
 
-	args.BaseFields.FieldsProvider = args
-	return args
+	arguments.BaseFields.FieldsProvider = arguments
+	return arguments
 }
 
 func (this *Arguments) StringArrayOption(key string, defaultValue []string) []string {
@@ -74,5 +87,10 @@ func (this *Arguments) FloatArrayOption(key string, defaultValue []float32) []fl
 }
 
 func (this *Arguments) Fields() contracts.Fields {
-	return this.fields
+	return this.options
+}
+
+func (this *Arguments) Exists(key string) bool {
+	_, exists := this.options[key]
+	return exists
 }

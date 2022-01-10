@@ -1,4 +1,4 @@
-package commonds
+package commands
 
 import (
 	"fmt"
@@ -15,17 +15,12 @@ type runner struct {
 
 func Runner(app contracts.Application) contracts.Command {
 	return &runner{
-		Base: Base{
-			signature:   "run",
-			name:        "run",
-			description: "启动应用程序",
-			help:        "启动应用程序",
-		},
-		app: app,
+		Base: BaseCommand("run {--port:http端口号=8000}", "启动 goal"),
+		app:  app,
 	}
 }
 
-func (this *runner) Handle(arguments contracts.ConsoleArguments) interface{} {
+func (this *runner) Handle(arguments contracts.CommandArguments) interface{} {
 	path := this.app.Get("path").(string)
 	pidPath := path + "/goal.pid"
 	// 写入 pid 文件

@@ -30,4 +30,5 @@ require (
 require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/modood/table v0.0.0-20200225102042-88de94bb9876 // indirect
 )
