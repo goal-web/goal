@@ -58,7 +58,7 @@ func ParseSignature(signature string) (string, Args) {
 		arg = utils.SubString(arg, 2, -1)
 		if argArr := strings.Split(arg, "="); len(argArr) > 1 { // {name=goal} / {--name=goal}
 			if strings.HasPrefix(argArr[0], "--") {
-				args = append(args, NewArg(utils.SubString(argArr[0], 2, 0), OptionalArg, argArr[1]))
+				args = append(args, NewArg(utils.SubString(argArr[0], 2, 0), Option, argArr[1]))
 			} else {
 				args = append(args, NewArg(argArr[0], OptionalArg, argArr[1]))
 			}

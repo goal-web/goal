@@ -1,7 +1,7 @@
 package console
 
 import (
-	"github.com/qbhy/goal/console/input"
+	"github.com/qbhy/goal/console/inputs"
 	"github.com/qbhy/goal/contracts"
 )
 
@@ -22,8 +22,8 @@ func (this *ServiceProvider) Register(application contracts.Application) {
 
 		return &Console{commands}
 	})
-	application.Singleton("console.input", func() contracts.ConsoleInput {
-		return input.NewOSArgsInput()
+	application.Singleton("console.inputs", func() contracts.ConsoleInput {
+		return inputs.NewOSArgsInput()
 	})
 }
 

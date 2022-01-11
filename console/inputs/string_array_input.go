@@ -1,4 +1,4 @@
-package input
+package inputs
 
 import (
 	"github.com/qbhy/goal/console/arguments"
@@ -8,6 +8,10 @@ import (
 
 type StringArrayInput struct {
 	ArgsArray []string
+}
+
+func StringArray(argsArray []string) StringArrayInput {
+	return StringArrayInput{argsArray}
 }
 
 func (this *StringArrayInput) GetCommand() string {

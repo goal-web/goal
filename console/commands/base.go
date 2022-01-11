@@ -38,8 +38,9 @@ func (this *Base) InjectArguments(arguments contracts.CommandArguments) error {
 				} else {
 					return errors.New(fmt.Sprintf("缺少必要参数：%s - %s", arg.Name, arg.Description))
 				}
+			} else {
+				arguments.SetOption(arg.Name, argValue)
 			}
-			arguments.SetOption(arg.Name, argValue)
 			argIndex++
 		case OptionalArg:
 			argValue := arguments.GetArg(argIndex)

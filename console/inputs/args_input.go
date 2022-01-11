@@ -1,4 +1,4 @@
-package input
+package inputs
 
 import (
 	"github.com/qbhy/goal/contracts"
@@ -10,5 +10,5 @@ type ArgsInput struct {
 }
 
 func NewOSArgsInput() contracts.ConsoleInput {
-	return &ArgsInput{StringArrayInput{ArgsArray: os.Args[1:]}}
+	return &ArgsInput{StringArray(os.Args[1:])}
 }
