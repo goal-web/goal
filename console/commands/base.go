@@ -33,7 +33,11 @@ func (this *Base) InjectArguments(arguments contracts.CommandArguments) error {
 		case RequiredArg:
 			argValue := arguments.GetArg(argIndex)
 			if argValue == "" {
-				return errors.New(fmt.Sprintf("缺少必要参数：%s - %s", arg.Name, arg.Description))
+				if this.Exists(arg.Name) {
+					arguments.SetOption(arg.Name, arguments.Fields()[arg.Name])
+				} else {
+					return errors.New(fmt.Sprintf("缺少必要参数：%s - %s", arg.Name, arg.Description))
+				}
 			}
 			arguments.SetOption(arg.Name, argValue)
 			argIndex++
