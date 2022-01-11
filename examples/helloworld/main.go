@@ -6,12 +6,11 @@ import (
 	"github.com/qbhy/goal/cache"
 	"github.com/qbhy/goal/config"
 	"github.com/qbhy/goal/console"
+	"github.com/qbhy/goal/console/commands"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/database"
 	"github.com/qbhy/goal/encryption"
 	"github.com/qbhy/goal/events"
-	console2 "github.com/qbhy/goal/examples/helloworld/app/console"
-	_ "github.com/qbhy/goal/examples/helloworld/config"
 	config2 "github.com/qbhy/goal/examples/helloworld/config"
 	"github.com/qbhy/goal/examples/helloworld/exceptions"
 	"github.com/qbhy/goal/examples/helloworld/routes"
@@ -56,7 +55,9 @@ func main() {
 			routes.V1Routes,
 		}},
 		&console.ServiceProvider{
-			console2.GetCommandProviders(),
+			Commands: []console.CommandProvider{
+				commands.Runner,
+			},
 		},
 	)
 
