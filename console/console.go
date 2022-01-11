@@ -9,6 +9,8 @@ import (
 
 var CommandDontExists = errors.New("命令不存在！")
 
+const logoText = "  ▄████  ▒█████   ▄▄▄       ██▓    \n ██▒ ▀█▒▒██▒  ██▒▒████▄    ▓██▒    \n▒██░▄▄▄░▒██░  ██▒▒██  ▀█▄  ▒██░    \n░▓█  ██▓▒██   ██░░██▄▄▄▄██ ▒██░    \n░▒▓███▀▒░ ████▓▒░ ▓█   ▓██▒░██████▒\n ░▒   ▒ ░ ▒░▒░▒░  ▒▒   ▓▒█░░ ▒░▓  ░\n  ░   ░   ░ ▒ ▒░   ▒   ▒▒ ░░ ░ ▒  ░\n░ ░   ░ ░ ░ ░ ▒    ░   ▒     ░ ░   \n      ░     ░ ░        ░  ░    ░  ░\n                                   "
+
 type Console struct {
 	commands map[string]contracts.Command
 }
@@ -28,6 +30,7 @@ func (this Console) Help() {
 			Description: command.GetDescription(),
 		})
 	}
+	fmt.Println(logoText)
 	table.Output(cmdTable)
 }
 
