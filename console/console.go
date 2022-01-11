@@ -42,7 +42,8 @@ func (this *Console) Call(cmd string, arguments contracts.CommandArguments) inte
 	for signature, command := range this.commands {
 		if cmd == signature {
 			if arguments.Exists("h") || arguments.Exists("help") {
-				fmt.Println(command.GetDescription())
+				fmt.Println(logoText)
+				fmt.Printf(" %s 命令：%s\n", command.GetName(), command.GetDescription())
 				fmt.Println(command.GetHelp())
 				return nil
 			}
