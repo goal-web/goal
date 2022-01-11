@@ -15,6 +15,7 @@ type Console struct {
 
 type CommandItem struct {
 	Command     string
+	Signature   string
 	Description string
 }
 
@@ -23,10 +24,10 @@ func (this Console) Help() {
 	for _, command := range this.commands {
 		cmdTable = append(cmdTable, CommandItem{
 			Command:     command.GetName(),
+			Signature:   command.GetSignature(),
 			Description: command.GetDescription(),
 		})
 	}
-	fmt.Println("支持的命令：")
 	table.Output(cmdTable)
 }
 
