@@ -28,3 +28,27 @@ func TestMergeFields(t *testing.T) {
 func TestRandStr(t *testing.T) {
 	fmt.Println(utils.RandStr(50))
 }
+
+func TestSubString(t *testing.T) {
+	subStr := utils.SubString("123456789", 1, 5)
+	fmt.Println(subStr)
+
+	assert.True(t, subStr == "23456")
+	zhSubStr := utils.SubString("一二三四五六七八九", 1, 5)
+
+	fmt.Println(zhSubStr)
+	assert.True(t, zhSubStr == "二三四五六")
+
+	overflowStr := utils.SubString("一二三四五六七八九", 1, 1000)
+	fmt.Println(overflowStr)
+
+	sufferStr := utils.SubString("一二三四五六七八九", 1, 0)
+	fmt.Println(sufferStr)
+
+	assert.True(t, overflowStr == sufferStr)
+
+	midStr := utils.SubString("一二三四五六七八九", 1, -1)
+	fmt.Println("midStr:", midStr)
+	assert.True(t, midStr == "二三四五六七八")
+
+}

@@ -1,6 +1,13 @@
 package commands
 
+import (
+	"errors"
+	"fmt"
+	"github.com/qbhy/goal/contracts"
+)
+
 type Base struct {
+	contracts.CommandArguments
 	Signature   string
 	Description string
 	Name        string
@@ -17,6 +24,36 @@ func BaseCommand(signature, description string) Base {
 		Help:        args.Help(),
 		args:        args,
 	}
+}
+
+func (this *Base) InjectArguments(arguments contracts.CommandArguments) error {
+	argIndex := 0
+	for _, arg := range this.args {
+		switch arg.Type {
+		case RequiredArg:
+			argValue := arguments.GetArg(argIndex)
+			if argValue == "" {
+				return errors.New(fmt.Sprintf("缺少必要参数：%s - %s", arg.Name, arg.Description))
+			}
+			arguments.SetOption(arg.Name, argValue)
+			argIndex++
+		case OptionalArg:
+			argValue := arguments.GetArg(argIndex)
+			if argValue == "" {
+				arguments.SetOption(arg.Name, arg.Default)
+			} else {
+				arguments.SetOption(arg.Name, argValue)
+			}
+			argIndex++
+		case Option:
+			if !arguments.Exists(arg.Name) && arg.Default != nil {
+				arguments.SetOption(arg.Name, arg.Default)
+			}
+		}
+	}
+
+	this.CommandArguments = arguments
+	return nil
 }
 
 func (this *Base) GetSignature() string {

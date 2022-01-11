@@ -23,6 +23,9 @@ func (this *Arguments) GetArg(index int) string {
 func (this *Arguments) GetArgs() []string {
 	return this.args
 }
+func (this *Arguments) SetOption(key string, value interface{}) {
+	this.Fields()[key] = value
+}
 
 func NewArguments(args []string, options contracts.Fields) contracts.CommandArguments {
 	arguments := &Arguments{

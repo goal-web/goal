@@ -1,6 +1,23 @@
 package utils
 
-import "strings"
+import (
+	"strings"
+)
+
+func SubString(str string, start, num int) string {
+	runes := []rune(str)
+	strLen := len(runes)
+	if start >= strLen {
+		return ""
+	}
+	if num < 0 {
+		return string(runes[start : strLen+num])
+	}
+	if start+num >= strLen || num == 0 {
+		return string(runes[start:])
+	}
+	return string(runes[start : start+num])
+}
 
 // IfString 类似三目运算
 func IfString(condition bool, str1 string, otherStr ...string) string {

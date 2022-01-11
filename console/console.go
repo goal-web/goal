@@ -42,7 +42,12 @@ func (this *Console) Call(cmd string, arguments contracts.CommandArguments) inte
 				fmt.Println(command.GetHelp())
 				return nil
 			}
-			return command.Handle(arguments)
+			if err := command.InjectArguments(arguments); err != nil {
+				fmt.Println(err.Error())
+				fmt.Println(command.GetHelp())
+				return nil
+			}
+			return command.Handle()
 		}
 	}
 	return CommandDontExists

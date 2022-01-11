@@ -6,7 +6,8 @@ type Console interface {
 }
 
 type Command interface {
-	Handle(arguments CommandArguments) interface{}
+	Handle() interface{}
+	InjectArguments(arguments CommandArguments) error
 	GetSignature() string
 	GetName() string
 	GetDescription() string
@@ -24,6 +25,7 @@ type CommandArguments interface {
 	OptionalGetter
 	GetArg(index int) string
 	GetArgs() []string
+	SetOption(key string, value interface{})
 	Exists(key string) bool
 	StringArrayOption(key string, defaultValue []string) []string
 	IntArrayOption(key string, defaultValue []int) []int
