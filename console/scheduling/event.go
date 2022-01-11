@@ -3,6 +3,7 @@ package scheduling
 import (
 	"fmt"
 	"github.com/qbhy/goal/utils"
+	"strings"
 	"time"
 )
 
@@ -44,11 +45,36 @@ func (this *Event) Skip(reject func() bool) *Event {
 	return this
 }
 
+func (this *Event) Cron(expression string) *Event {
+	this.expression = expression
+	return this
+}
+
+func (this *Event) Between(startTime, endTime string) *Event {
+	//this.When(func() bool {
+	//	todo: 判断时间
+	//})
+	return this
+}
+
+func (this *Event) UnlessBetween(startTime, endTime string) *Event {
+	//this.Skip(func() bool {
+	//	todo: 判断时间
+	//})
+	return this
+}
+
 func (this *Event) MutexName() string {
 	if this.mutexName != "" {
 		return this.mutexName
 	}
 	return fmt.Sprintf("goal/schedule-%s", utils.Md5(this.expression+this.command))
+}
+
+func (this *Event) spliceIntoPosition(position int, value string) *Event {
+	segments := strings.Split(" ", this.expression)
+	segments[position-1] = value
+	return this.Cron(strings.Join(segments, " "))
 }
 
 func (this *Event) WithoutOverlapping(expiresAt int) *Event {
