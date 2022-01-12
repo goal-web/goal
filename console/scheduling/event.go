@@ -346,13 +346,12 @@ func (this *Event) UnlessBetween(startTime, endTimeStr string) contracts.Schedul
 
 func (this *Event) inTimeInterval(startTime, endTimeStr string) func() bool {
 	var (
-		now     = carbon.Now(this.timezone)
-		startAt = carbon.Parse(startTime, this.timezone)
-		endAt   = carbon.Parse(endTimeStr, this.timezone)
+		startAt = carbon.Now().ParseByFormat(startTime, "H:i", this.timezone)
+		endAt   = carbon.Now().ParseByFormat(endTimeStr, "H:i", this.timezone)
 	)
 
 	if endAt.Lt(startAt) {
-		if startAt.Gt(now) {
+		if startAt.Gt(carbon.Now(this.timezone).SetYear(0000).SetMonth(1).SetDay(1)) {
 			startAt.SubDay()
 		} else {
 			endAt.AddDay()
@@ -360,6 +359,7 @@ func (this *Event) inTimeInterval(startTime, endTimeStr string) func() bool {
 	}
 
 	return func() bool {
+		now := carbon.Now(this.timezone).SetYear(0000).SetMonth(1).SetDay(1)
 		return now.Between(startAt, endAt)
 	}
 }

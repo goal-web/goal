@@ -23,6 +23,10 @@ func (this *Kernel) Schedule(schedule contracts.Schedule) {
 	}).EveryTenSeconds()
 
 	schedule.Call(func() {
+		logs.Default().Info("八点到九点，每秒更新一次")
+	}).EverySecond().Between("20:00", "22:00")
+
+	schedule.Call(func() {
 		logs.Default().Info("周日每5秒钟打印 周日愉快")
 	}).EveryFiveSeconds().Sundays()
 }
