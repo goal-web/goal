@@ -11,6 +11,7 @@ import (
 	"github.com/qbhy/goal/encryption"
 	"github.com/qbhy/goal/events"
 	console2 "github.com/qbhy/goal/examples/helloworld/app/console"
+	"github.com/qbhy/goal/examples/helloworld/app/providers"
 	config2 "github.com/qbhy/goal/examples/helloworld/config"
 	"github.com/qbhy/goal/examples/helloworld/exceptions"
 	"github.com/qbhy/goal/examples/helloworld/routes"
@@ -57,6 +58,7 @@ func main() {
 		&console.ServiceProvider{
 			ConsoleProvider: console2.NewKernel,
 		},
+		providers.AppServiceProvider{},
 	)
 
 	app.Call(func(console3 contracts.Console, input contracts.ConsoleInput) {
