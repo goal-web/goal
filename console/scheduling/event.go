@@ -90,7 +90,7 @@ func (this *Event) EverySecond() contracts.ScheduleEvent {
 }
 
 func (this *Event) WithoutOverlapping(expiresAt int) contracts.ScheduleEvent {
-	this.expiresAt = time.Duration(expiresAt)
+	this.expiresAt = time.Duration(expiresAt) * time.Second
 	this.withoutOverlapping = true
 	return this.Skip(func() bool {
 		return this.mutex.Exists(this)

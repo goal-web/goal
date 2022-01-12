@@ -51,7 +51,7 @@ func (this *Schedule) Command(command contracts.Command, args ...string) contrac
 	err := command.InjectArguments(input.GetArguments())
 	if err != nil {
 		logs.WithError(err).Debug("command 参数错误")
-		panic(err)
+		panic(err) // 因为这个阶段框架还没正式运行，所以 panic
 	}
 	event := NewCommandEvent(command.GetName(), this.mutex, func(console contracts.Console) {
 		command.Handle()
@@ -61,6 +61,11 @@ func (this *Schedule) Command(command contracts.Command, args ...string) contrac
 }
 
 func (this *Schedule) Exec(command string, args ...string) contracts.CommandEvent {
-	//TODO implement me
-	panic("implement me")
+	args = append([]string{command}, args...)
+	input := inputs.StringArray(args)
+	event := NewCommandEvent(command, this.mutex, func(console contracts.Console) {
+		console.Run(&input)
+	}, this.timezone)
+	this.events = append(this.events, event)
+	return event
 }

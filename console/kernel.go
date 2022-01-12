@@ -6,6 +6,7 @@ import (
 	"github.com/modood/table"
 	"github.com/qbhy/goal/console/scheduling"
 	"github.com/qbhy/goal/contracts"
+	"github.com/qbhy/goal/exceptions"
 )
 
 type CommandProvider func(application contracts.Application) contracts.Command
@@ -15,8 +16,9 @@ var CommandDontExists = errors.New("命令不存在！")
 const logoText = "  ▄████  ▒█████   ▄▄▄       ██▓    \n ██▒ ▀█▒▒██▒  ██▒▒████▄    ▓██▒    \n▒██░▄▄▄░▒██░  ██▒▒██  ▀█▄  ▒██░    \n░▓█  ██▓▒██   ██░░██▄▄▄▄██ ▒██░    \n░▒▓███▀▒░ ████▓▒░ ▓█   ▓██▒░██████▒\n ░▒   ▒ ░ ▒░▒░▒░  ▒▒   ▓▒█░░ ▒░▓  ░\n  ░   ░   ░ ▒ ▒░   ▒   ▒▒ ░░ ░ ▒  ░\n░ ░   ░ ░ ░ ░ ▒    ░   ▒     ░ ░   \n      ░     ░ ░        ░  ░    ░  ░\n                                   "
 
 type Kernel struct {
-	commands map[string]contracts.Command
-	schedule contracts.Schedule
+	commands         map[string]contracts.Command
+	schedule         contracts.Schedule
+	exceptionHandler contracts.ExceptionHandler
 }
 
 func (this *Kernel) GetSchedule() contracts.Schedule {
@@ -35,8 +37,9 @@ func NewKernel(app contracts.Application, commandProviders []CommandProvider) *K
 	}
 
 	return &Kernel{
-		commands,
-		scheduling.NewSchedule(app),
+		commands:         commands,
+		schedule:         scheduling.NewSchedule(app),
+		exceptionHandler: app.Get("exceptions.handler").(contracts.ExceptionHandler),
 	}
 }
 
@@ -73,6 +76,12 @@ func (this *Kernel) Call(cmd string, arguments contracts.CommandArguments) inter
 				return nil
 			}
 			if err := command.InjectArguments(arguments); err != nil {
+				this.exceptionHandler.Handle(CommandArgumentException{
+					exceptions.WithError(err, contracts.Fields{
+						"command":   cmd,
+						"arguments": arguments,
+					}),
+				})
 				fmt.Println(err.Error())
 				fmt.Println(command.GetHelp())
 				return nil

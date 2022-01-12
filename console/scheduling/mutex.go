@@ -2,7 +2,6 @@ package scheduling
 
 import (
 	"github.com/qbhy/goal/contracts"
-	"time"
 )
 
 type Mutex struct {
@@ -11,7 +10,7 @@ type Mutex struct {
 }
 
 func (this *Mutex) Create(event *Event) bool {
-	_, err := this.redis.Connection(this.store).Set(event.MutexName(), "1", event.expiresAt*time.Second)
+	_, err := this.redis.Connection(this.store).Set(event.MutexName(), "1", event.expiresAt)
 	return err == nil
 }
 func (this *Mutex) Exists(event *Event) bool {
