@@ -111,10 +111,10 @@ func ConvertToBool(rawValue interface{}, defaultValue bool) bool {
 	case bool:
 		return value
 	case string:
-		if value == "false" || value == "(false)" || value == "0" {
+		switch value {
+		case "false", "(false)", "0", "":
 			return false
-		}
-		if value == "true" || value == "(true)" || value == "1" {
+		case "true", "(true)", "1":
 			return true
 		}
 	case float64, int, int64, int8, float32:
