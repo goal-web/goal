@@ -50,10 +50,12 @@ func (this *ServiceProvider) runScheduleEvents(events []contracts.ScheduleEvent)
 			nowCarbon := carbon.Time2Carbon(now)
 			if nextTime.DiffInSeconds(nowCarbon) == 0 {
 				this.execRecords[index] = now
-				parallelInstance.Add(func() interface{} {
-					event.Run(this.app)
-					return nil
-				})
+				(func(event contracts.ScheduleEvent) {
+					parallelInstance.Add(func() interface{} {
+						event.Run(this.app)
+						return nil
+					})
+				})(event)
 			} else if nextTime.Lt(nowCarbon) {
 				this.execRecords[index] = now
 			}
