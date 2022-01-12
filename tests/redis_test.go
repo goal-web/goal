@@ -23,6 +23,9 @@ func TestRedisFactory(t *testing.T) {
 		aValue, err := defaultConnection.Get("a")
 		assert.True(t, err == nil)
 		assert.True(t, aValue == "default")
+		num, err := defaultConnection.Exists("a")
+		assert.True(t, num == 1)
+		assert.True(t, err == nil, err)
 
 		cacheConnection := factory.Connection("cache")
 		_, err = cacheConnection.Set("a", "cache", time.Minute*5)
