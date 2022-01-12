@@ -5,22 +5,15 @@ import (
 	"github.com/qbhy/goal/contracts"
 )
 
-type CommandProvider func(application contracts.Application) contracts.Command
+type ConsoleProvider func(application contracts.Application) contracts.Console
 
 type ServiceProvider struct {
-	Commands []CommandProvider
+	ConsoleProvider ConsoleProvider
 }
 
 func (this *ServiceProvider) Register(application contracts.Application) {
 	application.Singleton("console", func() contracts.Console {
-		commands := make(map[string]contracts.Command)
-
-		for _, commandProvider := range this.Commands {
-			command := commandProvider(application)
-			commands[command.GetName()] = command
-		}
-
-		return &Console{commands}
+		return this.ConsoleProvider(application)
 	})
 	application.Singleton("console.inputs", func() contracts.ConsoleInput {
 		return inputs.NewOSArgsInput()

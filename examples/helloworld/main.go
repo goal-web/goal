@@ -6,11 +6,11 @@ import (
 	"github.com/qbhy/goal/cache"
 	"github.com/qbhy/goal/config"
 	"github.com/qbhy/goal/console"
-	"github.com/qbhy/goal/console/commands"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/database"
 	"github.com/qbhy/goal/encryption"
 	"github.com/qbhy/goal/events"
+	console2 "github.com/qbhy/goal/examples/helloworld/app/console"
 	config2 "github.com/qbhy/goal/examples/helloworld/config"
 	"github.com/qbhy/goal/examples/helloworld/exceptions"
 	"github.com/qbhy/goal/examples/helloworld/routes"
@@ -54,11 +54,7 @@ func main() {
 			// 路由收集器
 			routes.V1Routes,
 		}},
-		&console.ServiceProvider{
-			Commands: []console.CommandProvider{
-				commands.Runner,
-			},
-		},
+		&console.ServiceProvider{console2.NewKernel},
 	)
 
 	app.Call(func(console3 contracts.Console, input contracts.ConsoleInput) {

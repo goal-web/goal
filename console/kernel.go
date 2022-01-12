@@ -7,12 +7,25 @@ import (
 	"github.com/qbhy/goal/contracts"
 )
 
+type CommandProvider func(application contracts.Application) contracts.Command
+
 var CommandDontExists = errors.New("命令不存在！")
 
 const logoText = "  ▄████  ▒█████   ▄▄▄       ██▓    \n ██▒ ▀█▒▒██▒  ██▒▒████▄    ▓██▒    \n▒██░▄▄▄░▒██░  ██▒▒██  ▀█▄  ▒██░    \n░▓█  ██▓▒██   ██░░██▄▄▄▄██ ▒██░    \n░▒▓███▀▒░ ████▓▒░ ▓█   ▓██▒░██████▒\n ░▒   ▒ ░ ▒░▒░▒░  ▒▒   ▓▒█░░ ▒░▓  ░\n  ░   ░   ░ ▒ ▒░   ▒   ▒▒ ░░ ░ ▒  ░\n░ ░   ░ ░ ░ ░ ▒    ░   ▒     ░ ░   \n      ░     ░ ░        ░  ░    ░  ░\n                                   "
 
-type Console struct {
+type Kernel struct {
 	commands map[string]contracts.Command
+}
+
+func NewKernel(app contracts.Application, commandProviders []CommandProvider) *Kernel {
+	commands := make(map[string]contracts.Command)
+
+	for _, commandProvider := range commandProviders {
+		command := commandProvider(app)
+		commands[command.GetName()] = command
+	}
+
+	return &Kernel{commands}
 }
 
 type CommandItem struct {
@@ -21,7 +34,7 @@ type CommandItem struct {
 	Description string
 }
 
-func (this Console) Help() {
+func (this Kernel) Help() {
 	cmdTable := make([]CommandItem, 0)
 	for _, command := range this.commands {
 		cmdTable = append(cmdTable, CommandItem{
@@ -34,7 +47,7 @@ func (this Console) Help() {
 	table.Output(cmdTable)
 }
 
-func (this *Console) Call(cmd string, arguments contracts.CommandArguments) interface{} {
+func (this *Kernel) Call(cmd string, arguments contracts.CommandArguments) interface{} {
 	if cmd == "" {
 		this.Help()
 		return nil
@@ -58,6 +71,6 @@ func (this *Console) Call(cmd string, arguments contracts.CommandArguments) inte
 	return CommandDontExists
 }
 
-func (this *Console) Run(input contracts.ConsoleInput) interface{} {
+func (this *Kernel) Run(input contracts.ConsoleInput) interface{} {
 	return this.Call(input.GetCommand(), input.GetArguments())
 }
