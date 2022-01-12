@@ -5,6 +5,8 @@ import "time"
 type Console interface {
 	Call(command string, arguments CommandArguments) interface{}
 	Run(input ConsoleInput) interface{}
+	Schedule(schedule Schedule)
+	GetSchedule() Schedule
 }
 
 type Command interface {
@@ -37,13 +39,16 @@ type CommandArguments interface {
 }
 
 type Schedule interface {
+	UseStore(store string)
 	Call(callback interface{}, args ...interface{}) CallbackEvent
 	Command(command Command, args ...string) CommandEvent
 	Exec(command string, args ...string) CommandEvent
+
+	GetEvents() []ScheduleEvent
 }
 
 type ScheduleEvent interface {
-	Run(application Application) []interface{}
+	Run(application Application)
 	WithoutOverlapping(expiresAt int) ScheduleEvent
 	OnOneServer() ScheduleEvent
 	MutexName() string
@@ -55,9 +60,11 @@ type ScheduleEvent interface {
 	SpliceIntoPosition(position int, value string) ScheduleEvent
 
 	// ManagesFrequencies
+	Expression() string
 	Cron(expression string) ScheduleEvent
 	Timezone(timezone string) ScheduleEvent
 	Days(day string, days ...string) ScheduleEvent
+	Years(years ...string) ScheduleEvent
 	Yearly() ScheduleEvent
 	YearlyOn(month time.Month, dayOfMonth int, time string) ScheduleEvent
 	Quarterly() ScheduleEvent
@@ -96,6 +103,15 @@ type ScheduleEvent interface {
 	EveryMinute() ScheduleEvent
 	UnlessBetween(startTime, endTime string) ScheduleEvent
 	Between(startTime, endTime string) ScheduleEvent
+
+	EveryThirtySeconds() ScheduleEvent
+	EveryFifteenSeconds() ScheduleEvent
+	EveryTenSeconds() ScheduleEvent
+	EveryFiveSeconds() ScheduleEvent
+	EveryFourSeconds() ScheduleEvent
+	EveryThreeSeconds() ScheduleEvent
+	EveryTwoSeconds() ScheduleEvent
+	EverySecond() ScheduleEvent
 }
 
 type CallbackEvent interface {

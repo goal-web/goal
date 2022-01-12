@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/modood/table"
+	"github.com/qbhy/goal/console/scheduling"
 	"github.com/qbhy/goal/contracts"
 )
 
@@ -15,6 +16,14 @@ const logoText = "  ▄████  ▒█████   ▄▄▄       ██
 
 type Kernel struct {
 	commands map[string]contracts.Command
+	schedule contracts.Schedule
+}
+
+func (this *Kernel) GetSchedule() contracts.Schedule {
+	return this.schedule
+}
+
+func (this *Kernel) Schedule(schedule contracts.Schedule) {
 }
 
 func NewKernel(app contracts.Application, commandProviders []CommandProvider) *Kernel {
@@ -25,7 +34,10 @@ func NewKernel(app contracts.Application, commandProviders []CommandProvider) *K
 		commands[command.GetName()] = command
 	}
 
-	return &Kernel{commands}
+	return &Kernel{
+		commands,
+		scheduling.NewSchedule(app),
+	}
 }
 
 type CommandItem struct {

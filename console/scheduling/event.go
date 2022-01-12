@@ -9,6 +9,23 @@ import (
 	"time"
 )
 
+func NewEvent(mutex *Mutex, callback interface{}, timezone string) *Event {
+	return &Event{
+		callback:           callback,
+		mutex:              mutex,
+		filters:            make([]filter, 0),
+		rejects:            make([]filter, 0),
+		beforeCallbacks:    make([]func(), 0),
+		afterCallbacks:     make([]func(), 0),
+		withoutOverlapping: false,
+		onOneServer:        false,
+		timezone:           timezone,
+		expression:         "0 * * * * * *",
+		mutexName:          "",
+		expiresAt:          0,
+	}
+}
+
 type filter func() bool
 
 type Event struct {
@@ -24,27 +41,52 @@ type Event struct {
 	onOneServer        bool
 
 	timezone   string
-	command    string
 	expression string
 	mutexName  string
 	expiresAt  time.Duration
 }
 
-func NewEvent(mutex *Mutex, callback interface{}, timezone string) *Event {
-	return &Event{
-		callback:           callback,
-		mutex:              mutex,
-		filters:            make([]filter, 0),
-		rejects:            make([]filter, 0),
-		beforeCallbacks:    make([]func(), 0),
-		afterCallbacks:     make([]func(), 0),
-		withoutOverlapping: false,
-		onOneServer:        false,
-		timezone:           timezone,
-		expression:         "* * * * *",
-		mutexName:          "",
-		expiresAt:          0,
+func (this *Event) Years(years ...string) contracts.ScheduleEvent {
+	if len(years) > 0 {
+		return this.SpliceIntoPosition(6, strings.Join(years, ","))
 	}
+	return this
+}
+
+func (this *Event) Expression() string {
+	return this.expression
+}
+
+func (this *Event) EveryThirtySeconds() contracts.ScheduleEvent {
+	return this.SpliceIntoPosition(0, "0,30")
+}
+
+func (this *Event) EveryFifteenSeconds() contracts.ScheduleEvent {
+	return this.SpliceIntoPosition(0, "*/15")
+}
+
+func (this *Event) EveryTenSeconds() contracts.ScheduleEvent {
+	return this.SpliceIntoPosition(0, "*/10")
+}
+
+func (this *Event) EveryFiveSeconds() contracts.ScheduleEvent {
+	return this.SpliceIntoPosition(0, "*/5")
+}
+
+func (this *Event) EveryFourSeconds() contracts.ScheduleEvent {
+	return this.SpliceIntoPosition(0, "*/4")
+}
+
+func (this *Event) EveryThreeSeconds() contracts.ScheduleEvent {
+	return this.SpliceIntoPosition(0, "*/3")
+}
+
+func (this *Event) EveryTwoSeconds() contracts.ScheduleEvent {
+	return this.SpliceIntoPosition(0, "*/2")
+}
+
+func (this *Event) EverySecond() contracts.ScheduleEvent {
+	return this.SpliceIntoPosition(0, "*")
 }
 
 func (this *Event) WithoutOverlapping(expiresAt int) contracts.ScheduleEvent {
@@ -55,10 +97,23 @@ func (this *Event) WithoutOverlapping(expiresAt int) contracts.ScheduleEvent {
 	})
 }
 
-func (this *Event) Run(application contracts.Application) []interface{} {
-	return application.Call(this.callback)
+func (this *Event) Run(application contracts.Application) {
+	if !this.FiltersPass() {
+		return
+	}
+	defer this.removeMutex()
+	if this.withoutOverlapping && !this.mutex.Create(this) {
+		return
+	}
+	application.Call(this.callback)
+	return
 }
 
+func (this *Event) removeMutex() {
+	if this.withoutOverlapping {
+		this.mutex.Forget(this)
+	}
+}
 func (this *Event) OnOneServer() contracts.ScheduleEvent {
 	this.onOneServer = true
 	return this
@@ -319,7 +374,7 @@ func (this *Event) SetMutexName(mutexName string) contracts.ScheduleEvent {
 }
 
 func (this *Event) SpliceIntoPosition(position int, value string) contracts.ScheduleEvent {
-	segments := strings.Split(" ", this.expression)
-	segments[position-1] = value
+	segments := strings.Split(this.expression, " ")
+	segments[position] = value
 	return this.Cron(strings.Join(segments, " "))
 }

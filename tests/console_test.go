@@ -2,11 +2,15 @@ package tests
 
 import (
 	"fmt"
+	"github.com/golang-module/carbon/v2"
+	"github.com/gorhill/cronexpr"
 	"github.com/qbhy/goal/console/commands"
 	"github.com/qbhy/goal/console/inputs"
+	"github.com/qbhy/goal/console/scheduling"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestParseSignature(t *testing.T) {
@@ -75,4 +79,14 @@ func TestCommandCase(t *testing.T) {
 	args := array.GetArguments()
 	assert.True(t, command.InjectArguments(args) == nil)
 	command.Handle()
+}
+
+func TestCronParse(t *testing.T) {
+	event := scheduling.NewEvent(nil, func() {}, "")
+
+	event.EveryMinute().EverySecond()
+
+	nextTime := cronexpr.MustParse(event.Expression()).Next(time.Now())
+
+	fmt.Println(event.Expression(), nextTime, carbon.Now().DiffInSeconds(carbon.Time2Carbon(nextTime)))
 }

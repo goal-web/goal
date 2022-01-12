@@ -54,7 +54,9 @@ func main() {
 			// 路由收集器
 			routes.V1Routes,
 		}},
-		&console.ServiceProvider{console2.NewKernel},
+		&console.ServiceProvider{
+			ConsoleProvider: console2.NewKernel,
+		},
 	)
 
 	app.Call(func(console3 contracts.Console, input contracts.ConsoleInput) {
