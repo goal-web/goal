@@ -14,6 +14,7 @@ type Config interface {
 
 type Env interface {
 	Getter
+	OptionalGetter
 
 	FieldsProvider
 
