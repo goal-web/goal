@@ -11,7 +11,7 @@ type Mutex struct {
 }
 
 func (this *Mutex) Create(event *Event) bool {
-	_, err := this.redis.Connection(this.store).Set(event.MutexName(), "1", time.Duration(event.expiresAt)*time.Second)
+	_, err := this.redis.Connection(this.store).Set(event.MutexName(), "1", event.expiresAt*time.Second)
 	return err == nil
 }
 func (this *Mutex) Exists(event *Event) bool {

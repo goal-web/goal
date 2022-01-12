@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"github.com/golang-module/carbon/v2"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/utils"
 	"github.com/stretchr/testify/assert"
@@ -51,4 +52,8 @@ func TestSubString(t *testing.T) {
 	fmt.Println("midStr:", midStr)
 	assert.True(t, midStr == "二三四五六七八")
 
+}
+
+func TestCarbon(t *testing.T) {
+	fmt.Println(carbon.Now().Day(), carbon.Now().EndOfMonth().Day())
 }

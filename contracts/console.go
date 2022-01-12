@@ -1,5 +1,7 @@
 package contracts
 
+import "time"
+
 type Console interface {
 	Call(command string, arguments CommandArguments) interface{}
 	Run(input ConsoleInput) interface{}
@@ -32,4 +34,74 @@ type CommandArguments interface {
 	Int64ArrayOption(key string, defaultValue []int64) []int64
 	FloatArrayOption(key string, defaultValue []float32) []float32
 	Float64ArrayOption(key string, defaultValue []float64) []float64
+}
+
+type Schedule interface {
+	Call(callback interface{}, args ...interface{}) CallbackEvent
+	Command(command Command, args ...string) CommandEvent
+	Exec(command string, args ...string) CommandEvent
+}
+
+type ScheduleEvent interface {
+	Run(application Application) []interface{}
+	WithoutOverlapping(expiresAt int) ScheduleEvent
+	OnOneServer() ScheduleEvent
+	MutexName() string
+	SetMutexName(mutexName string) ScheduleEvent
+
+	Skip(func() bool) ScheduleEvent
+	When(func() bool) ScheduleEvent
+
+	SpliceIntoPosition(position int, value string) ScheduleEvent
+
+	// ManagesFrequencies
+	Cron(expression string) ScheduleEvent
+	Timezone(timezone string) ScheduleEvent
+	Days(day string, days ...string) ScheduleEvent
+	Yearly() ScheduleEvent
+	YearlyOn(month time.Month, dayOfMonth int, time string) ScheduleEvent
+	Quarterly() ScheduleEvent
+	LastDayOfMonth(time string) ScheduleEvent
+	TwiceMonthly(first, second int, time string) ScheduleEvent
+	Monthly() ScheduleEvent
+	MonthlyOn(dayOfMonth int, time string) ScheduleEvent
+	WeeklyOn(dayOfWeek time.Weekday, time string) ScheduleEvent
+	Weekly() ScheduleEvent
+	Sundays() ScheduleEvent
+	Saturdays() ScheduleEvent
+	Fridays() ScheduleEvent
+	Thursdays() ScheduleEvent
+	Wednesdays() ScheduleEvent
+	Tuesdays() ScheduleEvent
+	Mondays() ScheduleEvent
+	Weekends() ScheduleEvent
+	Weekdays() ScheduleEvent
+	TwiceDailyAt(first, second, offset int) ScheduleEvent
+	TwiceDaily(first, second int) ScheduleEvent
+	DailyAt(time string) ScheduleEvent
+	Daily() ScheduleEvent
+	EverySixHours() ScheduleEvent
+	EveryFourHours() ScheduleEvent
+	EveryThreeHours() ScheduleEvent
+	EveryTwoHours() ScheduleEvent
+	HourlyAt(offset ...int) ScheduleEvent
+	Hourly() ScheduleEvent
+	EveryThirtyMinutes() ScheduleEvent
+	EveryFifteenMinutes() ScheduleEvent
+	EveryTenMinutes() ScheduleEvent
+	EveryFiveMinutes() ScheduleEvent
+	EveryFourMinutes() ScheduleEvent
+	EveryThreeMinutes() ScheduleEvent
+	EveryTwoMinutes() ScheduleEvent
+	EveryMinute() ScheduleEvent
+	UnlessBetween(startTime, endTime string) ScheduleEvent
+	Between(startTime, endTime string) ScheduleEvent
+}
+
+type CallbackEvent interface {
+	ScheduleEvent
+	Description(description string) CallbackEvent
+}
+type CommandEvent interface {
+	ScheduleEvent
 }
