@@ -9,15 +9,14 @@ var (
 	instance contracts.Application
 )
 
-func Singleton(environment string) contracts.Application {
+func Singleton() contracts.Application {
 	if instance != nil {
 		return instance
 	}
 
 	instance = &application{
-		environment: environment,
-		Container:   container.New(),
-		services:    make([]contracts.ServiceProvider, 0),
+		Container: container.New(),
+		services:  make([]contracts.ServiceProvider, 0),
 	}
 
 	return instance

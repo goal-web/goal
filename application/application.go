@@ -10,17 +10,16 @@ import (
 const ENV_PRODUCTION = "production"
 
 type application struct {
-	environment string
 	contracts.Container
 	services []contracts.ServiceProvider
 }
 
 func (this *application) Environment() string {
-	return this.environment
+	return this.Get("config").(contracts.Config).Get("app").(Config).Env
 }
 
 func (this *application) IsProduction() bool {
-	return this.environment == ENV_PRODUCTION
+	return this.Environment() == ENV_PRODUCTION
 }
 
 func (this *application) Start() map[string]error {

@@ -25,7 +25,7 @@ import (
 )
 
 func main() {
-	app := application.Singleton("dev")
+	app := application.Singleton()
 	path, _ := os.Getwd()
 	app.Instance("path", path)
 

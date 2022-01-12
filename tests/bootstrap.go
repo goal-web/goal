@@ -24,7 +24,7 @@ import (
 
 func getApp(path string) contracts.Application {
 	env := "testing"
-	app := application.Singleton(env)
+	app := application.Singleton()
 	app.Instance("path", path)
 
 	// 设置异常处理器
