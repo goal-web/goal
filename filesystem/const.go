@@ -1,4 +1,4 @@
-package filesystemt
+package filesystem
 
 import "github.com/qbhy/goal/contracts"
 

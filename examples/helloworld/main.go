@@ -15,7 +15,7 @@ import (
 	"github.com/qbhy/goal/examples/helloworld/app/providers"
 	config2 "github.com/qbhy/goal/examples/helloworld/config"
 	"github.com/qbhy/goal/examples/helloworld/routes"
-	"github.com/qbhy/goal/filesystemt"
+	"github.com/qbhy/goal/filesystem"
 	"github.com/qbhy/goal/hashing"
 	"github.com/qbhy/goal/http"
 	"github.com/qbhy/goal/redis"
@@ -43,7 +43,7 @@ func main() {
 		},
 		hashing.ServiceProvider{},
 		encryption.ServiceProvider{},
-		filesystemt.ServiceProvider{},
+		filesystem.ServiceProvider{},
 		events.ServiceProvider{},
 		redis.ServiceProvider{},
 		cache.ServiceProvider{},

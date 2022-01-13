@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"github.com/qbhy/goal/filesystemt"
+	"github.com/qbhy/goal/filesystem"
 	"github.com/qbhy/goal/utils"
 	"github.com/stretchr/testify/assert"
 	"io/fs"
@@ -14,7 +14,7 @@ func TestLocalFileSystemDriver(t *testing.T) {
 	path, err := os.Getwd()
 	assert.Nil(t, err, err)
 	diskPath := path + "/" + utils.Md5(time.Now().Format("2006-01-02 15:04:05.999999999 -0700 MST"))
-	disk := filesystemt.NewLocalFileSystem("testing", diskPath, fs.ModePerm)
+	disk := filesystem.NewLocalFileSystem("testing", diskPath, fs.ModePerm)
 
 	checkFileContent := func(path, contents string) {
 		fileContents, err := disk.Get(path)
@@ -104,10 +104,10 @@ func TestLocalFileSystemDriver(t *testing.T) {
 	assert.True(t, len(disk.AllDirectories("logs")) == 2) // 包含子目录的目录数
 
 	// 测试文件可见性
-	assert.True(t, disk.GetVisibility(logPath) == filesystemt.VISIBLE)
+	assert.True(t, disk.GetVisibility(logPath) == filesystem.VISIBLE)
 	// 测试设置文件权限
 	assert.Nil(t, disk.SetVisibility(logPath, fs.FileMode(0400)))
-	assert.True(t, disk.GetVisibility(logPath) == filesystemt.INVISIBLE)
+	assert.True(t, disk.GetVisibility(logPath) == filesystem.INVISIBLE)
 
 	// 删除logs文件夹
 	assert.Nil(t, disk.DeleteDirectory("logs"))

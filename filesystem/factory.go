@@ -1,4 +1,4 @@
-package filesystemt
+package filesystem
 
 import (
 	"bufio"

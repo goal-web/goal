@@ -12,7 +12,7 @@ import (
 	"github.com/qbhy/goal/events"
 	"github.com/qbhy/goal/examples/helloworld/app/exceptions"
 	config2 "github.com/qbhy/goal/examples/helloworld/config"
-	"github.com/qbhy/goal/filesystemt"
+	"github.com/qbhy/goal/filesystem"
 	"github.com/qbhy/goal/hashing"
 	"github.com/qbhy/goal/logs"
 	"github.com/qbhy/goal/redis"
@@ -41,7 +41,7 @@ func getApp(path string) contracts.Application {
 		},
 		hashing.ServiceProvider{},
 		encryption.ServiceProvider{},
-		filesystemt.ServiceProvider{},
+		filesystem.ServiceProvider{},
 		events.ServiceProvider{},
 		redis.ServiceProvider{},
 		cache.ServiceProvider{},
