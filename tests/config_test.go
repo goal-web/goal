@@ -101,4 +101,7 @@ func TestDotEnv(t *testing.T) {
 	assert.True(t, len(env.GetFields("redis")) > 0)
 
 	assert.True(t, fields["testing:name"] == "testing goal")
+
+	assert.Nil(t, os.Setenv("app.key", "goal"))
+	assert.True(t, env.GetString("app.key") == "goal")
 }

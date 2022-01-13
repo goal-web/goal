@@ -5,6 +5,7 @@ import (
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/supports"
 	"github.com/qbhy/goal/utils"
+	"os"
 	"path/filepath"
 )
 
@@ -17,10 +18,12 @@ type envProvider struct {
 
 func NewEnv(paths []string, sep string) contracts.Env {
 	provider := &envProvider{
-		BaseFields: supports.BaseFields{},
-		Paths:      paths,
-		Sep:        sep,
-		fields:     nil,
+		BaseFields: supports.BaseFields{Getter: func(key string) interface{} {
+			return os.Getenv(key)
+		}},
+		Paths:  paths,
+		Sep:    sep,
+		fields: nil,
 	}
 
 	provider.BaseFields.FieldsProvider = provider

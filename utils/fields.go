@@ -162,7 +162,7 @@ func ConvertToFields(anyValue interface{}) (contracts.Fields, error) {
 				return nil, errors.New("不支持 string 以外的类型作为 key 的 map")
 			}
 		default:
-			return nil, errors.New("不支持转 contracts.BaseFields 的类型： " + paramType.String())
+			return nil, errors.New("不支持转 contracts.Fields 的类型： " + paramType.String())
 		}
 	}
 	return fields, nil
