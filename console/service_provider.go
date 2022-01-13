@@ -24,9 +24,7 @@ type ServiceProvider struct {
 }
 
 func (this *ServiceProvider) Register(application contracts.Application) {
-	this.serverIdChan = make(chan bool, 1)
 	this.app = application
-	this.execRecords = make(map[int]time.Time)
 
 	application.Singleton("console", func() contracts.Console {
 		console := this.ConsoleProvider(application)
@@ -62,6 +60,7 @@ func (this *ServiceProvider) runScheduleEvents(events []contracts.ScheduleEvent)
 }
 
 func (this *ServiceProvider) Start() error {
+	this.execRecords = make(map[int]time.Time)
 	go this.maintainServerId()
 	this.app.Call(func(schedule contracts.Schedule) {
 		this.stopChan = utils.SetInterval(1, func() {
@@ -92,7 +91,7 @@ func (this *ServiceProvider) maintainServerId() {
 		}
 		this.serverIdChan = utils.SetInterval(1, func() {
 			// 维持当前服务心跳
-			_, _ = redis.Set("goal.server."+appConfig.ServerId, time.Now().String(), time.Second*5)
+			_, _ = redis.Set("goal.server."+appConfig.ServerId, time.Now().String(), time.Second*2)
 
 			// 挂掉的服务就删掉
 			servers, _ := redis.SMembers("goal.servers")
