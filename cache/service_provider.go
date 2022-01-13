@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"github.com/qbhy/goal/cache/drivers"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/utils"
 )
@@ -29,10 +30,10 @@ func (this ServiceProvider) Register(container contracts.Application) {
 		}
 
 		factory.Extend("redis", func(cacheConfig contracts.Fields) contracts.CacheStore {
-			return &RedisStore{
-				redis:  redis.Connection(utils.GetStringField(cacheConfig, "connection")),
-				prefix: utils.GetStringField(cacheConfig, "prefix"),
-			}
+			return drivers.NewRedisCache(
+				redis.Connection(utils.GetStringField(cacheConfig, "connection")),
+				utils.GetStringField(cacheConfig, "prefix"),
+			)
 		})
 
 		return factory

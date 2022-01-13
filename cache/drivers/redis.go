@@ -1,9 +1,16 @@
-package cache
+package drivers
 
 import (
 	"github.com/qbhy/goal/contracts"
 	"time"
 )
+
+func NewRedisCache(redis contracts.RedisConnection, prefix string) contracts.CacheStore {
+	return &RedisStore{
+		redis:  redis,
+		prefix: prefix,
+	}
+}
 
 type RedisStore struct {
 	redis  contracts.RedisConnection
