@@ -6,6 +6,7 @@ import (
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/utils"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
@@ -54,6 +55,11 @@ func TestSubString(t *testing.T) {
 
 }
 
-func TestCarbon(t *testing.T) {
+func TestCarbonDay(t *testing.T) {
 	fmt.Println(carbon.Now().Day(), carbon.Now().EndOfMonth().Day())
+}
+
+func TestOsHostname(t *testing.T) {
+	fmt.Println(os.Hostname())
+	fmt.Println(os.UserHomeDir())
 }

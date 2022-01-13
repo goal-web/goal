@@ -25,7 +25,7 @@ func (this *CallbackEvent) Description(description string) contracts.CallbackEve
 
 func (this *CallbackEvent) MutexName() string {
 	if this.mutexName == "" {
-		return fmt.Sprintf("goal/schedule-%s", utils.Md5(this.expression+this.description))
+		return fmt.Sprintf("goal.schedule-%s", utils.Md5(this.expression+this.description))
 	}
 	return this.mutexName
 }

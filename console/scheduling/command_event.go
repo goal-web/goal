@@ -25,7 +25,7 @@ func (this *CommandEvent) Command(command string) contracts.CommandEvent {
 
 func (this *CommandEvent) MutexName() string {
 	if this.mutexName == "" {
-		return fmt.Sprintf("goal/schedule-%s", utils.Md5(this.expression+this.command))
+		return fmt.Sprintf("goal.schedule-%s", utils.Md5(this.expression+this.command))
 	}
 	return this.mutexName
 }

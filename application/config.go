@@ -1,6 +1,7 @@
 package application
 
 type Config struct {
+	ServerId string
 	Name     string
 	Debug    bool
 	Timezone string
