@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"errors"
 	"fmt"
 	"github.com/golang-module/carbon/v2"
 	"github.com/qbhy/goal/contracts"
@@ -62,4 +63,12 @@ func TestCarbonDay(t *testing.T) {
 func TestOsHostname(t *testing.T) {
 	fmt.Println(os.Hostname())
 	fmt.Println(os.UserHomeDir())
+}
+
+func TestJoins(t *testing.T) {
+	fmt.Println(utils.JoinFloat64Array([]float64{0, 1, 3.555}, ","))
+	fmt.Println(utils.JoinFloatArray([]float32{0, 1, 3.555}, ","))
+	fmt.Println(utils.JoinIntArray([]int{0, 1, 3}, ","))
+	fmt.Println(utils.JoinInt64Array([]int64{0, 1, 44}, ","))
+	fmt.Println(utils.JoinInterfaceArray([]interface{}{0, 1, 44, "aaa", errors.New("错误")}, ","))
 }

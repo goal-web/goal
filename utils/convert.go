@@ -135,6 +135,8 @@ func ConvertToString(rawValue interface{}, defaultValue string) string {
 		return fmt.Sprintf("%d", value)
 	case float32, float64:
 		return fmt.Sprintf("%f", value)
+	case interface{}:
+		return fmt.Sprintf("%v", value)
 	}
 
 	return defaultValue

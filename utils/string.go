@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -82,4 +83,70 @@ func CamelString(s string) string {
 		data = append(data, d)
 	}
 	return string(data[:])
+}
+
+func JoinStringerArray(arr []fmt.Stringer, sep string) (result string) {
+	for index, stringer := range arr {
+		if index == 0 {
+			result = stringer.String()
+		} else {
+			result = fmt.Sprintf("%s%s%s", result, sep, stringer.String())
+		}
+	}
+	return
+}
+
+func JoinIntArray(arr []int, sep string) (result string) {
+	for index, num := range arr {
+		if index == 0 {
+			result = fmt.Sprintf("%d", num)
+		} else {
+			result = fmt.Sprintf("%s%s%d", result, sep, num)
+		}
+	}
+
+	return
+}
+
+func JoinInt64Array(arr []int64, sep string) (result string) {
+	for index, num := range arr {
+		if index == 0 {
+			result = fmt.Sprintf("%d", num)
+		} else {
+			result = fmt.Sprintf("%s%s%d", result, sep, num)
+		}
+	}
+	return
+}
+
+func JoinFloatArray(arr []float32, sep string) (result string) {
+	for index, num := range arr {
+		if index == 0 {
+			result = fmt.Sprintf("%f", num)
+		} else {
+			result = fmt.Sprintf("%s%s%f", result, sep, num)
+		}
+	}
+	return
+}
+func JoinFloat64Array(arr []float64, sep string) (result string) {
+	for index, num := range arr {
+		if index == 0 {
+			result = fmt.Sprintf("%f", num)
+		} else {
+			result = fmt.Sprintf("%s%s%f", result, sep, num)
+		}
+	}
+	return
+}
+
+func JoinInterfaceArray(arr []interface{}, sep string) (result string) {
+	for index, v := range arr {
+		if index == 0 {
+			result = fmt.Sprintf("%v", v)
+		} else {
+			result = fmt.Sprintf("%s%s%v", result, sep, v)
+		}
+	}
+	return
 }
