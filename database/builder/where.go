@@ -83,32 +83,42 @@ func (this Wheres) getStringers(whereType string) []fmt.Stringer {
 	return stringers
 }
 
+func (this *Wheres) getSubWheres(whereType string) string {
+	return JoinSubStringerArray(this.getSubStringers(whereType), whereType)
+}
+
+func (this *Wheres) getWheres(whereType string) string {
+	return JoinStringerArray(this.getStringers(whereType), whereType)
+}
+
 func (this *Wheres) String() (result string) {
 	if this == nil || this.Empty() {
 		return ""
 	}
 
-	andSubWheres := JoinStringerArray(this.getSubStringers(and), and)
-	andWheres := JoinStringerArray(this.getStringers(and), and)
+	result = this.getSubWheres(and)
+	andWheres := this.getWheres(and)
 
-	if andSubWheres != "" {
-		result = fmt.Sprintf("(%s) and %s", andSubWheres, andWheres)
+	if result != "" {
+		if andWheres != "" {
+			result = fmt.Sprintf("%s and %s", result, andWheres)
+		}
 	} else {
 		result = andWheres
 	}
 
-	orWheres := JoinStringerArray(this.getStringers(or), or)
-	orSubWheres := JoinStringerArray(this.getSubStringers(or), or)
+	orSubWheres := this.getSubWheres(or)
+	if result == "" {
+		result = orSubWheres
+	} else if orSubWheres != "" {
+		result = fmt.Sprintf("%s or %s", result, orSubWheres)
+	}
+
+	orWheres := this.getWheres(or)
 	if result == "" {
 		result = orWheres
 	} else if orWheres != "" {
 		result = fmt.Sprintf("%s or %s", result, orWheres)
-	}
-
-	if result == "" {
-		result = orSubWheres
-	} else if orSubWheres != "" {
-		result = fmt.Sprintf("%s or (%s)", result, orSubWheres)
 	}
 
 	return
@@ -120,6 +130,18 @@ func JoinStringerArray(arr []fmt.Stringer, sep string) (result string) {
 			result = stringer.String()
 		} else {
 			result = fmt.Sprintf("%s %s %s", result, sep, stringer.String())
+		}
+	}
+
+	return
+}
+
+func JoinSubStringerArray(arr []fmt.Stringer, sep string) (result string) {
+	for index, stringer := range arr {
+		if index == 0 {
+			result = fmt.Sprintf("(%s)", stringer.String())
+		} else {
+			result = fmt.Sprintf("%s %s (%s)", result, sep, stringer.String())
 		}
 	}
 

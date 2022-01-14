@@ -33,9 +33,9 @@ func (this *Builder) WhereFunc(callback whereFunc, whereType ...string) *Builder
 	subBuilder := NewQueryBuilder("")
 	callback(subBuilder)
 	if len(whereType) == 0 {
-		this.wheres.subWheres[and] = []*Wheres{subBuilder.getWheres()}
+		this.wheres.subWheres[and] = append(this.wheres.subWheres[and], subBuilder.getWheres())
 	} else {
-		this.wheres.subWheres[whereType[0]] = []*Wheres{subBuilder.getWheres()}
+		this.wheres.subWheres[whereType[0]] = append(this.wheres.subWheres[whereType[0]], subBuilder.getWheres())
 	}
 	return this
 }
@@ -43,7 +43,7 @@ func (this *Builder) WhereFunc(callback whereFunc, whereType ...string) *Builder
 func (this *Builder) OrWhereFunc(callback whereFunc) *Builder {
 	subBuilder := NewQueryBuilder("")
 	callback(subBuilder)
-	this.wheres.subWheres[or] = []*Wheres{subBuilder.getWheres()}
+	this.wheres.subWheres[or] = append(this.wheres.subWheres[or], subBuilder.getWheres())
 	return this
 }
 
@@ -78,8 +78,16 @@ func (this *Builder) WhereIn(field string, args interface{}) *Builder {
 	return this.Where(field, "in", args)
 }
 
+func (this *Builder) OrWhereIn(field string, args interface{}) *Builder {
+	return this.OrWhere(field, "in", args)
+}
+
 func (this *Builder) WhereNotIn(field string, args interface{}) *Builder {
 	return this.Where(field, "not in", args)
+}
+
+func (this *Builder) OrWhereNotIn(field string, args interface{}) *Builder {
+	return this.OrWhere(field, "not in", args)
 }
 
 func (this *Builder) OrWhere(field string, args ...interface{}) *Builder {
@@ -113,8 +121,19 @@ func (this *Builder) WhereIsNull(field string, whereType ...string) *Builder {
 	return this.Where(field, "", "is null", whereType[0])
 }
 
-func (this *Builder) WhereNotNull(field string) *Builder {
-	return this
+func (this *Builder) OrWhereIsNull(field string) *Builder {
+	return this.OrWhere(field, "", "is null")
+}
+
+func (this *Builder) OrWhereNotNull(field string) *Builder {
+	return this.OrWhere(field, "", "is not null")
+}
+
+func (this *Builder) WhereNotNull(field string, whereType ...string) *Builder {
+	if len(whereType) == 0 {
+		return this.Where(field, "", "is not null", and)
+	}
+	return this.Where(field, "", "is not null", whereType[0])
 }
 
 func (this *Builder) From(table string, as ...string) *Builder {
