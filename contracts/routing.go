@@ -28,6 +28,7 @@ type Router interface {
 	Patch(path string, handler interface{}, middlewares ...interface{})
 	Options(path string, handler interface{}, middlewares ...interface{})
 	Trace(path string, handler interface{}, middlewares ...interface{})
+	Use(middlewares ...interface{})
 	Group(prefix string, middlewares ...interface{}) RouteGroup
 	Start(string) error
 	Close() error
