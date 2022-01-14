@@ -18,13 +18,25 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * exceptions 异常处理模块
 * redis Redis模块
 * cache 缓存模块
+  * redis
+  * memcache [未完成]
+  * file [未完成]
+  * memory [未完成]
+  * multi 高可用多级缓存 [未完成]
 * encryption 加密模块
 * hashing 哈希模块
 * validation 数据校验模块
 * events 事件模块
 * filesystem 文件系统模块
+  * local 本地文件系统
+  * qiniu 七牛文件系统 [未完成]
+  * oss 阿里云文件系统 [未完成]
 * signal 信号监听，goal 实现了优雅关闭功能
 * database 数据库操作模块
+  * mysql
+  * postgresql
+  * sqlite
+  * sqlserver [未完成]
 * http http相关模块，请求、响应、中间件等
   * routing http 路由服务
   * session 会话服务
@@ -34,8 +46,20 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * websocket socket通信模块 [未完成]
   * socket.io socket.io 实现 [未完成]
 * sse server-sent-events模块(简称sse) [未完成]
+* rpc 远程调用模块 [未完成]
+  * jsonrpc [未完成]
+  * grpc [未完成]
+* serialize 序列化模块 [未完成]
+  * json [未完成]
+  * xml [未完成]
+  * gob [未完成]
+  * protobuf [未完成]
 * mail 邮件模块 [未完成]
 * queue 消息队列模块 [未完成]
+  * redis [未完成]
+  * kafka [未完成]
+  * rocketMQ [未完成]
+  * rabbitMQ [未完成]
 * view 视图模块 [未完成]
 * translation 多语言模块 [未完成]
 * eloquent ORM模块，计划 golang 1.18 发布后完成，因为泛型 [未完成]
