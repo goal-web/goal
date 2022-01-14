@@ -6,6 +6,7 @@ import (
 	"github.com/qbhy/goal/container"
 	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/exceptions"
+	"strings"
 )
 
 var (
@@ -17,7 +18,7 @@ var (
 	})
 )
 
-func New(container contracts.Container) contracts.Router {
+func New(container contracts.Application) contracts.Router {
 	return &router{
 		app:    container,
 		events: container.Get("events").(contracts.EventDispatcher),
@@ -29,7 +30,7 @@ func New(container contracts.Container) contracts.Router {
 
 type router struct {
 	events contracts.EventDispatcher
-	app    contracts.Container
+	app    contracts.Application
 	echo   *echo.Echo
 	groups []contracts.RouteGroup
 	routes []contracts.Route
@@ -68,6 +69,12 @@ func (this *router) Group(prefix string, middlewares ...interface{}) contracts.R
 
 func (this *router) Close() error {
 	return this.echo.Close()
+}
+func (this *router) Static(path, directory string) {
+	if strings.HasPrefix(directory, "/") {
+		directory = this.app.Get("path").(string) + "/" + directory
+	}
+	this.echo.Static(path, directory)
 }
 
 func (this *router) Get(path string, handler interface{}, middlewares ...interface{}) {
@@ -145,6 +152,7 @@ func (this *router) Start(address string) error {
 	}
 
 	this.echo.HTTPErrorHandler = this.errHandler
+	this.echo.Debug = this.app.Debug()
 
 	return this.echo.Start(address)
 }

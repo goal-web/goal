@@ -20,6 +20,7 @@ type RouteGroup interface {
 }
 
 type Router interface {
+	Static(path string, directory string)
 	Get(path string, handler interface{}, middlewares ...interface{})
 	Post(path string, handler interface{}, middlewares ...interface{})
 	Delete(path string, handler interface{}, middlewares ...interface{})

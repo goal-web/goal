@@ -7,6 +7,8 @@ import (
 )
 
 func V1Routes(router contracts.Router) {
+	router.Static("/", "public")
+
 	v1 := router.Group("", session.StartSession)
 
 	v1.Get("/", controllers.HelloWorld)

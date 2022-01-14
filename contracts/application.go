@@ -5,6 +5,8 @@ type Application interface {
 
 	IsProduction() bool
 
+	Debug() bool
+
 	Environment() string
 
 	RegisterServices(provider ...ServiceProvider)

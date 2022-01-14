@@ -22,6 +22,10 @@ func (this *application) IsProduction() bool {
 	return this.Environment() == ENV_PRODUCTION
 }
 
+func (this *application) Debug() bool {
+	return this.Get("config").(contracts.Config).Get("app").(Config).Debug
+}
+
 func (this *application) Start() map[string]error {
 	errors := make(map[string]error)
 	queue := parallel.NewParallel(len(this.services))
