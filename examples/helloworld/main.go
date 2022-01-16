@@ -52,8 +52,11 @@ func main() {
 		auth.ServiceProvider{},
 		&database.ServiceProvider{},
 		&http.ServiceProvider{RouteCollectors: []interface{}{
+			func(router contracts.Router) {
+				router.Static("/", "public")
+			},
 			// 路由收集器
-			routes.V1Routes,
+			routes.ApiRoutes,
 		}},
 		&console.ServiceProvider{
 			ConsoleProvider: console2.NewKernel,

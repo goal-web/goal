@@ -6,8 +6,7 @@ import (
 	"github.com/qbhy/goal/session"
 )
 
-func V1Routes(router contracts.Router) {
-	router.Static("/", "public")
+func ApiRoutes(router contracts.Router) {
 
 	v1 := router.Group("", session.StartSession)
 
