@@ -19,7 +19,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * redis Redis模块
 * cache 缓存模块
   * redis
-  * memcache [未完成]
+  * memcached [未完成]
   * file [未完成]
   * database 数据库驱动 [未完成]
   * memory [未完成]
@@ -43,6 +43,11 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * http http相关模块，请求、响应、中间件等
   * routing http 路由服务
   * session 会话服务
+    * cookie
+    * redis [未完成]
+    * file [未完成]
+    * database [未完成]
+    * memcached [未完成]
 * console 命令行模块
   * scheduling 任务调度模块
 * auth 用户授权模块 [未完成]
