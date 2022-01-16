@@ -21,6 +21,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * redis
   * memcache [未完成]
   * file [未完成]
+  * database 数据库驱动 [未完成]
   * memory [未完成]
   * multi 高可用多级缓存 [未完成]
 * encryption 加密模块
