@@ -33,10 +33,12 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * oss 阿里云文件系统 [未完成]
 * signal 信号监听，goal 实现了优雅关闭功能
 * database 数据库操作模块
-  * mysql
-  * postgresql
-  * sqlite
-  * sqlserver [未完成]
+  * query builder 查询构造器 [开发中...] 
+  * drivers 数据库驱动
+    * mysql
+    * postgresql
+    * sqlite
+    * sqlserver [未完成]
 * http http相关模块，请求、响应、中间件等
   * routing http 路由服务
   * session 会话服务
