@@ -150,6 +150,13 @@ func (this *Builder) From(table string, as ...string) *Builder {
 	return this
 }
 
+func (this *Builder) FromMany(tables ...string) *Builder {
+	if len(tables) > 0 {
+		this.table = strings.Join(tables, ",")
+	}
+	return this
+}
+
 func (this *Builder) FromSub(callback BuilderProvider, as string) *Builder {
 	this.table = fmt.Sprintf("(%s) as %s", callback().ToSql(), as)
 	return this

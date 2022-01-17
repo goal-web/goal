@@ -20,11 +20,15 @@ func TestQueryBuilder(t *testing.T) {
 		FromSub(func() *builder.Builder {
 			return builder.NewQueryBuilder("users").Where("amount", ">", 1000)
 		}, "rich_users").
-		OrWhereFunc(func(b *builder.Builder) {
-			b.Where("name", "goal").Where("age", "<", "18").WhereIn("id", []int{1, 2})
+		WhereFunc(func(b *builder.Builder) {
+			b.Where("name", "goal").
+				Where("age", "<", "18").
+				WhereIn("id", []int{1, 2})
 		}).
 		OrWhereFunc(func(b *builder.Builder) {
-			b.Where("name", "qbhy").Where("age", ">", 18).WhereNotIn("id", []int{1, 2})
+			b.Where("name", "qbhy").
+				Where("age", ">", 18).
+				WhereNotIn("id", []int{1, 2})
 		}).
 		OrWhereNotIn("id", []int{6, 7}).
 		OrWhereNotNull("id").
