@@ -24,6 +24,8 @@ func TestQueryBuilder(t *testing.T) {
 			b.Where("name", "qbhy").Where("age", ">", 18).WhereNotIn("id", []int{1, 2})
 		}).
 		OrWhereNotIn("id", []int{6, 7}).
-		OrWhereNotNull("id")
+		OrWhereNotNull("id").
+		OrderByDesc("age").
+		OrderBy("id")
 	fmt.Println(query1.ToSql())
 }

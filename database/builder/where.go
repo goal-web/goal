@@ -55,7 +55,10 @@ func (this *Where) String() string {
 	} else {
 		stringArg = utils.ConvertToString(this.arg, "")
 	}
-	return fmt.Sprintf("(%s %s %s)", this.field, this.condition, stringArg)
+	if this.condition == "" {
+		return fmt.Sprintf("%s %s", this.field, stringArg)
+	}
+	return fmt.Sprintf("%s %s %s", this.field, this.condition, stringArg)
 }
 
 type Wheres struct {
@@ -63,7 +66,7 @@ type Wheres struct {
 	wheres    map[string][]*Where
 }
 
-func (this *Wheres) Empty() bool {
+func (this *Wheres) IsEmpty() bool {
 	return len(this.subWheres) == 0 && len(this.wheres) == 0
 }
 
@@ -92,7 +95,7 @@ func (this *Wheres) getWheres(whereType string) string {
 }
 
 func (this *Wheres) String() (result string) {
-	if this == nil || this.Empty() {
+	if this == nil || this.IsEmpty() {
 		return ""
 	}
 
