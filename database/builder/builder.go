@@ -40,7 +40,7 @@ func (this *Builder) WhereFunc(callback whereFunc, whereType ...string) *Builder
 	subBuilder := NewQueryBuilder("")
 	callback(subBuilder)
 	if len(whereType) == 0 {
-		this.wheres.subWheres[and] = append(this.wheres.subWheres[and], subBuilder.getWheres())
+		this.wheres.subWheres[And] = append(this.wheres.subWheres[And], subBuilder.getWheres())
 	} else {
 		this.wheres.subWheres[whereType[0]] = append(this.wheres.subWheres[whereType[0]], subBuilder.getWheres())
 	}
@@ -50,7 +50,7 @@ func (this *Builder) WhereFunc(callback whereFunc, whereType ...string) *Builder
 func (this *Builder) OrWhereFunc(callback whereFunc) *Builder {
 	subBuilder := NewQueryBuilder("")
 	callback(subBuilder)
-	this.wheres.subWheres[or] = append(this.wheres.subWheres[or], subBuilder.getWheres())
+	this.wheres.subWheres[Or] = append(this.wheres.subWheres[Or], subBuilder.getWheres())
 	return this
 }
 
@@ -58,7 +58,7 @@ func (this *Builder) Where(field string, args ...interface{}) *Builder {
 	var (
 		arg       interface{}
 		condition = "="
-		whereType = and
+		whereType = And
 	)
 	switch len(args) {
 	case 1:
@@ -91,7 +91,7 @@ func (this *Builder) Join(table string, first, condition, second string, joins .
 		join = joins[0]
 	}
 	this.joins = append(this.joins, Join{table, join, &Wheres{wheres: map[string][]*Where{
-		and: {&Where{
+		And: {&Where{
 			field:     first,
 			condition: condition,
 			arg:       second,
@@ -141,7 +141,7 @@ func (this *Builder) OrWhere(field string, args ...interface{}) *Builder {
 		arg = args[1]
 	}
 
-	this.wheres.wheres[or] = append(this.wheres.wheres[or], &Where{
+	this.wheres.wheres[Or] = append(this.wheres.wheres[Or], &Where{
 		field:     field,
 		condition: condition,
 		arg:       arg,
@@ -151,7 +151,7 @@ func (this *Builder) OrWhere(field string, args ...interface{}) *Builder {
 
 func (this *Builder) WhereIsNull(field string, whereType ...string) *Builder {
 	if len(whereType) == 0 {
-		return this.Where(field, "", "is null", and)
+		return this.Where(field, "", "is null", And)
 	}
 	return this.Where(field, "", "is null", whereType[0])
 }
@@ -166,7 +166,7 @@ func (this *Builder) OrWhereNotNull(field string) *Builder {
 
 func (this *Builder) WhereNotNull(field string, whereType ...string) *Builder {
 	if len(whereType) == 0 {
-		return this.Where(field, "", "is not null", and)
+		return this.Where(field, "", "is not null", And)
 	}
 	return this.Where(field, "", "is not null", whereType[0])
 }

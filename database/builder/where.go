@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	and = "and"
-	or  = "or"
+	And = "AND"
+	Or  = "OR"
 )
 
 type Where struct {
@@ -99,29 +99,29 @@ func (this *Wheres) String() (result string) {
 		return ""
 	}
 
-	result = this.getSubWheres(and)
-	andWheres := this.getWheres(and)
+	result = this.getSubWheres(And)
+	andWheres := this.getWheres(And)
 
 	if result != "" {
 		if andWheres != "" {
-			result = fmt.Sprintf("%s and %s", result, andWheres)
+			result = fmt.Sprintf("%s And %s", result, andWheres)
 		}
 	} else {
 		result = andWheres
 	}
 
-	orSubWheres := this.getSubWheres(or)
+	orSubWheres := this.getSubWheres(Or)
 	if result == "" {
 		result = orSubWheres
 	} else if orSubWheres != "" {
-		result = fmt.Sprintf("%s or %s", result, orSubWheres)
+		result = fmt.Sprintf("%s Or %s", result, orSubWheres)
 	}
 
-	orWheres := this.getWheres(or)
+	orWheres := this.getWheres(Or)
 	if result == "" {
 		result = orWheres
 	} else if orWheres != "" {
-		result = fmt.Sprintf("%s or %s", result, orWheres)
+		result = fmt.Sprintf("%s Or %s", result, orWheres)
 	}
 
 	return
