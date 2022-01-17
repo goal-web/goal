@@ -20,6 +20,7 @@ func TestQueryBuilder(t *testing.T) {
 		FromSub(func() *builder.Builder {
 			return builder.NewQueryBuilder("users").Where("amount", ">", 1000)
 		}, "rich_users").
+		Join("accounts", "users.id", "=", "accounts.user_id").
 		WhereFunc(func(b *builder.Builder) {
 			b.Where("name", "goal").
 				Where("age", "<", "18").
@@ -35,5 +36,6 @@ func TestQueryBuilder(t *testing.T) {
 		OrderByDesc("age").
 		OrderBy("id").
 		GroupBy("country")
+
 	fmt.Println(query1.ToSql())
 }

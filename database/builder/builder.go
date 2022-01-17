@@ -15,6 +15,7 @@ type Builder struct {
 	wheres  *Wheres
 	orderBy OrderByFields
 	groupBy GroupBy
+	joins   Joins
 }
 
 func NewQueryBuilder(table string) *Builder {
@@ -22,6 +23,7 @@ func NewQueryBuilder(table string) *Builder {
 		table:   table,
 		fields:  []string{"*"},
 		orderBy: OrderByFields{},
+		joins:   Joins{},
 		groupBy: GroupBy{},
 		wheres: &Wheres{
 			wheres:    map[string][]*Where{},
@@ -81,6 +83,34 @@ func (this *Builder) Where(field string, args ...interface{}) *Builder {
 
 func (this *Builder) WhereIn(field string, args interface{}) *Builder {
 	return this.Where(field, "in", args)
+}
+
+func (this *Builder) Join(table string, first, condition, second string, joins ...joinType) *Builder {
+	join := InnerJoin
+	if len(joins) > 0 {
+		join = joins[0]
+	}
+	this.joins = append(this.joins, Join{table, join, &Wheres{wheres: map[string][]*Where{
+		and: {&Where{
+			field:     first,
+			condition: condition,
+			arg:       second,
+		}},
+	}}})
+
+	return this
+}
+
+func (this *Builder) FullJoin(table string, first, condition, second string) *Builder {
+	return this.Join(table, first, condition, second, FullOutJoin)
+}
+
+func (this *Builder) LeftJoin(table string, first, condition, second string) *Builder {
+	return this.Join(table, first, condition, second, LeftJoin)
+}
+
+func (this *Builder) RightJoin(table string, first, condition, second string) *Builder {
+	return this.Join(table, first, condition, second, RightJoin)
 }
 
 func (this *Builder) OrWhereIn(field string, args interface{}) *Builder {
@@ -213,6 +243,10 @@ func (this *Builder) OrderByDesc(field string) *Builder {
 
 func (this *Builder) ToSql() string {
 	sql := fmt.Sprintf("select %s from %s", strings.Join(this.fields, ","), this.table)
+
+	if !this.joins.IsEmpty() {
+		sql = fmt.Sprintf("%s %s", sql, this.joins.String())
+	}
 
 	if !this.wheres.IsEmpty() {
 		sql = fmt.Sprintf("%s where %s", sql, this.wheres.String())
