@@ -6,6 +6,7 @@ import (
 )
 
 type Callback func(*Builder) *Builder
+type BuilderProvider func() *Builder
 type whereFunc func(*Builder)
 
 type Builder struct {
@@ -13,6 +14,7 @@ type Builder struct {
 	fields  []string
 	wheres  *Wheres
 	orderBy OrderByFields
+	groupBy GroupBy
 }
 
 func NewQueryBuilder(table string) *Builder {
@@ -20,6 +22,7 @@ func NewQueryBuilder(table string) *Builder {
 		table:   table,
 		fields:  []string{"*"},
 		orderBy: OrderByFields{},
+		groupBy: GroupBy{},
 		wheres: &Wheres{
 			wheres:    map[string][]*Where{},
 			subWheres: map[string][]*Wheres{},
@@ -147,6 +150,11 @@ func (this *Builder) From(table string, as ...string) *Builder {
 	return this
 }
 
+func (this *Builder) FromSub(callback BuilderProvider, as string) *Builder {
+	this.table = fmt.Sprintf("(%s) as %s", callback().ToSql(), as)
+	return this
+}
+
 func (this *Builder) Select(field string, fields ...string) *Builder {
 	this.fields = append(this.fields, append(fields, field)...)
 	return this
@@ -181,6 +189,13 @@ func (this *Builder) OrderBy(field string, columnOrderType ...orderType) *Builde
 
 	return this
 }
+
+func (this *Builder) GroupBy(columns ...string) *Builder {
+	this.groupBy = append(this.groupBy, columns...)
+
+	return this
+}
+
 func (this *Builder) OrderByDesc(field string) *Builder {
 	this.orderBy = append(this.orderBy, OrderBy{
 		field:          field,
@@ -194,6 +209,10 @@ func (this *Builder) ToSql() string {
 
 	if !this.wheres.IsEmpty() {
 		sql = fmt.Sprintf("%s where %s", sql, this.wheres.String())
+	}
+
+	if !this.groupBy.IsEmpty() {
+		sql = fmt.Sprintf("%s group by %s", sql, this.groupBy.String())
 	}
 
 	if !this.orderBy.IsEmpty() {
