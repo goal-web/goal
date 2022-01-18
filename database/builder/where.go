@@ -112,7 +112,7 @@ func (this *Wheres) String() (result string) {
 
 	if result != "" {
 		if andWheres != "" {
-			result = fmt.Sprintf("%s And %s", result, andWheres)
+			result = fmt.Sprintf("%s AND %s", result, andWheres)
 		}
 	} else {
 		result = andWheres
@@ -122,7 +122,7 @@ func (this *Wheres) String() (result string) {
 	if result == "" {
 		result = orSubWheres
 	} else if orSubWheres != "" {
-		result = fmt.Sprintf("%s Or %s", result, orSubWheres)
+		result = fmt.Sprintf("%s OR %s", result, orSubWheres)
 	}
 
 	orWheres := this.getWheres(Or)

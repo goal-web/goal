@@ -63,7 +63,12 @@ func (this *Builder) UnionAllByProvider(builder Provider) *Builder {
 }
 
 func (this *Builder) WhereFunc(callback whereFunc, whereType ...whereJoinType) *Builder {
-	subBuilder := NewQueryBuilder("")
+	subBuilder := &Builder{
+		wheres: &Wheres{
+			wheres:    map[whereJoinType][]*Where{},
+			subWheres: map[whereJoinType][]*Wheres{},
+		},
+	}
 	callback(subBuilder)
 	if len(whereType) == 0 {
 		this.wheres.subWheres[And] = append(this.wheres.subWheres[And], subBuilder.getWheres())
@@ -74,10 +79,7 @@ func (this *Builder) WhereFunc(callback whereFunc, whereType ...whereJoinType) *
 }
 
 func (this *Builder) OrWhereFunc(callback whereFunc) *Builder {
-	subBuilder := NewQueryBuilder("")
-	callback(subBuilder)
-	this.wheres.subWheres[Or] = append(this.wheres.subWheres[Or], subBuilder.getWheres())
-	return this
+	return this.WhereFunc(callback, Or)
 }
 
 func (this *Builder) Where(field string, args ...interface{}) *Builder {

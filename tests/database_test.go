@@ -104,6 +104,7 @@ func TestComplexQueryBuilder(t *testing.T) {
 		OrderBy("id").
 		GroupBy("country")
 
+	fmt.Println(query1.ToSql())
 	_, err := sqlparser.Parse(query1.ToSql())
 	assert.Nil(t, err, err)
 }
