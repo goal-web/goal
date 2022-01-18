@@ -9,3 +9,7 @@ type CommandArgumentException struct {
 type CommandDontExistsException struct {
 	contracts.Exception
 }
+
+type ScheduleEventException struct {
+	contracts.Exception
+}

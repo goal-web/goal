@@ -9,6 +9,7 @@ import (
 	"github.com/qbhy/goal/exceptions"
 	"github.com/qbhy/goal/logs"
 	"github.com/qbhy/goal/utils"
+	"reflect"
 	"time"
 )
 
@@ -17,14 +18,16 @@ type ConsoleProvider func(application contracts.Application) contracts.Console
 type ServiceProvider struct {
 	ConsoleProvider ConsoleProvider
 
-	stopChan     chan bool
-	serverIdChan chan bool
-	app          contracts.Application
-	execRecords  map[int]time.Time
+	stopChan         chan bool
+	serverIdChan     chan bool
+	app              contracts.Application
+	execRecords      map[int]time.Time
+	exceptionHandler contracts.ExceptionHandler
 }
 
 func (this *ServiceProvider) Register(application contracts.Application) {
 	this.app = application
+	this.exceptionHandler = application.Get("exceptions.handler").(contracts.ExceptionHandler)
 
 	application.Singleton("console", func() contracts.Console {
 		console := this.ConsoleProvider(application)
@@ -50,6 +53,18 @@ func (this *ServiceProvider) runScheduleEvents(events []contracts.ScheduleEvent)
 			if nextTime.DiffInSeconds(nowCarbon) == 0 {
 				this.execRecords[index] = now
 				go (func(event contracts.ScheduleEvent) {
+					defer func() {
+						if err := recover(); err != nil {
+							this.exceptionHandler.Handle(ScheduleEventException{
+								Exception: exceptions.WithRecover(err, contracts.Fields{
+									"expression": event.Expression(),
+									"mutex_name": event.MutexName(),
+									"one_server": event.OnOneServer(),
+									"event":      utils.GetTypeKey(reflect.TypeOf(event)),
+								}),
+							})
+						}
+					}()
 					event.Run(this.app)
 				})(event)
 			} else if nextTime.Lt(nowCarbon) {
