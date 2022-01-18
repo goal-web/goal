@@ -142,6 +142,30 @@ func (this *Builder) OrWhereIn(field string, args interface{}) *Builder {
 	return this.OrWhere(field, "in", args)
 }
 
+func (this *Builder) WhereBetween(field string, args interface{}, whereType ...whereJoinType) *Builder {
+	if len(whereType) > 0 {
+		return this.Where(field, "between", args, whereType[0])
+	}
+
+	return this.Where(field, "between", args, And)
+}
+
+func (this *Builder) OrWhereBetween(field string, args interface{}) *Builder {
+	return this.Where(field, "between", args, Or)
+}
+
+func (this *Builder) WhereNotBetween(field string, args interface{}, whereType ...whereJoinType) *Builder {
+	if len(whereType) > 0 {
+		return this.Where(field, "not between", args, whereType[0])
+	}
+
+	return this.Where(field, "not between", args, And)
+}
+
+func (this *Builder) OrWhereNotBetween(field string, args interface{}) *Builder {
+	return this.Where(field, "not between", args, Or)
+}
+
 func (this *Builder) WhereNotIn(field string, args interface{}) *Builder {
 	return this.Where(field, "not in", args)
 }

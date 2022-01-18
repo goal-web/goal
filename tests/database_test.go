@@ -30,6 +30,25 @@ func TestJoinQueryBuilder(t *testing.T) {
 	assert.Nil(t, err, err)
 }
 
+func TestBetweenQueryBuilder(t *testing.T) {
+	query := builder.NewQueryBuilder("users").
+		Join("accounts", "accounts.user_id", "=", "users.id").
+		WhereFunc(func(b *builder.Builder) {
+			// 高瘦
+			b.WhereBetween("height", []int{180, 200}).
+				WhereBetween("weight", []int{50, 60}).
+				WhereIn("id", []int{1, 2, 3, 4, 5})
+		}).OrWhereFunc(func(b *builder.Builder) {
+		// 矮胖
+		b.WhereBetween("height", []int{140, 160}).
+			WhereBetween("weight", []int{70, 140}).
+			WhereNotBetween("id", []int{1, 5})
+	})
+	fmt.Println(query.ToSql())
+	_, err := sqlparser.Parse(query.ToSql())
+	assert.Nil(t, err, err)
+}
+
 func TestUnionQueryBuilder(t *testing.T) {
 	query := builder.NewQueryBuilder("users").
 		Join("accounts", "accounts.user_id", "=", "users.id").

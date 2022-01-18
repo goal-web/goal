@@ -27,25 +27,29 @@ func (this *Where) String() string {
 		return ""
 	}
 	var stringArg string
+	lowerCaseCondition := strings.ToLower(this.condition)
 
-	if this.condition == "in" || this.condition == "not in" {
+	switch lowerCaseCondition {
+	case "in", "not in", "between", "not between":
+		isInGrammar := strings.Contains(lowerCaseCondition, "in")
+		joinSymbol := utils.IfString(isInGrammar, ",", " AND ")
 		switch arg := this.arg.(type) {
 		case string:
 			stringArg = arg
 		case fmt.Stringer:
 			stringArg = arg.String()
 		case []string:
-			stringArg = strings.Join(arg, ",")
+			stringArg = strings.Join(arg, joinSymbol)
 		case []int:
-			stringArg = utils.JoinIntArray(arg, ",")
+			stringArg = utils.JoinIntArray(arg, joinSymbol)
 		case []int64:
-			stringArg = utils.JoinInt64Array(arg, ",")
+			stringArg = utils.JoinInt64Array(arg, joinSymbol)
 		case []float64:
-			stringArg = utils.JoinFloat64Array(arg, ",")
+			stringArg = utils.JoinFloat64Array(arg, joinSymbol)
 		case []float32:
-			stringArg = utils.JoinFloatArray(arg, ",")
+			stringArg = utils.JoinFloatArray(arg, joinSymbol)
 		case []interface{}:
-			stringArg = utils.JoinInterfaceArray(arg, ",")
+			stringArg = utils.JoinInterfaceArray(arg, joinSymbol)
 		default:
 			panic(exceptions.WithError(errors.New("不支持的参数类型"), contracts.Fields{
 				"arg":       this.arg,
@@ -53,8 +57,10 @@ func (this *Where) String() string {
 				"condition": this.condition,
 			}))
 		}
-		stringArg = fmt.Sprintf("(%s)", stringArg)
-	} else {
+		if isInGrammar {
+			stringArg = fmt.Sprintf("(%s)", stringArg)
+		}
+	default:
 		stringArg = utils.ConvertToString(this.arg, "")
 	}
 	if this.condition == "" {
