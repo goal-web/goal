@@ -6,17 +6,18 @@ import (
 )
 
 type Callback func(*Builder) *Builder
-type BuilderProvider func() *Builder
+type Provider func() *Builder
 type whereFunc func(*Builder)
 
 type Builder struct {
-	table   string
-	fields  []string
-	wheres  *Wheres
-	orderBy OrderByFields
-	groupBy GroupBy
-	joins   Joins
-	unions  Unions
+	distinct bool
+	table    string
+	fields   []string
+	wheres   *Wheres
+	orderBy  OrderByFields
+	groupBy  GroupBy
+	joins    Joins
+	unions   Unions
 }
 
 func NewQueryBuilder(table string) *Builder {
@@ -53,11 +54,11 @@ func (this *Builder) UnionAll(builder *Builder) *Builder {
 	return this.Union(builder, UnionAll)
 }
 
-func (this *Builder) UnionByCallback(builder BuilderProvider, unionType ...unionJoinType) *Builder {
+func (this *Builder) UnionByProvider(builder Provider, unionType ...unionJoinType) *Builder {
 	return this.Union(builder(), unionType...)
 }
 
-func (this *Builder) UnionAllByCallback(builder BuilderProvider) *Builder {
+func (this *Builder) UnionAllByProvider(builder Provider) *Builder {
 	return this.Union(builder(), UnionAll)
 }
 
@@ -108,6 +109,10 @@ func (this *Builder) Where(field string, args ...interface{}) *Builder {
 
 func (this *Builder) WhereIn(field string, args interface{}) *Builder {
 	return this.Where(field, "in", args)
+}
+func (this *Builder) Distinct() *Builder {
+	this.distinct = true
+	return this
 }
 
 func (this *Builder) Join(table string, first, condition, second string, joins ...joinType) *Builder {
@@ -236,7 +241,7 @@ func (this *Builder) FromMany(tables ...string) *Builder {
 	return this
 }
 
-func (this *Builder) FromSub(callback BuilderProvider, as string) *Builder {
+func (this *Builder) FromSub(callback Provider, as string) *Builder {
 	this.table = fmt.Sprintf("(%s) as %s", callback().ToSql(), as)
 	return this
 }
@@ -290,23 +295,30 @@ func (this *Builder) OrderByDesc(field string) *Builder {
 	return this
 }
 
+func (this *Builder) getSelect() string {
+	if this.distinct {
+		return "DISTINCT " + strings.Join(this.fields, ",")
+	}
+	return strings.Join(this.fields, ",")
+}
+
 func (this *Builder) ToSql() string {
-	sql := fmt.Sprintf("select %s from %s", strings.Join(this.fields, ","), this.table)
+	sql := fmt.Sprintf("SELECT %s FROM %s", this.getSelect(), this.table)
 
 	if !this.joins.IsEmpty() {
 		sql = fmt.Sprintf("%s %s", sql, this.joins.String())
 	}
 
 	if !this.wheres.IsEmpty() {
-		sql = fmt.Sprintf("%s where %s", sql, this.wheres.String())
+		sql = fmt.Sprintf("%s WHERE %s", sql, this.wheres.String())
 	}
 
 	if !this.groupBy.IsEmpty() {
-		sql = fmt.Sprintf("%s group by %s", sql, this.groupBy.String())
+		sql = fmt.Sprintf("%s GROUP BY %s", sql, this.groupBy.String())
 	}
 
 	if !this.orderBy.IsEmpty() {
-		sql = fmt.Sprintf("%s order by %s", sql, this.orderBy.String())
+		sql = fmt.Sprintf("%s ORDER BY %s", sql, this.orderBy.String())
 	}
 
 	if !this.unions.IsEmpty() {
