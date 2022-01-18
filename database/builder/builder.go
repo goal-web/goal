@@ -26,8 +26,8 @@ func NewQueryBuilder(table string) *Builder {
 		joins:   Joins{},
 		groupBy: GroupBy{},
 		wheres: &Wheres{
-			wheres:    map[string][]*Where{},
-			subWheres: map[string][]*Wheres{},
+			wheres:    map[whereJoinType][]*Where{},
+			subWheres: map[whereJoinType][]*Wheres{},
 		},
 	}
 }
@@ -36,7 +36,7 @@ func (this *Builder) getWheres() *Wheres {
 	return this.wheres
 }
 
-func (this *Builder) WhereFunc(callback whereFunc, whereType ...string) *Builder {
+func (this *Builder) WhereFunc(callback whereFunc, whereType ...whereJoinType) *Builder {
 	subBuilder := NewQueryBuilder("")
 	callback(subBuilder)
 	if len(whereType) == 0 {
@@ -69,7 +69,7 @@ func (this *Builder) Where(field string, args ...interface{}) *Builder {
 	case 3:
 		condition = args[0].(string)
 		arg = args[1]
-		whereType = args[2].(string)
+		whereType = args[2].(whereJoinType)
 	}
 
 	this.wheres.wheres[whereType] = append(this.wheres.wheres[whereType], &Where{
@@ -90,7 +90,7 @@ func (this *Builder) Join(table string, first, condition, second string, joins .
 	if len(joins) > 0 {
 		join = joins[0]
 	}
-	this.joins = append(this.joins, Join{table, join, &Wheres{wheres: map[string][]*Where{
+	this.joins = append(this.joins, Join{table, join, &Wheres{wheres: map[whereJoinType][]*Where{
 		And: {&Where{
 			field:     first,
 			condition: condition,

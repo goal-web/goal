@@ -9,9 +9,11 @@ import (
 	"strings"
 )
 
+type whereJoinType string
+
 const (
-	And = "AND"
-	Or  = "OR"
+	And whereJoinType = "AND"
+	Or  whereJoinType = "OR"
 )
 
 type Where struct {
@@ -62,15 +64,15 @@ func (this *Where) String() string {
 }
 
 type Wheres struct {
-	subWheres map[string][]*Wheres
-	wheres    map[string][]*Where
+	subWheres map[whereJoinType][]*Wheres
+	wheres    map[whereJoinType][]*Where
 }
 
 func (this *Wheres) IsEmpty() bool {
 	return len(this.subWheres) == 0 && len(this.wheres) == 0
 }
 
-func (this Wheres) getSubStringers(whereType string) []fmt.Stringer {
+func (this Wheres) getSubStringers(whereType whereJoinType) []fmt.Stringer {
 	stringers := make([]fmt.Stringer, 0)
 	for _, where := range this.subWheres[whereType] {
 		stringers = append(stringers, where)
@@ -78,7 +80,7 @@ func (this Wheres) getSubStringers(whereType string) []fmt.Stringer {
 	return stringers
 }
 
-func (this Wheres) getStringers(whereType string) []fmt.Stringer {
+func (this Wheres) getStringers(whereType whereJoinType) []fmt.Stringer {
 	stringers := make([]fmt.Stringer, 0)
 	for _, where := range this.wheres[whereType] {
 		stringers = append(stringers, where)
@@ -86,12 +88,12 @@ func (this Wheres) getStringers(whereType string) []fmt.Stringer {
 	return stringers
 }
 
-func (this *Wheres) getSubWheres(whereType string) string {
-	return JoinSubStringerArray(this.getSubStringers(whereType), whereType)
+func (this *Wheres) getSubWheres(whereType whereJoinType) string {
+	return JoinSubStringerArray(this.getSubStringers(whereType), string(whereType))
 }
 
-func (this *Wheres) getWheres(whereType string) string {
-	return JoinStringerArray(this.getStringers(whereType), whereType)
+func (this *Wheres) getWheres(whereType whereJoinType) string {
+	return JoinStringerArray(this.getStringers(whereType), string(whereType))
 }
 
 func (this *Wheres) String() (result string) {
@@ -121,7 +123,7 @@ func (this *Wheres) String() (result string) {
 	if result == "" {
 		result = orWheres
 	} else if orWheres != "" {
-		result = fmt.Sprintf("%s Or %s", result, orWheres)
+		result = fmt.Sprintf("%s OR %s", result, orWheres)
 	}
 
 	return

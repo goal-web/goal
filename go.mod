@@ -35,4 +35,5 @@ require (
 	github.com/gorhill/cronexpr v0.0.0-20180427100037-88b0669f7d75 // indirect
 	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/smartystreets/goconvey v1.7.2 // indirect
+	github.com/xwb1989/sqlparser v0.0.0-20180606152119-120387863bf2 // indirect
 )

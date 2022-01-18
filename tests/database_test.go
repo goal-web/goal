@@ -3,10 +3,12 @@ package tests
 import (
 	"fmt"
 	"github.com/qbhy/goal/database/builder"
+	"github.com/stretchr/testify/assert"
+	"github.com/xwb1989/sqlparser"
 	"testing"
 )
 
-func TestQueryBuilder(t *testing.T) {
+func TestSimpleQueryBuilder(t *testing.T) {
 	query := builder.NewQueryBuilder("users")
 	query.Where("name", "qbhy").
 		Where("age", ">", 18).
@@ -14,6 +16,21 @@ func TestQueryBuilder(t *testing.T) {
 		OrWhere("amount", ">=", 100).
 		WhereIsNull("avatar")
 	fmt.Println(query.ToSql())
+
+	_, err := sqlparser.Parse(query.ToSql())
+	assert.Nil(t, err, err)
+}
+
+func TestJoinQueryBuilder(t *testing.T) {
+	query := builder.NewQueryBuilder("users").
+		Join("accounts", "accounts.user_id", "=", "users.id").
+		Where("gender", "!=", 0, builder.Or)
+	fmt.Println(query.ToSql())
+	_, err := sqlparser.Parse(query.ToSql())
+	assert.Nil(t, err, err)
+}
+
+func TestComplexQueryBuilder(t *testing.T) {
 
 	query1 := builder.NewQueryBuilder("users")
 	query1.
@@ -37,5 +54,6 @@ func TestQueryBuilder(t *testing.T) {
 		OrderBy("id").
 		GroupBy("country")
 
-	fmt.Println(query1.ToSql())
+	_, err := sqlparser.Parse(query1.ToSql())
+	assert.Nil(t, err, err)
 }
