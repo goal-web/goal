@@ -30,6 +30,27 @@ func TestJoinQueryBuilder(t *testing.T) {
 	assert.Nil(t, err, err)
 }
 
+func TestUnionQueryBuilder(t *testing.T) {
+	query := builder.NewQueryBuilder("users").
+		Join("accounts", "accounts.user_id", "=", "users.id").
+		Where("gender", "!=", 0, builder.Or).
+		Union(
+			builder.NewQueryBuilder("peoples"),
+		).
+		Union(
+			builder.NewQueryBuilder("accounts"),
+		).
+		UnionAll(
+			builder.NewQueryBuilder("members"),
+		).
+		UnionAll(
+			builder.NewQueryBuilder("students"),
+		)
+	fmt.Println(query.ToSql())
+	_, err := sqlparser.Parse(query.ToSql())
+	assert.Nil(t, err, err)
+}
+
 func TestComplexQueryBuilder(t *testing.T) {
 
 	query1 := builder.NewQueryBuilder("users")

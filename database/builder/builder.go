@@ -16,6 +16,7 @@ type Builder struct {
 	orderBy OrderByFields
 	groupBy GroupBy
 	joins   Joins
+	unions  Unions
 }
 
 func NewQueryBuilder(table string) *Builder {
@@ -24,6 +25,7 @@ func NewQueryBuilder(table string) *Builder {
 		fields:  []string{"*"},
 		orderBy: OrderByFields{},
 		joins:   Joins{},
+		unions:  Unions{},
 		groupBy: GroupBy{},
 		wheres: &Wheres{
 			wheres:    map[whereJoinType][]*Where{},
@@ -34,6 +36,29 @@ func NewQueryBuilder(table string) *Builder {
 
 func (this *Builder) getWheres() *Wheres {
 	return this.wheres
+}
+func (this *Builder) Union(builder *Builder, unionType ...unionJoinType) *Builder {
+	if builder != nil {
+		if len(unionType) > 0 {
+			this.unions[unionType[0]] = append(this.unions[unionType[0]], builder)
+		} else {
+			this.unions[Union] = append(this.unions[Union], builder)
+		}
+	}
+
+	return this
+}
+
+func (this *Builder) UnionAll(builder *Builder) *Builder {
+	return this.Union(builder, UnionAll)
+}
+
+func (this *Builder) UnionByCallback(builder BuilderProvider, unionType ...unionJoinType) *Builder {
+	return this.Union(builder(), unionType...)
+}
+
+func (this *Builder) UnionAllByCallback(builder BuilderProvider) *Builder {
+	return this.Union(builder(), UnionAll)
 }
 
 func (this *Builder) WhereFunc(callback whereFunc, whereType ...whereJoinType) *Builder {
@@ -258,6 +283,10 @@ func (this *Builder) ToSql() string {
 
 	if !this.orderBy.IsEmpty() {
 		sql = fmt.Sprintf("%s order by %s", sql, this.orderBy.String())
+	}
+
+	if !this.unions.IsEmpty() {
+		sql = fmt.Sprintf("(%s) %s", sql, this.unions.String())
 	}
 
 	return sql
