@@ -287,54 +287,6 @@ func (this *Builder) Distinct() *Builder {
 	return this
 }
 
-func (this *Builder) Join(table string, first, condition, second string, joins ...joinType) *Builder {
-	join := InnerJoin
-	if len(joins) > 0 {
-		join = joins[0]
-	}
-	this.joins = append(this.joins, Join{table, join, &Wheres{wheres: map[whereJoinType][]*Where{
-		And: {&Where{
-			field:     first,
-			condition: condition,
-			arg:       second,
-		}},
-	}}})
-
-	return this
-}
-
-func (this *Builder) JoinSub(provider Provider, as, first, condition, second string, joins ...joinType) *Builder {
-	join := InnerJoin
-	if len(joins) > 0 {
-		join = joins[0]
-	}
-	subBuilder := provider()
-	this.joins = append(this.joins, Join{fmt.Sprintf("(%s) as %s", subBuilder.ToSql(), as), join, &Wheres{wheres: map[whereJoinType][]*Where{
-		And: {&Where{
-			field:     first,
-			condition: condition,
-			arg:       second,
-		}},
-	}}})
-
-	return this.addBinding(joinBinding, subBuilder.GetBindings()...)
-}
-
-func (this *Builder) FullJoin(table string, first, condition, second string) *Builder {
-	return this.Join(table, first, condition, second, FullJoin)
-}
-func (this *Builder) FullOutJoin(table string, first, condition, second string) *Builder {
-	return this.Join(table, first, condition, second, FullOutJoin)
-}
-
-func (this *Builder) LeftJoin(table string, first, condition, second string) *Builder {
-	return this.Join(table, first, condition, second, LeftJoin)
-}
-
-func (this *Builder) RightJoin(table string, first, condition, second string) *Builder {
-	return this.Join(table, first, condition, second, RightJoin)
-}
-
 func (this *Builder) OrWhereIn(field string, args interface{}) *Builder {
 	return this.OrWhere(field, "in", args)
 }
@@ -416,7 +368,7 @@ func (this *Builder) FromSub(provider Provider, as string) *Builder {
 }
 
 func (this *Builder) Select(field string, fields ...string) *Builder {
-	this.fields = append(this.fields, append(fields, field)...)
+	this.fields = append(fields, field)
 	return this
 }
 
@@ -432,6 +384,30 @@ func (this *Builder) When(condition bool, callback Callback, elseCallback ...Cal
 func (this *Builder) AddSelect(fields ...string) *Builder {
 	this.fields = append(this.fields, fields...)
 	return this
+}
+
+func (this *Builder) SelectSub(subBuilder *Builder, as string) *Builder {
+	this.fields = []string{fmt.Sprintf("(%s) as %s", subBuilder.ToSql(), as)}
+	return this.addBinding(selectBinding, subBuilder.GetBindings()...)
+}
+func (this *Builder) AddSelectSub(subBuilder *Builder, as string) *Builder {
+	this.fields = append(this.fields, fmt.Sprintf("(%s) as %s", subBuilder.ToSql(), as))
+	return this.addBinding(selectBinding, subBuilder.GetBindings()...)
+}
+
+func (this *Builder) AddSelectByProvider(provider Provider, as string) *Builder {
+	return this.AddSelectSub(provider(), as)
+}
+
+func (this *Builder) SelectByProvider(provider Provider, as string) *Builder {
+	return this.SelectSub(provider(), as)
+}
+
+func (this *Builder) Count(fields ...string) *Builder {
+	if len(fields) == 0 {
+		return this.Select("count(*)")
+	}
+	return this.Select(fmt.Sprintf("count(%s) as %s_count", fields[0], fields[0]))
 }
 
 func (this *Builder) OrderBy(field string, columnOrderType ...orderType) *Builder {
@@ -499,4 +475,8 @@ func (this *Builder) ToSql() string {
 	}
 
 	return sql
+}
+
+func (this *Builder) SelectSql() (string, []interface{}) {
+	return this.ToSql(), this.GetBindings()
 }

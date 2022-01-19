@@ -70,6 +70,23 @@ func TestUpdateSql(t *testing.T) {
 	_, err := sqlparser.Parse(sql)
 	assert.Nil(t, err, err)
 }
+func TestSelectSub(t *testing.T) {
+	sql, bindings := builder.NewQuery("users").Where("id", ">", 1).
+		SelectSub(builder.NewQuery("accounts").Where("accounts.id", "users.id").Count(), "accounts_count").
+		Join("accounts", "accounts.user_id", "=", "users.id").
+		SelectSql()
+	fmt.Println(sql)
+	fmt.Println(bindings)
+	_, err := sqlparser.Parse(sql)
+	assert.Nil(t, err, err)
+}
+func TestCount(t *testing.T) {
+	sql, bindings := builder.NewQuery("users").Where("id", ">", 1).Count("id").SelectSql()
+	fmt.Println(sql)
+	fmt.Println(bindings)
+	_, err := sqlparser.Parse(sql)
+	assert.Nil(t, err, err)
+}
 func TestDeleteSql(t *testing.T) {
 	sql, bindings := builder.NewQuery("users").Where("id", ">", 1).DeleteSql()
 	fmt.Println(sql)
