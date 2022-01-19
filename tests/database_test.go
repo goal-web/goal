@@ -9,39 +9,60 @@ import (
 )
 
 func TestSimpleQueryBuilder(t *testing.T) {
-	query := builder.NewQueryBuilder("users")
+	query := builder.NewQuery("users")
 	query.Where("name", "qbhy").
 		Where("age", ">", 18).
 		Where("gender", "!=", 0, "or").
 		OrWhere("amount", ">=", 100).
 		WhereIsNull("avatar")
 	fmt.Println(query.ToSql())
+	fmt.Println(query.GetBindings())
 
 	_, err := sqlparser.Parse(query.ToSql())
 	assert.Nil(t, err, err)
 }
 
 func TestJoinQueryBuilder(t *testing.T) {
-	query := builder.NewQueryBuilder("users").
+	query := builder.NewQuery("users").
 		Join("accounts", "accounts.user_id", "=", "users.id").
-		Where("gender", "!=", 0, builder.Or)
+		JoinSub(func() *builder.Builder {
+			return builder.NewQuery("users").
+				Where("level", ">", 5)
+		}, "vip_users", "vip_users.id", "=", "users.id").
+		//WhereIn("gender", "1,2").
+		WhereIn("gender", []int{1, 2})
 	fmt.Println(query.ToSql())
+	fmt.Println(query.GetBindings())
+	_, err := sqlparser.Parse(query.ToSql())
+	assert.Nil(t, err, err)
+}
+
+func TestFromSubQueryBuilder(t *testing.T) {
+	query := builder.FromSub(func() *builder.Builder {
+		return builder.NewQuery("users").
+			Where("level", ">", 5)
+	}, "vip_users").
+		//WhereIn("gender", "1,2").
+		WhereIn("gender", []int{1, 2})
+	fmt.Println(query.ToSql())
+	fmt.Println(query.GetBindings())
 	_, err := sqlparser.Parse(query.ToSql())
 	assert.Nil(t, err, err)
 }
 
 func TestDistinctQueryBuilder(t *testing.T) {
-	query := builder.NewQueryBuilder("users").
+	query := builder.NewQuery("users").
 		Distinct().
 		Join("accounts", "accounts.user_id", "=", "users.id").
 		Where("gender", "!=", 0, builder.Or)
 	fmt.Println(query.ToSql())
+	fmt.Println(query.GetBindings())
 	_, err := sqlparser.Parse(query.ToSql())
 	assert.Nil(t, err, err)
 }
 
 func TestBetweenQueryBuilder(t *testing.T) {
-	query := builder.NewQueryBuilder("users").
+	query := builder.NewQuery("users").
 		Join("accounts", "accounts.user_id", "=", "users.id").
 		WhereFunc(func(b *builder.Builder) {
 			// 高瘦
@@ -55,37 +76,39 @@ func TestBetweenQueryBuilder(t *testing.T) {
 			WhereNotBetween("id", []int{1, 5})
 	})
 	fmt.Println(query.ToSql())
+	fmt.Println(query.GetBindings())
 	_, err := sqlparser.Parse(query.ToSql())
 	assert.Nil(t, err, err)
 }
 
 func TestUnionQueryBuilder(t *testing.T) {
-	query := builder.NewQueryBuilder("users").
+	query := builder.NewQuery("users").
 		Join("accounts", "accounts.user_id", "=", "users.id").
 		Where("gender", "!=", 0, builder.Or).
 		Union(
-			builder.NewQueryBuilder("peoples"),
+			builder.NewQuery("peoples").Where("id", 5),
 		).
 		Union(
-			builder.NewQueryBuilder("accounts"),
+			builder.NewQuery("accounts"),
 		).
 		UnionAll(
-			builder.NewQueryBuilder("members"),
+			builder.NewQuery("members"),
 		).
 		UnionAll(
-			builder.NewQueryBuilder("students"),
+			builder.NewQuery("students"),
 		)
 	fmt.Println(query.ToSql())
+	fmt.Println(query.GetBindings())
 	_, err := sqlparser.Parse(query.ToSql())
 	assert.Nil(t, err, err)
 }
 
 func TestComplexQueryBuilder(t *testing.T) {
 
-	query1 := builder.NewQueryBuilder("users")
-	query1.
+	query := builder.NewQuery("users")
+	query.
 		FromSub(func() *builder.Builder {
-			return builder.NewQueryBuilder("users").Where("amount", ">", 1000)
+			return builder.NewQuery("users").Where("amount", ">", 1000)
 		}, "rich_users").
 		Join("accounts", "users.id", "=", "accounts.user_id").
 		WhereFunc(func(b *builder.Builder) {
@@ -104,7 +127,8 @@ func TestComplexQueryBuilder(t *testing.T) {
 		OrderBy("id").
 		GroupBy("country")
 
-	fmt.Println(query1.ToSql())
-	_, err := sqlparser.Parse(query1.ToSql())
+	fmt.Println(query.ToSql())
+	fmt.Println(query.GetBindings())
+	_, err := sqlparser.Parse(query.ToSql())
 	assert.Nil(t, err, err)
 }

@@ -2,12 +2,18 @@ package builder
 
 import (
 	"fmt"
+	"github.com/pkg/errors"
+	"github.com/qbhy/goal/contracts"
+	"github.com/qbhy/goal/exceptions"
+	"github.com/qbhy/goal/utils"
 	"strings"
 )
 
 type Callback func(*Builder) *Builder
 type Provider func() *Builder
 type whereFunc func(*Builder)
+
+type bindingType string
 
 type Builder struct {
 	distinct bool
@@ -18,21 +24,38 @@ type Builder struct {
 	groupBy  GroupBy
 	joins    Joins
 	unions   Unions
+	bindings map[bindingType][]interface{}
 }
 
-func NewQueryBuilder(table string) *Builder {
+const (
+	selectBinding  bindingType = "select"
+	fromBinding    bindingType = "from"
+	joinBinding    bindingType = "join"
+	whereBinding   bindingType = "where"
+	groupByBinding bindingType = "groupBy"
+	havingBinding  bindingType = "having"
+	orderBinding   bindingType = "order"
+	unionBinding   bindingType = "union"
+)
+
+func NewQuery(table string) *Builder {
 	return &Builder{
-		table:   table,
-		fields:  []string{"*"},
-		orderBy: OrderByFields{},
-		joins:   Joins{},
-		unions:  Unions{},
-		groupBy: GroupBy{},
+		table:    table,
+		fields:   []string{"*"},
+		orderBy:  OrderByFields{},
+		bindings: map[bindingType][]interface{}{},
+		joins:    Joins{},
+		unions:   Unions{},
+		groupBy:  GroupBy{},
 		wheres: &Wheres{
 			wheres:    map[whereJoinType][]*Where{},
 			subWheres: map[whereJoinType][]*Wheres{},
 		},
 	}
+}
+
+func FromSub(callback Provider, as string) *Builder {
+	return NewQuery("").FromSub(callback, as)
 }
 
 func (this *Builder) getWheres() *Wheres {
@@ -47,7 +70,7 @@ func (this *Builder) Union(builder *Builder, unionType ...unionJoinType) *Builde
 		}
 	}
 
-	return this
+	return this.addBinding(unionBinding, builder.GetBindings()...)
 }
 
 func (this *Builder) UnionAll(builder *Builder) *Builder {
@@ -68,6 +91,7 @@ func (this *Builder) WhereFunc(callback whereFunc, whereType ...whereJoinType) *
 			wheres:    map[whereJoinType][]*Where{},
 			subWheres: map[whereJoinType][]*Wheres{},
 		},
+		bindings: map[bindingType][]interface{}{},
 	}
 	callback(subBuilder)
 	if len(whereType) == 0 {
@@ -75,6 +99,7 @@ func (this *Builder) WhereFunc(callback whereFunc, whereType ...whereJoinType) *
 	} else {
 		this.wheres.subWheres[whereType[0]] = append(this.wheres.subWheres[whereType[0]], subBuilder.getWheres())
 	}
+	this.addBinding(whereBinding, subBuilder.GetBindings()...)
 	return this
 }
 
@@ -100,18 +125,105 @@ func (this *Builder) Where(field string, args ...interface{}) *Builder {
 		whereType = args[2].(whereJoinType)
 	}
 
+	raw, bindings := this.prepareArgs(condition, arg)
+
 	this.wheres.wheres[whereType] = append(this.wheres.wheres[whereType], &Where{
 		field:     field,
 		condition: condition,
-		arg:       arg,
+		arg:       raw,
 	})
 
-	return this
+	return this.addBinding(whereBinding, bindings...)
+}
+func (this *Builder) OrWhere(field string, args ...interface{}) *Builder {
+	var (
+		arg       interface{}
+		condition = "="
+	)
+	switch len(args) {
+	case 1:
+		arg = args[0]
+	case 2:
+		condition = args[0].(string)
+		arg = args[1]
+	default:
+		condition = args[0].(string)
+		arg = args[1]
+	}
+	raw, bindings := this.prepareArgs(condition, arg)
+
+	this.wheres.wheres[Or] = append(this.wheres.wheres[Or], &Where{
+		field:     field,
+		condition: condition,
+		arg:       raw,
+	})
+	return this.addBinding(whereBinding, bindings...)
+}
+
+func (this *Builder) prepareArgs(condition string, args interface{}) (sql string, bindings []interface{}) {
+	condition = strings.ToLower(condition)
+	switch condition {
+	case "in", "not in", "between", "not between":
+		isInGrammar := strings.Contains(condition, "in")
+		joinSymbol := utils.IfString(isInGrammar, ",", " and ")
+		var stringArg string
+		switch arg := args.(type) {
+		case string:
+			stringArg = arg
+		case fmt.Stringer:
+			stringArg = arg.String()
+		case []string:
+			stringArg = strings.Join(arg, joinSymbol)
+		case []int:
+			stringArg = utils.JoinIntArray(arg, joinSymbol)
+		case []int64:
+			stringArg = utils.JoinInt64Array(arg, joinSymbol)
+		case []float64:
+			stringArg = utils.JoinFloat64Array(arg, joinSymbol)
+		case []float32:
+			stringArg = utils.JoinFloatArray(arg, joinSymbol)
+		case []interface{}:
+			sql = fmt.Sprintf("(%s)", strings.Join(utils.MakeSymbolArray("?", len(arg)), ","))
+			bindings = arg
+			return
+		default:
+			panic(exceptions.WithError(errors.New("不支持的参数类型"), contracts.Fields{
+				"arg":       arg,
+				"condition": condition,
+			}))
+		}
+		bindings = utils.StringArray2InterfaceArray(strings.Split(stringArg, joinSymbol))
+		if isInGrammar {
+			sql = fmt.Sprintf("(%s)", strings.Join(utils.MakeSymbolArray("?", len(bindings)), ","))
+		} else {
+			sql = "(? and ?)"
+		}
+	case "is", "is not":
+		sql = utils.ConvertToString(args, "")
+	default:
+		sql = "?"
+		bindings = append(bindings, utils.ConvertToString(args, ""))
+	}
+
+	return
 }
 
 func (this *Builder) WhereIn(field string, args interface{}) *Builder {
 	return this.Where(field, "in", args)
 }
+
+func (this *Builder) addBinding(bindType bindingType, bindings ...interface{}) *Builder {
+	this.bindings[bindType] = append(this.bindings[bindType], bindings...)
+	return this
+}
+
+func (this *Builder) GetBindings() (results []interface{}) {
+	for _, bindings := range this.bindings {
+		results = append(results, bindings...)
+	}
+	return
+}
+
 func (this *Builder) Distinct() *Builder {
 	this.distinct = true
 	return this
@@ -133,7 +245,27 @@ func (this *Builder) Join(table string, first, condition, second string, joins .
 	return this
 }
 
+func (this *Builder) JoinSub(provider Provider, as, first, condition, second string, joins ...joinType) *Builder {
+	join := InnerJoin
+	if len(joins) > 0 {
+		join = joins[0]
+	}
+	subBuilder := provider()
+	this.joins = append(this.joins, Join{fmt.Sprintf("(%s) as %s", subBuilder.ToSql(), as), join, &Wheres{wheres: map[whereJoinType][]*Where{
+		And: {&Where{
+			field:     first,
+			condition: condition,
+			arg:       second,
+		}},
+	}}})
+
+	return this.addBinding(joinBinding, subBuilder.GetBindings()...)
+}
+
 func (this *Builder) FullJoin(table string, first, condition, second string) *Builder {
+	return this.Join(table, first, condition, second, FullJoin)
+}
+func (this *Builder) FullOutJoin(table string, first, condition, second string) *Builder {
 	return this.Join(table, first, condition, second, FullOutJoin)
 }
 
@@ -181,50 +313,26 @@ func (this *Builder) OrWhereNotIn(field string, args interface{}) *Builder {
 	return this.OrWhere(field, "not in", args)
 }
 
-func (this *Builder) OrWhere(field string, args ...interface{}) *Builder {
-	var (
-		arg       interface{}
-		condition = "="
-	)
-	switch len(args) {
-	case 1:
-		arg = args[0]
-	case 2:
-		condition = args[0].(string)
-		arg = args[1]
-	default:
-		condition = args[0].(string)
-		arg = args[1]
-	}
-
-	this.wheres.wheres[Or] = append(this.wheres.wheres[Or], &Where{
-		field:     field,
-		condition: condition,
-		arg:       arg,
-	})
-	return this
-}
-
 func (this *Builder) WhereIsNull(field string, whereType ...string) *Builder {
 	if len(whereType) == 0 {
-		return this.Where(field, "", "is null", And)
+		return this.Where(field, "is", "null", And)
 	}
-	return this.Where(field, "", "is null", whereType[0])
+	return this.Where(field, "is", "null", whereType[0])
 }
 
 func (this *Builder) OrWhereIsNull(field string) *Builder {
-	return this.OrWhere(field, "", "is null")
+	return this.OrWhere(field, "is", "null")
 }
 
 func (this *Builder) OrWhereNotNull(field string) *Builder {
-	return this.OrWhere(field, "", "is not null")
+	return this.OrWhere(field, "is not", "null")
 }
 
 func (this *Builder) WhereNotNull(field string, whereType ...string) *Builder {
 	if len(whereType) == 0 {
-		return this.Where(field, "", "is not null", And)
+		return this.Where(field, "is not", "null", And)
 	}
-	return this.Where(field, "", "is not null", whereType[0])
+	return this.Where(field, "is not", "null", whereType[0])
 }
 
 func (this *Builder) From(table string, as ...string) *Builder {
@@ -243,9 +351,10 @@ func (this *Builder) FromMany(tables ...string) *Builder {
 	return this
 }
 
-func (this *Builder) FromSub(callback Provider, as string) *Builder {
-	this.table = fmt.Sprintf("(%s) as %s", callback().ToSql(), as)
-	return this
+func (this *Builder) FromSub(provider Provider, as string) *Builder {
+	subBuilder := provider()
+	this.table = fmt.Sprintf("(%s) as %s", subBuilder.ToSql(), as)
+	return this.addBinding(fromBinding, subBuilder.GetBindings()...)
 }
 
 func (this *Builder) Select(field string, fields ...string) *Builder {

@@ -2,11 +2,6 @@ package builder
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
-	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/exceptions"
-	"github.com/qbhy/goal/utils"
-	"strings"
 )
 
 type whereJoinType string
@@ -19,54 +14,14 @@ const (
 type Where struct {
 	field     string
 	condition string
-	arg       interface{}
+	arg       string
 }
 
 func (this *Where) String() string {
 	if this == nil {
 		return ""
 	}
-	var stringArg string
-	lowerCaseCondition := strings.ToLower(this.condition)
-
-	switch lowerCaseCondition {
-	case "in", "not in", "between", "not between":
-		isInGrammar := strings.Contains(lowerCaseCondition, "in")
-		joinSymbol := utils.IfString(isInGrammar, ",", " AND ")
-		switch arg := this.arg.(type) {
-		case string:
-			stringArg = arg
-		case fmt.Stringer:
-			stringArg = arg.String()
-		case []string:
-			stringArg = strings.Join(arg, joinSymbol)
-		case []int:
-			stringArg = utils.JoinIntArray(arg, joinSymbol)
-		case []int64:
-			stringArg = utils.JoinInt64Array(arg, joinSymbol)
-		case []float64:
-			stringArg = utils.JoinFloat64Array(arg, joinSymbol)
-		case []float32:
-			stringArg = utils.JoinFloatArray(arg, joinSymbol)
-		case []interface{}:
-			stringArg = utils.JoinInterfaceArray(arg, joinSymbol)
-		default:
-			panic(exceptions.WithError(errors.New("不支持的参数类型"), contracts.Fields{
-				"arg":       this.arg,
-				"field":     this.field,
-				"condition": this.condition,
-			}))
-		}
-		if isInGrammar {
-			stringArg = fmt.Sprintf("(%s)", stringArg)
-		}
-	default:
-		stringArg = utils.ConvertToString(this.arg, "")
-	}
-	if this.condition == "" {
-		return fmt.Sprintf("%s %s", this.field, stringArg)
-	}
-	return fmt.Sprintf("%s %s %s", this.field, this.condition, stringArg)
+	return fmt.Sprintf("%s %s %s", this.field, this.condition, this.arg)
 }
 
 type Wheres struct {

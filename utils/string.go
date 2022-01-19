@@ -150,3 +150,17 @@ func JoinInterfaceArray(arr []interface{}, sep string) (result string) {
 	}
 	return
 }
+
+func MakeSymbolArray(symbol string, num int) (result []string) {
+	for i := 0; i < num; i++ {
+		result = append(result, symbol)
+	}
+	return
+}
+
+func StringArray2InterfaceArray(args []string) (result []interface{}) {
+	for _, arg := range args {
+		result = append(result, arg)
+	}
+	return
+}

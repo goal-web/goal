@@ -42,7 +42,7 @@ func (this Joins) String() (result string) {
 		if index == 0 {
 			result = join.String()
 		} else {
-			result = fmt.Sprintf("%s%s%s", result, ",", join.String())
+			result = fmt.Sprintf("%s %s", result, join.String())
 		}
 	}
 
