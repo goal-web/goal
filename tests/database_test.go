@@ -61,6 +61,27 @@ func TestDistinctQueryBuilder(t *testing.T) {
 	assert.Nil(t, err, err)
 }
 
+func TestInsertSql(t *testing.T) {
+	sql, bindings := builder.NewQuery("users").InsertSql([]map[string]interface{}{
+		{"name": "qbhy", "age": 18, "money": 100000000000},
+		{"name": "goal", "age": 18, "money": 10},
+	})
+	fmt.Println(sql)
+	fmt.Println(bindings)
+	_, err := sqlparser.Parse(sql)
+	assert.Nil(t, err, err)
+}
+
+func TestCreateSql(t *testing.T) {
+	sql, bindings := builder.NewQuery("users").CreateSql(map[string]interface{}{
+		"name": "qbhy", "age": 18, "money": 100000000000,
+	})
+	fmt.Println(sql)
+	fmt.Println(bindings)
+	_, err := sqlparser.Parse(sql)
+	assert.Nil(t, err, err)
+}
+
 func TestBetweenQueryBuilder(t *testing.T) {
 	query := builder.NewQuery("users").
 		Join("accounts", "accounts.user_id", "=", "users.id").
@@ -85,8 +106,10 @@ func TestUnionQueryBuilder(t *testing.T) {
 	query := builder.NewQuery("users").
 		Join("accounts", "accounts.user_id", "=", "users.id").
 		Where("gender", "!=", 0, builder.Or).
-		Union(
-			builder.NewQuery("peoples").Where("id", 5),
+		UnionByProvider(
+			func() *builder.Builder {
+				return builder.NewQuery("peoples").Where("id", 5)
+			},
 		).
 		Union(
 			builder.NewQuery("accounts"),
@@ -135,14 +158,13 @@ func TestComplexQueryBuilder(t *testing.T) {
 
 func TestGroupByQueryBuilder(t *testing.T) {
 
-	query := builder.NewQuery("users")
-	query.
+	query := builder.
 		FromSub(func() *builder.Builder {
 			return builder.NewQuery("users").Where("amount", ">", 1000)
 		}, "rich_users").
 		GroupBy("country").
-		Having("count(users.id)", "<", 1000).   // 人口少
-		OrHaving("sum(users.amount)", "<", 100) // 或者穷
+		Having("count(rich_users.id)", "<", 1000).   // 人口少
+		OrHaving("sum(rich_users.amount)", "<", 100) // 或者穷
 
 	fmt.Println(query.ToSql())
 	fmt.Println(query.GetBindings())
