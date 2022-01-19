@@ -82,6 +82,18 @@ func TestSelectSub(t *testing.T) {
 	_, err := sqlparser.Parse(sql)
 	assert.Nil(t, err, err)
 }
+func TestWhereNotExists(t *testing.T) {
+	sql, bindings := builder.NewQuery("users").
+		Where("id", ">", 1).
+		WhereNotExists(func() *builder.Builder {
+			return builder.NewQuery("users").Select("id").Where("age", ">", 18)
+		}).
+		SelectSql()
+	fmt.Println(sql)
+	fmt.Println(bindings)
+	_, err := sqlparser.Parse(sql)
+	assert.Nil(t, err, err)
+}
 func TestCount(t *testing.T) {
 	sql, bindings := builder.NewQuery("users").Where("id", ">", 1).Count("id").SelectSql()
 	fmt.Println(sql)

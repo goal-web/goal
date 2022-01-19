@@ -103,7 +103,7 @@ func (this *Builder) prepareArgs(condition string, args interface{}) (raw string
 		} else {
 			raw = "? and ?"
 		}
-	case "is", "is not":
+	case "is", "is not", "exists", "not exists":
 		raw = utils.ConvertToString(args, "")
 	default:
 		raw = "?"
