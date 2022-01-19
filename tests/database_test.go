@@ -132,3 +132,20 @@ func TestComplexQueryBuilder(t *testing.T) {
 	_, err := sqlparser.Parse(query.ToSql())
 	assert.Nil(t, err, err)
 }
+
+func TestGroupByQueryBuilder(t *testing.T) {
+
+	query := builder.NewQuery("users")
+	query.
+		FromSub(func() *builder.Builder {
+			return builder.NewQuery("users").Where("amount", ">", 1000)
+		}, "rich_users").
+		GroupBy("country").
+		Having("count(users.id)", "<", 1000).   // 人口少
+		OrHaving("sum(users.amount)", "<", 100) // 或者穷
+
+	fmt.Println(query.ToSql())
+	fmt.Println(query.GetBindings())
+	_, err := sqlparser.Parse(query.ToSql())
+	assert.Nil(t, err, err)
+}

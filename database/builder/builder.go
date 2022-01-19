@@ -24,6 +24,7 @@ type Builder struct {
 	groupBy  GroupBy
 	joins    Joins
 	unions   Unions
+	having   *Wheres
 	bindings map[bindingType][]interface{}
 }
 
@@ -48,6 +49,10 @@ func NewQuery(table string) *Builder {
 		unions:   Unions{},
 		groupBy:  GroupBy{},
 		wheres: &Wheres{
+			wheres:    map[whereJoinType][]*Where{},
+			subWheres: map[whereJoinType][]*Wheres{},
+		},
+		having: &Wheres{
 			wheres:    map[whereJoinType][]*Where{},
 			subWheres: map[whereJoinType][]*Wheres{},
 		},
@@ -135,6 +140,7 @@ func (this *Builder) Where(field string, args ...interface{}) *Builder {
 
 	return this.addBinding(whereBinding, bindings...)
 }
+
 func (this *Builder) OrWhere(field string, args ...interface{}) *Builder {
 	var (
 		arg       interface{}
@@ -160,7 +166,61 @@ func (this *Builder) OrWhere(field string, args ...interface{}) *Builder {
 	return this.addBinding(whereBinding, bindings...)
 }
 
-func (this *Builder) prepareArgs(condition string, args interface{}) (sql string, bindings []interface{}) {
+func (this *Builder) Having(field string, args ...interface{}) *Builder {
+	var (
+		arg       interface{}
+		condition = "="
+		whereType = And
+	)
+	switch len(args) {
+	case 1:
+		arg = args[0]
+	case 2:
+		condition = args[0].(string)
+		arg = args[1]
+	case 3:
+		condition = args[0].(string)
+		arg = args[1]
+		whereType = args[2].(whereJoinType)
+	}
+
+	raw, bindings := this.prepareArgs(condition, arg)
+
+	this.having.wheres[whereType] = append(this.having.wheres[whereType], &Where{
+		field:     field,
+		condition: condition,
+		arg:       raw,
+	})
+
+	return this.addBinding(havingBinding, bindings...)
+}
+
+func (this *Builder) OrHaving(field string, args ...interface{}) *Builder {
+	var (
+		arg       interface{}
+		condition = "="
+	)
+	switch len(args) {
+	case 1:
+		arg = args[0]
+	case 2:
+		condition = args[0].(string)
+		arg = args[1]
+	default:
+		condition = args[0].(string)
+		arg = args[1]
+	}
+	raw, bindings := this.prepareArgs(condition, arg)
+
+	this.having.wheres[Or] = append(this.having.wheres[Or], &Where{
+		field:     field,
+		condition: condition,
+		arg:       raw,
+	})
+	return this.addBinding(havingBinding, bindings...)
+}
+
+func (this *Builder) prepareArgs(condition string, args interface{}) (raw string, bindings []interface{}) {
 	condition = strings.ToLower(condition)
 	switch condition {
 	case "in", "not in", "between", "not between":
@@ -183,7 +243,7 @@ func (this *Builder) prepareArgs(condition string, args interface{}) (sql string
 		case []float32:
 			stringArg = utils.JoinFloatArray(arg, joinSymbol)
 		case []interface{}:
-			sql = fmt.Sprintf("(%s)", strings.Join(utils.MakeSymbolArray("?", len(arg)), ","))
+			raw = fmt.Sprintf("(%s)", strings.Join(utils.MakeSymbolArray("?", len(arg)), ","))
 			bindings = arg
 			return
 		default:
@@ -194,14 +254,14 @@ func (this *Builder) prepareArgs(condition string, args interface{}) (sql string
 		}
 		bindings = utils.StringArray2InterfaceArray(strings.Split(stringArg, joinSymbol))
 		if isInGrammar {
-			sql = fmt.Sprintf("(%s)", strings.Join(utils.MakeSymbolArray("?", len(bindings)), ","))
+			raw = fmt.Sprintf("(%s)", strings.Join(utils.MakeSymbolArray("?", len(bindings)), ","))
 		} else {
-			sql = "(? and ?)"
+			raw = "(? and ?)"
 		}
 	case "is", "is not":
-		sql = utils.ConvertToString(args, "")
+		raw = utils.ConvertToString(args, "")
 	default:
-		sql = "?"
+		raw = "?"
 		bindings = append(bindings, utils.ConvertToString(args, ""))
 	}
 
@@ -426,6 +486,10 @@ func (this *Builder) ToSql() string {
 
 	if !this.groupBy.IsEmpty() {
 		sql = fmt.Sprintf("%s GROUP BY %s", sql, this.groupBy.String())
+
+		if !this.having.IsEmpty() {
+			sql = fmt.Sprintf("%s HAVING %s", sql, this.having.String())
+		}
 	}
 
 	if !this.orderBy.IsEmpty() {
