@@ -276,8 +276,11 @@ func (this *Builder) addBinding(bindType bindingType, bindings ...interface{}) *
 }
 
 func (this *Builder) GetBindings() (results []interface{}) {
-	for _, bindings := range this.bindings {
-		results = append(results, bindings...)
+	for _, binding := range []bindingType{
+		selectBinding, fromBinding, joinBinding,
+		whereBinding, groupByBinding, havingBinding, orderBinding, unionBinding,
+	} {
+		results = append(results, this.bindings[binding]...)
 	}
 	return
 }
