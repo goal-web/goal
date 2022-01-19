@@ -70,6 +70,13 @@ func TestUpdateSql(t *testing.T) {
 	_, err := sqlparser.Parse(sql)
 	assert.Nil(t, err, err)
 }
+func TestDeleteSql(t *testing.T) {
+	sql, bindings := builder.NewQuery("users").Where("id", ">", 1).DeleteSql()
+	fmt.Println(sql)
+	fmt.Println(bindings)
+	_, err := sqlparser.Parse(sql)
+	assert.Nil(t, err, err)
+}
 func TestInsertSql(t *testing.T) {
 	sql, bindings := builder.NewQuery("users").InsertSql([]map[string]interface{}{
 		{"name": "qbhy", "age": 18, "money": 100000000000},
