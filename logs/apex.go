@@ -9,70 +9,70 @@ type ApexLogger struct {
 	Entry *log.Entry
 }
 
-func (a *ApexLogger) WithFields(m contracts.Fields) contracts.Logger {
-	if a == nil || a.Entry == nil {
-		a = &ApexLogger{
+func (this *ApexLogger) WithFields(m contracts.Fields) contracts.Logger {
+	if this == nil || this.Entry == nil {
+		this = &ApexLogger{
 			Entry: log.WithFields(log.Fields(m)),
 		}
 	}
 
-	a.Entry = a.Entry.WithFields(log.Fields(m))
+	this.Entry = this.Entry.WithFields(log.Fields(m))
 
-	return a
+	return this
 }
 
-func (a *ApexLogger) WithField(key string, value interface{}) contracts.Logger {
-	if a == nil || a.Entry == nil {
-		a = &ApexLogger{
+func (this *ApexLogger) WithField(key string, value interface{}) contracts.Logger {
+	if this == nil || this.Entry == nil {
+		this = &ApexLogger{
 			Entry: log.WithField(key, value),
 		}
 	}
 
-	a.Entry = a.Entry.WithField(key, value)
+	this.Entry = this.Entry.WithField(key, value)
 
-	return a
+	return this
 }
 
-func (a *ApexLogger) WithError(err error) contracts.Logger {
-	if a == nil || a.Entry == nil {
-		a = &ApexLogger{
+func (this *ApexLogger) WithError(err error) contracts.Logger {
+	if this == nil || this.Entry == nil {
+		this = &ApexLogger{
 			Entry: log.WithError(err),
 		}
 	}
 
-	a.Entry = a.Entry.WithError(err)
+	this.Entry = this.Entry.WithError(err)
 
-	return a
+	return this
 }
 
-func (a *ApexLogger) WithException(err contracts.Exception) contracts.Logger {
-	if a == nil || a.Entry == nil {
-		a = &ApexLogger{
+func (this *ApexLogger) WithException(err contracts.Exception) contracts.Logger {
+	if this == nil || this.Entry == nil {
+		this = &ApexLogger{
 			Entry: log.WithError(err).WithFields(log.Fields(err.Fields())),
 		}
 	}
 
-	a.Entry = a.Entry.WithError(err).WithFields(log.Fields(err.Fields()))
+	this.Entry = this.Entry.WithError(err).WithFields(log.Fields(err.Fields()))
 
-	return a
+	return this
 }
 
-func (a ApexLogger) Info(msg string) {
-	a.Entry.Info(msg)
+func (this ApexLogger) Info(msg string) {
+	this.Entry.Info(msg)
 }
 
-func (a ApexLogger) Warn(msg string) {
-	a.Entry.Warn(msg)
+func (this ApexLogger) Warn(msg string) {
+	this.Entry.Warn(msg)
 }
 
-func (a ApexLogger) Debug(msg string) {
-	a.Entry.Debug(msg)
+func (this ApexLogger) Debug(msg string) {
+	this.Entry.Debug(msg)
 }
 
-func (a ApexLogger) Error(msg string) {
-	a.Entry.Error(msg)
+func (this ApexLogger) Error(msg string) {
+	this.Entry.Error(msg)
 }
 
-func (a ApexLogger) Fatal(msg string) {
-	a.Entry.Fatal(msg)
+func (this ApexLogger) Fatal(msg string) {
+	this.Entry.Fatal(msg)
 }
