@@ -72,7 +72,9 @@ func TestUpdateSql(t *testing.T) {
 }
 func TestSelectSub(t *testing.T) {
 	sql, bindings := builder.NewQuery("users").Where("id", ">", 1).
-		SelectSub(builder.NewQuery("accounts").Where("accounts.id", "users.id").Count(), "accounts_count").
+		SelectSub(func() *builder.Builder {
+			return builder.NewQuery("accounts").Where("accounts.id", "users.id").Count()
+		}, "accounts_count").
 		Join("accounts", "accounts.user_id", "=", "users.id").
 		SelectSql()
 	fmt.Println(sql)

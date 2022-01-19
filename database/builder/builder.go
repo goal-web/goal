@@ -65,159 +65,6 @@ func FromSub(callback Provider, as string) *Builder {
 func (this *Builder) getWheres() *Wheres {
 	return this.wheres
 }
-func (this *Builder) Union(builder *Builder, unionType ...unionJoinType) *Builder {
-	if builder != nil {
-		if len(unionType) > 0 {
-			this.unions[unionType[0]] = append(this.unions[unionType[0]], builder)
-		} else {
-			this.unions[Union] = append(this.unions[Union], builder)
-		}
-	}
-
-	return this.addBinding(unionBinding, builder.GetBindings()...)
-}
-
-func (this *Builder) UnionAll(builder *Builder) *Builder {
-	return this.Union(builder, UnionAll)
-}
-
-func (this *Builder) UnionByProvider(builder Provider, unionType ...unionJoinType) *Builder {
-	return this.Union(builder(), unionType...)
-}
-
-func (this *Builder) UnionAllByProvider(builder Provider) *Builder {
-	return this.Union(builder(), UnionAll)
-}
-
-func (this *Builder) WhereFunc(callback whereFunc, whereType ...whereJoinType) *Builder {
-	subBuilder := &Builder{
-		wheres: &Wheres{
-			wheres:    map[whereJoinType][]*Where{},
-			subWheres: map[whereJoinType][]*Wheres{},
-		},
-		bindings: map[bindingType][]interface{}{},
-	}
-	callback(subBuilder)
-	if len(whereType) == 0 {
-		this.wheres.subWheres[And] = append(this.wheres.subWheres[And], subBuilder.getWheres())
-	} else {
-		this.wheres.subWheres[whereType[0]] = append(this.wheres.subWheres[whereType[0]], subBuilder.getWheres())
-	}
-	this.addBinding(whereBinding, subBuilder.GetBindings()...)
-	return this
-}
-
-func (this *Builder) OrWhereFunc(callback whereFunc) *Builder {
-	return this.WhereFunc(callback, Or)
-}
-
-func (this *Builder) Where(field string, args ...interface{}) *Builder {
-	var (
-		arg       interface{}
-		condition = "="
-		whereType = And
-	)
-	switch len(args) {
-	case 1:
-		arg = args[0]
-	case 2:
-		condition = args[0].(string)
-		arg = args[1]
-	case 3:
-		condition = args[0].(string)
-		arg = args[1]
-		whereType = args[2].(whereJoinType)
-	}
-
-	raw, bindings := this.prepareArgs(condition, arg)
-
-	this.wheres.wheres[whereType] = append(this.wheres.wheres[whereType], &Where{
-		field:     field,
-		condition: condition,
-		arg:       raw,
-	})
-
-	return this.addBinding(whereBinding, bindings...)
-}
-
-func (this *Builder) OrWhere(field string, args ...interface{}) *Builder {
-	var (
-		arg       interface{}
-		condition = "="
-	)
-	switch len(args) {
-	case 1:
-		arg = args[0]
-	case 2:
-		condition = args[0].(string)
-		arg = args[1]
-	default:
-		condition = args[0].(string)
-		arg = args[1]
-	}
-	raw, bindings := this.prepareArgs(condition, arg)
-
-	this.wheres.wheres[Or] = append(this.wheres.wheres[Or], &Where{
-		field:     field,
-		condition: condition,
-		arg:       raw,
-	})
-	return this.addBinding(whereBinding, bindings...)
-}
-
-func (this *Builder) Having(field string, args ...interface{}) *Builder {
-	var (
-		arg       interface{}
-		condition = "="
-		whereType = And
-	)
-	switch len(args) {
-	case 1:
-		arg = args[0]
-	case 2:
-		condition = args[0].(string)
-		arg = args[1]
-	case 3:
-		condition = args[0].(string)
-		arg = args[1]
-		whereType = args[2].(whereJoinType)
-	}
-
-	raw, bindings := this.prepareArgs(condition, arg)
-
-	this.having.wheres[whereType] = append(this.having.wheres[whereType], &Where{
-		field:     field,
-		condition: condition,
-		arg:       raw,
-	})
-
-	return this.addBinding(havingBinding, bindings...)
-}
-
-func (this *Builder) OrHaving(field string, args ...interface{}) *Builder {
-	var (
-		arg       interface{}
-		condition = "="
-	)
-	switch len(args) {
-	case 1:
-		arg = args[0]
-	case 2:
-		condition = args[0].(string)
-		arg = args[1]
-	default:
-		condition = args[0].(string)
-		arg = args[1]
-	}
-	raw, bindings := this.prepareArgs(condition, arg)
-
-	this.having.wheres[Or] = append(this.having.wheres[Or], &Where{
-		field:     field,
-		condition: condition,
-		arg:       raw,
-	})
-	return this.addBinding(havingBinding, bindings...)
-}
 
 func (this *Builder) prepareArgs(condition string, args interface{}) (raw string, bindings []interface{}) {
 	condition = strings.ToLower(condition)
@@ -266,10 +113,6 @@ func (this *Builder) prepareArgs(condition string, args interface{}) (raw string
 	return
 }
 
-func (this *Builder) WhereIn(field string, args interface{}) *Builder {
-	return this.Where(field, "in", args)
-}
-
 func (this *Builder) addBinding(bindType bindingType, bindings ...interface{}) *Builder {
 	this.bindings[bindType] = append(this.bindings[bindType], bindings...)
 	return this
@@ -288,64 +131,6 @@ func (this *Builder) GetBindings() (results []interface{}) {
 func (this *Builder) Distinct() *Builder {
 	this.distinct = true
 	return this
-}
-
-func (this *Builder) OrWhereIn(field string, args interface{}) *Builder {
-	return this.OrWhere(field, "in", args)
-}
-
-func (this *Builder) WhereBetween(field string, args interface{}, whereType ...whereJoinType) *Builder {
-	if len(whereType) > 0 {
-		return this.Where(field, "between", args, whereType[0])
-	}
-
-	return this.Where(field, "between", args)
-}
-
-func (this *Builder) OrWhereBetween(field string, args interface{}) *Builder {
-	return this.OrWhere(field, "between", args)
-}
-
-func (this *Builder) WhereNotBetween(field string, args interface{}, whereType ...whereJoinType) *Builder {
-	if len(whereType) > 0 {
-		return this.Where(field, "not between", args, whereType[0])
-	}
-
-	return this.Where(field, "not between", args)
-}
-
-func (this *Builder) OrWhereNotBetween(field string, args interface{}) *Builder {
-	return this.OrWhere(field, "not between", args)
-}
-
-func (this *Builder) WhereNotIn(field string, args interface{}) *Builder {
-	return this.Where(field, "not in", args)
-}
-
-func (this *Builder) OrWhereNotIn(field string, args interface{}) *Builder {
-	return this.OrWhere(field, "not in", args)
-}
-
-func (this *Builder) WhereIsNull(field string, whereType ...string) *Builder {
-	if len(whereType) == 0 {
-		return this.Where(field, "is", "null", And)
-	}
-	return this.Where(field, "is", "null", whereType[0])
-}
-
-func (this *Builder) OrWhereIsNull(field string) *Builder {
-	return this.OrWhere(field, "is", "null")
-}
-
-func (this *Builder) OrWhereNotNull(field string) *Builder {
-	return this.OrWhere(field, "is not", "null")
-}
-
-func (this *Builder) WhereNotNull(field string, whereType ...string) *Builder {
-	if len(whereType) == 0 {
-		return this.Where(field, "is not", "null", And)
-	}
-	return this.Where(field, "is not", "null", whereType[0])
 }
 
 func (this *Builder) From(table string, as ...string) *Builder {
@@ -370,76 +155,12 @@ func (this *Builder) FromSub(provider Provider, as string) *Builder {
 	return this.addBinding(fromBinding, subBuilder.GetBindings()...)
 }
 
-func (this *Builder) Select(field string, fields ...string) *Builder {
-	this.fields = append(fields, field)
-	return this
-}
-
 func (this *Builder) When(condition bool, callback Callback, elseCallback ...Callback) *Builder {
 	if condition {
 		return callback(this)
 	} else if len(elseCallback) > 0 {
 		return elseCallback[0](this)
 	}
-	return this
-}
-
-func (this *Builder) AddSelect(fields ...string) *Builder {
-	this.fields = append(this.fields, fields...)
-	return this
-}
-
-func (this *Builder) SelectSub(subBuilder *Builder, as string) *Builder {
-	this.fields = []string{fmt.Sprintf("(%s) as %s", subBuilder.ToSql(), as)}
-	return this.addBinding(selectBinding, subBuilder.GetBindings()...)
-}
-func (this *Builder) AddSelectSub(subBuilder *Builder, as string) *Builder {
-	this.fields = append(this.fields, fmt.Sprintf("(%s) as %s", subBuilder.ToSql(), as))
-	return this.addBinding(selectBinding, subBuilder.GetBindings()...)
-}
-
-func (this *Builder) AddSelectByProvider(provider Provider, as string) *Builder {
-	return this.AddSelectSub(provider(), as)
-}
-
-func (this *Builder) SelectByProvider(provider Provider, as string) *Builder {
-	return this.SelectSub(provider(), as)
-}
-
-func (this *Builder) Count(fields ...string) *Builder {
-	if len(fields) == 0 {
-		return this.Select("count(*)")
-	}
-	return this.Select(fmt.Sprintf("count(%s) as %s_count", fields[0], fields[0]))
-}
-
-func (this *Builder) OrderBy(field string, columnOrderType ...orderType) *Builder {
-	if len(columnOrderType) > 0 {
-		this.orderBy = append(this.orderBy, OrderBy{
-			field:          field,
-			fieldOrderType: columnOrderType[0],
-		})
-	} else {
-		this.orderBy = append(this.orderBy, OrderBy{
-			field:          field,
-			fieldOrderType: ASC,
-		})
-	}
-
-	return this
-}
-
-func (this *Builder) GroupBy(columns ...string) *Builder {
-	this.groupBy = append(this.groupBy, columns...)
-
-	return this
-}
-
-func (this *Builder) OrderByDesc(field string) *Builder {
-	this.orderBy = append(this.orderBy, OrderBy{
-		field:          field,
-		fieldOrderType: DESC,
-	})
 	return this
 }
 

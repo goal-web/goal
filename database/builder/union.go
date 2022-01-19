@@ -27,3 +27,27 @@ func (this Unions) String() (result string) {
 
 	return
 }
+
+func (this *Builder) Union(builder *Builder, unionType ...unionJoinType) *Builder {
+	if builder != nil {
+		if len(unionType) > 0 {
+			this.unions[unionType[0]] = append(this.unions[unionType[0]], builder)
+		} else {
+			this.unions[Union] = append(this.unions[Union], builder)
+		}
+	}
+
+	return this.addBinding(unionBinding, builder.GetBindings()...)
+}
+
+func (this *Builder) UnionAll(builder *Builder) *Builder {
+	return this.Union(builder, UnionAll)
+}
+
+func (this *Builder) UnionByProvider(builder Provider, unionType ...unionJoinType) *Builder {
+	return this.Union(builder(), unionType...)
+}
+
+func (this *Builder) UnionAllByProvider(builder Provider) *Builder {
+	return this.Union(builder(), UnionAll)
+}

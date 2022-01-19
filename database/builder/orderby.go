@@ -36,3 +36,27 @@ func (this OrderByFields) String() string {
 
 	return strings.Join(columns, ",")
 }
+
+func (this *Builder) OrderBy(field string, columnOrderType ...orderType) *Builder {
+	if len(columnOrderType) > 0 {
+		this.orderBy = append(this.orderBy, OrderBy{
+			field:          field,
+			fieldOrderType: columnOrderType[0],
+		})
+	} else {
+		this.orderBy = append(this.orderBy, OrderBy{
+			field:          field,
+			fieldOrderType: ASC,
+		})
+	}
+
+	return this
+}
+
+func (this *Builder) OrderByDesc(field string) *Builder {
+	this.orderBy = append(this.orderBy, OrderBy{
+		field:          field,
+		fieldOrderType: DESC,
+	})
+	return this
+}
