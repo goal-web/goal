@@ -14,7 +14,6 @@ type Provider func() *Builder
 type whereFunc func(*Builder)
 
 type bindingType string
-
 type Builder struct {
 	distinct bool
 	table    string
@@ -500,44 +499,4 @@ func (this *Builder) ToSql() string {
 	}
 
 	return sql
-}
-
-func (this *Builder) CreateSql(value map[string]interface{}) (sql string, bindings []interface{}) {
-	if len(value) == 0 {
-		return
-	}
-	keys := make([]string, 0)
-
-	valuesString := fmt.Sprintf("(%s)", strings.Join(utils.MakeSymbolArray("?", len(value)), ","))
-	for name, field := range value {
-		bindings = append(bindings, field)
-		keys = append(keys, name)
-	}
-
-	sql = fmt.Sprintf("insert into %s %s values %s", this.table, fmt.Sprintf("(%s)", strings.Join(keys, ",")), valuesString)
-	return
-}
-
-func (this *Builder) InsertSql(values []map[string]interface{}) (sql string, bindings []interface{}) {
-	if len(values) == 0 {
-		return
-	}
-	fields := make(map[string]interface{})
-	valuesString := make([]string, 0)
-
-	for _, value := range values {
-		valuesString = append(valuesString, fmt.Sprintf("(%s)", strings.Join(utils.MakeSymbolArray("?", len(value)), ",")))
-		for name, field := range value {
-			fields[name] = true
-			bindings = append(bindings, field)
-		}
-	}
-
-	fieldsString := ""
-	if len(fields) > 0 {
-		fieldsString = fmt.Sprintf(" (%s)", strings.Join(utils.GetMapKeys(fields), ","))
-	}
-
-	sql = fmt.Sprintf("insert into %s%s values %s", this.table, fieldsString, strings.Join(valuesString, ","))
-	return
 }

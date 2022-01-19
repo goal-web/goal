@@ -71,6 +71,26 @@ func TestInsertSql(t *testing.T) {
 	_, err := sqlparser.Parse(sql)
 	assert.Nil(t, err, err)
 }
+func TestInsertIgnoreSql(t *testing.T) {
+	sql, bindings := builder.NewQuery("users").InsertIgnoreSql([]map[string]interface{}{
+		{"name": "qbhy", "age": 18, "money": 100000000000},
+		{"name": "goal", "age": 18, "money": 10},
+	})
+	fmt.Println(sql)
+	fmt.Println(bindings)
+	_, err := sqlparser.Parse(sql)
+	assert.Nil(t, err, err)
+}
+func TestInsertReplaceSql(t *testing.T) {
+	sql, bindings := builder.NewQuery("users").InsertReplaceSql([]map[string]interface{}{
+		{"name": "qbhy", "age": 18, "money": 100000000000},
+		{"name": "goal", "age": 18, "money": 10},
+	})
+	fmt.Println(sql)
+	fmt.Println(bindings)
+	_, err := sqlparser.Parse(sql)
+	assert.Nil(t, err, err)
+}
 
 func TestCreateSql(t *testing.T) {
 	sql, bindings := builder.NewQuery("users").CreateSql(map[string]interface{}{
