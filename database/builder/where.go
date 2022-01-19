@@ -90,64 +90,6 @@ func (this *Wheres) String() (result string) {
 	return
 }
 
-func (this *Builder) OrWhereIn(field string, args interface{}) *Builder {
-	return this.OrWhere(field, "in", args)
-}
-
-func (this *Builder) WhereBetween(field string, args interface{}, whereType ...whereJoinType) *Builder {
-	if len(whereType) > 0 {
-		return this.Where(field, "between", args, whereType[0])
-	}
-
-	return this.Where(field, "between", args)
-}
-
-func (this *Builder) OrWhereBetween(field string, args interface{}) *Builder {
-	return this.OrWhere(field, "between", args)
-}
-
-func (this *Builder) WhereNotBetween(field string, args interface{}, whereType ...whereJoinType) *Builder {
-	if len(whereType) > 0 {
-		return this.Where(field, "not between", args, whereType[0])
-	}
-
-	return this.Where(field, "not between", args)
-}
-
-func (this *Builder) OrWhereNotBetween(field string, args interface{}) *Builder {
-	return this.OrWhere(field, "not between", args)
-}
-
-func (this *Builder) WhereNotIn(field string, args interface{}) *Builder {
-	return this.Where(field, "not in", args)
-}
-
-func (this *Builder) OrWhereNotIn(field string, args interface{}) *Builder {
-	return this.OrWhere(field, "not in", args)
-}
-
-func (this *Builder) WhereIsNull(field string, whereType ...string) *Builder {
-	if len(whereType) == 0 {
-		return this.Where(field, "is", "null", And)
-	}
-	return this.Where(field, "is", "null", whereType[0])
-}
-
-func (this *Builder) OrWhereIsNull(field string) *Builder {
-	return this.OrWhere(field, "is", "null")
-}
-
-func (this *Builder) OrWhereNotNull(field string) *Builder {
-	return this.OrWhere(field, "is not", "null")
-}
-
-func (this *Builder) WhereNotNull(field string, whereType ...string) *Builder {
-	if len(whereType) == 0 {
-		return this.Where(field, "is not", "null", And)
-	}
-	return this.Where(field, "is not", "null", whereType[0])
-}
-
 func (this *Builder) WhereFunc(callback whereFunc, whereType ...whereJoinType) *Builder {
 	subBuilder := &Builder{
 		wheres: &Wheres{
@@ -222,9 +164,6 @@ func (this *Builder) OrWhere(field string, args ...interface{}) *Builder {
 		arg:       raw,
 	})
 	return this.addBinding(whereBinding, bindings...)
-}
-func (this *Builder) WhereIn(field string, args interface{}) *Builder {
-	return this.Where(field, "in", args)
 }
 
 func JoinStringerArray(arr []fmt.Stringer, sep string) (result string) {
