@@ -5,11 +5,11 @@ import "fmt"
 type joinType string
 
 const (
-	LeftJoin    joinType = "LEFT"
-	RightJoin   joinType = "RIGHT"
-	InnerJoin   joinType = "INNER"
-	FullOutJoin joinType = "FULL OUTER"
-	FullJoin    joinType = "FULL"
+	LeftJoin    joinType = "left"
+	RightJoin   joinType = "right"
+	InnerJoin   joinType = "inner"
+	FullOutJoin joinType = "full outer"
+	FullJoin    joinType = "full"
 )
 
 type Join struct {
@@ -19,11 +19,11 @@ type Join struct {
 }
 
 func (this Join) String() (result string) {
-	result = fmt.Sprintf("%s JOIN %s", this.join, this.table)
+	result = fmt.Sprintf("%s join %s", this.join, this.table)
 	if this.conditions.IsEmpty() {
 		return
 	}
-	result = fmt.Sprintf("%s ON (%s)", result, this.conditions.String())
+	result = fmt.Sprintf("%s on (%s)", result, this.conditions.String())
 	return
 }
 

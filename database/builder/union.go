@@ -5,8 +5,8 @@ import "fmt"
 type unionJoinType string
 
 const (
-	Union    unionJoinType = "UNION"
-	UnionAll unionJoinType = "UNION ALL"
+	Union    unionJoinType = "union"
+	UnionAll unionJoinType = "union all"
 )
 
 type Unions map[unionJoinType][]*Builder

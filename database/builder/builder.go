@@ -166,32 +166,32 @@ func (this *Builder) When(condition bool, callback Callback, elseCallback ...Cal
 
 func (this *Builder) getSelect() string {
 	if this.distinct {
-		return "DISTINCT " + strings.Join(this.fields, ",")
+		return "distinct " + strings.Join(this.fields, ",")
 	}
 	return strings.Join(this.fields, ",")
 }
 
 func (this *Builder) ToSql() string {
-	sql := fmt.Sprintf("SELECT %s FROM %s", this.getSelect(), this.table)
+	sql := fmt.Sprintf("select %s from %s", this.getSelect(), this.table)
 
 	if !this.joins.IsEmpty() {
 		sql = fmt.Sprintf("%s %s", sql, this.joins.String())
 	}
 
 	if !this.wheres.IsEmpty() {
-		sql = fmt.Sprintf("%s WHERE %s", sql, this.wheres.String())
+		sql = fmt.Sprintf("%s where %s", sql, this.wheres.String())
 	}
 
 	if !this.groupBy.IsEmpty() {
-		sql = fmt.Sprintf("%s GROUP BY %s", sql, this.groupBy.String())
+		sql = fmt.Sprintf("%s group by %s", sql, this.groupBy.String())
 
 		if !this.having.IsEmpty() {
-			sql = fmt.Sprintf("%s HAVING %s", sql, this.having.String())
+			sql = fmt.Sprintf("%s having %s", sql, this.having.String())
 		}
 	}
 
 	if !this.orderBy.IsEmpty() {
-		sql = fmt.Sprintf("%s ORDER BY %s", sql, this.orderBy.String())
+		sql = fmt.Sprintf("%s order by %s", sql, this.orderBy.String())
 	}
 
 	if !this.unions.IsEmpty() {
