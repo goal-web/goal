@@ -8,8 +8,8 @@ import (
 type orderType string
 
 const (
-	DESC orderType = "DESC"
-	ASC  orderType = "ASC"
+	Desc orderType = "desc"
+	Asc  orderType = "asc"
 )
 
 type OrderBy struct {
@@ -46,7 +46,7 @@ func (this *Builder) OrderBy(field string, columnOrderType ...orderType) *Builde
 	} else {
 		this.orderBy = append(this.orderBy, OrderBy{
 			field:          field,
-			fieldOrderType: ASC,
+			fieldOrderType: Asc,
 		})
 	}
 
@@ -56,7 +56,7 @@ func (this *Builder) OrderBy(field string, columnOrderType ...orderType) *Builde
 func (this *Builder) OrderByDesc(field string) *Builder {
 	this.orderBy = append(this.orderBy, OrderBy{
 		field:          field,
-		fieldOrderType: DESC,
+		fieldOrderType: Desc,
 	})
 	return this
 }
