@@ -61,6 +61,15 @@ func TestDistinctQueryBuilder(t *testing.T) {
 	assert.Nil(t, err, err)
 }
 
+func TestUpdateSql(t *testing.T) {
+	sql, bindings := builder.NewQuery("users").Where("id", ">", 1).UpdateSql(map[string]interface{}{
+		"name": "qbhy", "age": 18, "money": 100000000000,
+	})
+	fmt.Println(sql)
+	fmt.Println(bindings)
+	_, err := sqlparser.Parse(sql)
+	assert.Nil(t, err, err)
+}
 func TestInsertSql(t *testing.T) {
 	sql, bindings := builder.NewQuery("users").InsertSql([]map[string]interface{}{
 		{"name": "qbhy", "age": 18, "money": 100000000000},
