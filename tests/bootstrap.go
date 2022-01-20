@@ -2,11 +2,12 @@ package tests
 
 import (
 	"fmt"
+	"github.com/goal-web/contracts"
+	"github.com/goal-web/supports/logs"
 	"github.com/qbhy/goal/application"
 	"github.com/qbhy/goal/auth"
 	"github.com/qbhy/goal/cache"
 	"github.com/qbhy/goal/config"
-	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/database"
 	"github.com/qbhy/goal/encryption"
 	"github.com/qbhy/goal/events"
@@ -14,7 +15,6 @@ import (
 	config2 "github.com/qbhy/goal/examples/helloworld/config"
 	"github.com/qbhy/goal/filesystem"
 	"github.com/qbhy/goal/hashing"
-	"github.com/qbhy/goal/logs"
 	"github.com/qbhy/goal/redis"
 	"github.com/qbhy/goal/session"
 	"github.com/qbhy/goal/signal"

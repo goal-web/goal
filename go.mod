@@ -7,7 +7,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/goal-web/contracts v0.0.0-20220120002635-287c7ed72d25
+	github.com/goal-web/contracts v0.0.0-20220120093117-be8f72613bff
 	github.com/golang-module/carbon/v2 v2.0.1
 	github.com/gorhill/cronexpr v0.0.0-20180427100037-88b0669f7d75
 	github.com/jmoiron/sqlx v1.3.4
@@ -35,7 +35,13 @@ require (
 require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/goal-web/cache v0.0.0-20220120131444-19db721c20bf // indirect
+	github.com/goal-web/container v0.0.0-20220120135030-9af8668c867f // indirect
+	github.com/goal-web/encryption v0.0.0-20220120143436-7d5c8b4fd5ad // indirect
+	github.com/goal-web/events v0.0.0-20220120141646-81402d06ff43 // indirect
+	github.com/goal-web/filesystem v0.0.0-20220120135714-dc3dd88b880a // indirect
 	github.com/goal-web/querybuilder v0.0.0-20220120024354-7749c8205c88 // indirect
-	github.com/goal-web/supports v0.0.0-20220120022343-2b715d6e81fc // indirect
+	github.com/goal-web/redis v0.0.0-20220120142441-d9fea47c5755 // indirect
+	github.com/goal-web/supports v0.0.0-20220120132758-562ab8d40f95 // indirect
 	github.com/smartystreets/goconvey v1.7.2 // indirect
 )

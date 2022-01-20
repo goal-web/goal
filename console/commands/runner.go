@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/logs"
+	"github.com/goal-web/supports/logs"
 	"io/ioutil"
 	"os"
 )

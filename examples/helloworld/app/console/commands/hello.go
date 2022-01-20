@@ -1,9 +1,9 @@
 package commands
 
 import (
-	"github.com/qbhy/goal/console/commands"
 	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/logs"
+	"github.com/goal-web/supports/logs"
+	"github.com/qbhy/goal/console/commands"
 )
 
 func NewHello(app contracts.Application) contracts.Command {

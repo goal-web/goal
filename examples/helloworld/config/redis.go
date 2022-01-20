@@ -2,8 +2,8 @@ package config
 
 import (
 	"github.com/goal-web/contracts"
+	"github.com/goal-web/redis"
 	"github.com/goal-web/supports/utils"
-	"github.com/qbhy/goal/redis"
 )
 
 func init() {

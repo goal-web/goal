@@ -1,10 +1,10 @@
 package scheduling
 
 import (
+	"github.com/goal-web/contracts"
+	"github.com/goal-web/supports/logs"
 	"github.com/qbhy/goal/application"
 	"github.com/qbhy/goal/console/inputs"
-	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/logs"
 )
 
 type Schedule struct {
