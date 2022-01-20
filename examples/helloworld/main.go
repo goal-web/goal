@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/application"
 	"github.com/qbhy/goal/auth"
 	"github.com/qbhy/goal/cache"
 	"github.com/qbhy/goal/config"
 	"github.com/qbhy/goal/console"
-	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/database"
 	"github.com/qbhy/goal/encryption"
 	"github.com/qbhy/goal/events"

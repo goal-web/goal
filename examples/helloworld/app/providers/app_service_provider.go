@@ -1,9 +1,9 @@
 package providers
 
 import (
+	"github.com/goal-web/contracts"
 	"github.com/golang-module/carbon/v2"
 	"github.com/qbhy/goal/application"
-	"github.com/goal-web/contracts"
 )
 
 type AppServiceProvider struct {

@@ -6,7 +6,6 @@ import (
 	"github.com/goal-web/contracts"
 	"github.com/modood/table"
 	"github.com/qbhy/goal/console/scheduling"
-	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/exceptions"
 )
 
