@@ -2,8 +2,8 @@ package validation
 
 import (
 	"github.com/goal-web/contracts"
+	"github.com/goal-web/supports/utils"
 	"github.com/qbhy/goal/exceptions"
-	"github.com/qbhy/goal/supports/utils"
 )
 
 func Make(data interface{}, rules contracts.Rules) contracts.Validator {

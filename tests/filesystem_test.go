@@ -1,8 +1,8 @@
 package tests
 
 import (
+	"github.com/goal-web/supports/utils"
 	"github.com/qbhy/goal/filesystem"
-	"github.com/qbhy/goal/supports/utils"
 	"github.com/stretchr/testify/assert"
 	"io/fs"
 	"os"

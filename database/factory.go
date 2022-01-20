@@ -3,7 +3,7 @@ package database
 import (
 	"errors"
 	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/supports/utils"
+	"github.com/goal-web/supports/utils"
 )
 
 type Factory struct {

@@ -3,9 +3,9 @@ package config
 import (
 	"fmt"
 	"github.com/goal-web/contracts"
+	"github.com/goal-web/supports/utils"
 	"github.com/qbhy/goal/application"
 	"github.com/qbhy/goal/config"
-	"github.com/qbhy/goal/supports/utils"
 	"os"
 )
 

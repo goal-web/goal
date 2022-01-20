@@ -2,7 +2,7 @@ package tests
 
 import (
 	"fmt"
-	"github.com/qbhy/goal/database/builder"
+	builder "github.com/goal-web/querybuilder"
 	"github.com/stretchr/testify/assert"
 	"github.com/xwb1989/sqlparser"
 	"testing"
@@ -12,7 +12,7 @@ func TestSimpleQueryBuilder(t *testing.T) {
 	query := builder.NewQuery("users")
 	query.Where("name", "qbhy").
 		Where("age", ">", 18).
-		Where("gender", "!=", 0, "or").
+		Where("gender", "!=", 0, builder.Or).
 		OrWhere("amount", ">=", 100).
 		WhereIsNull("avatar")
 	fmt.Println(query.ToSql())

@@ -2,7 +2,7 @@ package tests
 
 import (
 	"fmt"
-	"github.com/qbhy/goal/supports/utils"
+	"github.com/goal-web/supports/utils"
 	"os"
 	"path/filepath"
 	"testing"

@@ -35,5 +35,7 @@ require (
 require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/goal-web/querybuilder v0.0.0-20220120024354-7749c8205c88 // indirect
+	github.com/goal-web/supports v0.0.0-20220120022343-2b715d6e81fc // indirect
 	github.com/smartystreets/goconvey v1.7.2 // indirect
 )

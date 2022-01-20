@@ -2,8 +2,8 @@ package arguments
 
 import (
 	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/supports"
-	"github.com/qbhy/goal/supports/utils"
+	"github.com/goal-web/supports"
+	"github.com/goal-web/supports/utils"
 	"strings"
 )
 

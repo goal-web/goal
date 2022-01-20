@@ -3,10 +3,10 @@ package drivers
 import (
 	"fmt"
 	"github.com/goal-web/contracts"
+	"github.com/goal-web/supports/utils"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"github.com/qbhy/goal/logs"
-	"github.com/qbhy/goal/supports/utils"
 )
 
 type PostgreSql struct {

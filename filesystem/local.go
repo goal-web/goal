@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/supports/utils"
+	"github.com/goal-web/supports/utils"
 	"io/fs"
 	"io/ioutil"
 	"os"

@@ -2,7 +2,7 @@ package tests
 
 import (
 	"fmt"
-	"github.com/qbhy/goal/supports"
+	"github.com/goal-web/supports"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

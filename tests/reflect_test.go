@@ -2,8 +2,8 @@ package tests
 
 import (
 	"fmt"
+	"github.com/goal-web/supports/utils"
 	"github.com/labstack/echo/v4"
-	"github.com/qbhy/goal/supports/utils"
 	"reflect"
 	"testing"
 )
