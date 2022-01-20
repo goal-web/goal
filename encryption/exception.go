@@ -1,7 +1,7 @@
 package encryption
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 type EncryptException struct {

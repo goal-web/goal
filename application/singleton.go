@@ -2,7 +2,7 @@ package application
 
 import (
 	"github.com/qbhy/goal/container"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 var (

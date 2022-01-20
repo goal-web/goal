@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"io/ioutil"
 	"strings"
 )

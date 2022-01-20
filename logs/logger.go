@@ -2,7 +2,7 @@ package logs
 
 import (
 	"github.com/apex/log"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 func WithFields(fields contracts.Fields) contracts.Logger {

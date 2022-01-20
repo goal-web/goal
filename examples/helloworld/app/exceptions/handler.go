@@ -1,10 +1,10 @@
 package exceptions
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/http"
 	"github.com/qbhy/goal/logs"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 	"reflect"
 )
 
@@ -22,8 +22,7 @@ func (handler *ExceptionHandler) Handle(exception contracts.Exception) {
 		Error("ExceptionHandler")
 
 	if httpException, isHttpException := exception.(http.HttpException); isHttpException {
-		logs.WithException(httpException).WithFields(contracts.Fields{
-		})
+		logs.WithException(httpException).WithFields(contracts.Fields{})
 	}
 
 	if handler.ShouldReport(exception) {

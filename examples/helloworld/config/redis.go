@@ -1,16 +1,16 @@
 package config
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/redis"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 )
 
 func init() {
 	configs["redis"] = func(env contracts.Env) interface{} {
 		return redis.Config{
 			Default: utils.StringOr(env.GetString("redis.default"), "default"),
-			Stores: map[string]contracts.Fields{
+			Stores: map[string]ontracts.Fields{
 				"default": {
 					"network":  env.GetString("redis.network"),
 					"host":     env.GetString("redis.host"),

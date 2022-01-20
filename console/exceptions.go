@@ -1,6 +1,6 @@
 package console
 
-import "github.com/qbhy/goal/contracts"
+import "github.com/goal-web/contracts"
 
 type CommandArgumentException struct {
 	contracts.Exception

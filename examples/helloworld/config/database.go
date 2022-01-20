@@ -1,16 +1,16 @@
 package config
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/database"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 )
 
 func init() {
 	configs["database"] = func(env contracts.Env) interface{} {
 		return database.Config{
 			Default: utils.StringOr(env.GetString("db.connection"), "mysql"),
-			Connections: map[string]contracts.Fields{
+			Connections: map[string]ontracts.Fields{
 				"sqlite": {
 					"driver":   "sqlite",
 					"database": env.GetString("sqlite.database"),

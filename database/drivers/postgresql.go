@@ -2,11 +2,11 @@ package drivers
 
 import (
 	"fmt"
+	"github.com/goal-web/contracts"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"github.com/qbhy/goal/contracts"
 	"github.com/qbhy/goal/logs"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 )
 
 type PostgreSql struct {

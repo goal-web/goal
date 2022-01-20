@@ -1,6 +1,6 @@
 package filesystem
 
-import "github.com/qbhy/goal/contracts"
+import "github.com/goal-web/contracts"
 
 const (
 	VISIBLE contracts.FileVisibility = iota

@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/examples/helloworld/app/controllers"
 	"github.com/qbhy/goal/session"
 )

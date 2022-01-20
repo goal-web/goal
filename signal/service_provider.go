@@ -1,7 +1,7 @@
 package signal
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"os"
 	"os/signal"
 	"syscall"

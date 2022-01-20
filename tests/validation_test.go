@@ -3,7 +3,7 @@ package tests
 import (
 	"errors"
 	"fmt"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/validation"
 	"github.com/qbhy/goal/validation/checkers"
 	"github.com/stretchr/testify/assert"

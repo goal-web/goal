@@ -2,7 +2,7 @@ package exceptions
 
 import (
 	"fmt"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 func WithError(err error, fields contracts.Fields) contracts.Exception {

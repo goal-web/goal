@@ -3,9 +3,10 @@ package console
 import (
 	"errors"
 	"fmt"
+	"github.com/goal-web/contracts"
 	"github.com/modood/table"
 	"github.com/qbhy/goal/console/scheduling"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/exceptions"
 )
 

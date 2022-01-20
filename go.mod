@@ -7,6 +7,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/goal-web/contracts v0.0.0-20220120002635-287c7ed72d25
 	github.com/golang-module/carbon/v2 v2.0.1
 	github.com/gorhill/cronexpr v0.0.0-20180427100037-88b0669f7d75
 	github.com/jmoiron/sqlx v1.3.4

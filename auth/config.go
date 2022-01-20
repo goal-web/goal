@@ -1,6 +1,6 @@
 package auth
 
-import "github.com/qbhy/goal/contracts"
+import "github.com/goal-web/contracts"
 
 type Config struct {
 	Defaults struct {

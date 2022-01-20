@@ -3,7 +3,7 @@ package console
 import (
 	"github.com/qbhy/goal/console"
 	"github.com/qbhy/goal/console/commands"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	commands2 "github.com/qbhy/goal/examples/helloworld/app/console/commands"
 	"github.com/qbhy/goal/logs"
 	"time"

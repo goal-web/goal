@@ -1,6 +1,8 @@
 package auth
 
-import "github.com/qbhy/goal/contracts"
+import (
+	"github.com/goal-web/contracts"
+)
 
 type DatabaseUserProvider struct {
 	db    contracts.DBConnection

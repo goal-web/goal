@@ -1,9 +1,9 @@
 package supports
 
 import (
-	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/exceptions"
-	"github.com/qbhy/goal/utils"
+	"errors"
+	"github.com/goal-web/contracts"
+	"github.com/goal-web/supports/utils"
 	"reflect"
 	"strings"
 )
@@ -13,16 +13,26 @@ type Class struct {
 }
 
 type ClassException struct {
-	contracts.Exception
+	error
+	fields contracts.Fields
+}
+
+func (this ClassException) Error() string {
+	return this.error.Error()
+}
+
+func (this ClassException) Fields() contracts.Fields {
+	return this.fields
 }
 
 func GetClass(arg interface{}) Class {
 	class := Class{reflect.TypeOf(arg)}
 	if class.Kind() != reflect.Struct {
 		panic(ClassException{
-			Exception: exceptions.New("只支持 struct 类型!", map[string]interface{}{
+			errors.New("只支持 struct 类型!"),
+			map[string]interface{}{
 				"class": class.ClassName(),
-			}),
+			},
 		})
 	}
 	return class

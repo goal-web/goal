@@ -1,0 +1,6 @@
+github.com/goal-web/contracts v0.0.0-20220120002635-287c7ed72d25 h1:wPl7wzDg9msIpTgkeI9hyxJcEunuV7VqI6jcqjdPSAo=
+github.com/goal-web/contracts v0.0.0-20220120002635-287c7ed72d25/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
+github.com/goal-web/supports v0.0.0-20220120022343-2b715d6e81fc h1:VsT1h9claNluQ2y0K2Qf8Q7dZeX040mZVgBjbOjwno8=
+github.com/goal-web/supports v0.0.0-20220120022343-2b715d6e81fc/go.mod h1:F4to2eJ5J8Wasj+iC2Ks20YQChPuY5A6XyvKkvcxPYA=
+github.com/xwb1989/sqlparser v0.0.0-20180606152119-120387863bf2 h1:zzrxE1FKn5ryBNl9eKOeqQ58Y/Qpo3Q9QNxKHX5uzzQ=
+github.com/xwb1989/sqlparser v0.0.0-20180606152119-120387863bf2/go.mod h1:hzfGeIUDq/j97IG+FhNqkowIyEcD88LrW6fyU3K3WqY=

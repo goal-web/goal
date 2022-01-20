@@ -1,6 +1,6 @@
 package session
 
-import "github.com/qbhy/goal/contracts"
+import "github.com/goal-web/contracts"
 
 type ServiceProvider struct {
 	app contracts.Application

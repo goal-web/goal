@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/qbhy/goal/auth"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 func init() {

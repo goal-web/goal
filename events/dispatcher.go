@@ -1,7 +1,7 @@
 package events
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/exceptions"
 )
 

@@ -2,7 +2,7 @@ package drivers
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	exceptions2 "github.com/qbhy/goal/database/exceptions"
 	"github.com/qbhy/goal/database/tx"
 	"github.com/qbhy/goal/exceptions"

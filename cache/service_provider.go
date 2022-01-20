@@ -1,9 +1,9 @@
 package cache
 
 import (
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/cache/drivers"
-	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 )
 
 type ServiceProvider struct {

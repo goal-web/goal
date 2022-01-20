@@ -1,7 +1,7 @@
 package checkers
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 // custom 自定义验证

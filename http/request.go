@@ -1,9 +1,9 @@
 package http
 
 import (
+	"github.com/goal-web/contracts"
 	"github.com/labstack/echo/v4"
-	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 )
 
 type Request struct {

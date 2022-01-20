@@ -1,7 +1,7 @@
 package redis
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 type ServiceProvider struct {

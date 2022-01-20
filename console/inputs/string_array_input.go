@@ -1,8 +1,8 @@
 package inputs
 
 import (
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/console/arguments"
-	"github.com/qbhy/goal/contracts"
 	"strings"
 )
 

@@ -2,8 +2,8 @@ package validation
 
 import (
 	"errors"
-	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/utils"
+	"github.com/goal-web/contracts"
+	"github.com/qbhy/goal/supports/utils"
 	"strings"
 )
 
@@ -46,7 +46,7 @@ func (this *Validator) Errors() (results contracts.ValidatedErrors) {
 
 	defer func() { // 抛异常也就是失败了
 		if err := recover(); err != nil {
-			if exception ,isValidateException := err.(ValidatorException); isValidateException{
+			if exception, isValidateException := err.(ValidatorException); isValidateException {
 				results = exception.errors
 			}
 		}

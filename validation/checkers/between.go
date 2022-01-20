@@ -3,8 +3,8 @@ package checkers
 import (
 	"errors"
 	"fmt"
-	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/utils"
+	"github.com/goal-web/contracts"
+	"github.com/qbhy/goal/supports/utils"
 	"github.com/qbhy/goal/validation"
 )
 

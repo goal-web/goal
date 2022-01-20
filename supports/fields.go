@@ -1,17 +1,17 @@
 package supports
 
 import (
-	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/utils"
+	"github.com/goal-web/contracts"
+	"github.com/goal-web/supports/utils"
 	"strings"
 )
 
-type Getter func(key string) interface{}
+type InstanceGetter func(key string) interface{}
 
 type BaseFields struct { // 具体方法
 	contracts.FieldsProvider // 抽象方法，继承 interface
 
-	Getter Getter // 如果有设置 getter ，优先使用 getter
+	Getter InstanceGetter // 如果有设置 getter ，优先使用 getter
 }
 
 func (this *BaseFields) get(key string) interface{} {

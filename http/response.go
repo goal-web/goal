@@ -3,7 +3,7 @@ package http
 import (
 	"errors"
 	"github.com/labstack/echo/v4"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/logs"
 	"go/types"
 	"os"
@@ -76,7 +76,7 @@ func (res Response) Status() int {
 	return res.status
 }
 
-func (res Response) Response(ctx echo.Context) error {
+func (res Response) Response(ctx contracts.Context) error {
 	if res.Json != nil {
 		return ctx.JSON(res.Status(), res.Json)
 	}

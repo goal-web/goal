@@ -2,7 +2,7 @@ package commands
 
 import (
 	"github.com/modood/table"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 	"regexp"
 	"strings"
 )

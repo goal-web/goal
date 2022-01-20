@@ -2,9 +2,9 @@ package hashing
 
 import (
 	"fmt"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/logs"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 )
 
 type Factory struct {
@@ -44,7 +44,7 @@ func (this *Factory) Driver(name string) contracts.Hasher {
 		logs.WithFields(nil).Fatal(fmt.Sprintf("不支持的哈希驱动：%s", driver))
 	}
 
-	this.hashers[name] =  driveProvider(config)
+	this.hashers[name] = driveProvider(config)
 
 	return this.hashers[name]
 }

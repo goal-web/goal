@@ -1,7 +1,7 @@
 package encryption
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 type ServiceProvider struct {
@@ -14,7 +14,6 @@ func (this ServiceProvider) Stop() {
 func (this ServiceProvider) Start() error {
 	return nil
 }
-
 
 func (this ServiceProvider) Register(container contracts.Application) {
 	container.Singleton("encryption", func(config contracts.Config) contracts.EncryptorFactory {

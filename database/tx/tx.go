@@ -2,7 +2,7 @@ package tx
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 type Tx struct {

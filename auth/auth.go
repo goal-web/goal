@@ -2,16 +2,16 @@ package auth
 
 import (
 	"fmt"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/exceptions"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 )
 
 type Auth struct {
-	config        contracts.Config
+	config contracts.Config
 
-	guardDrivers  map[string]contracts.GuardProvider
-	guards        map[string]contracts.Guard
+	guardDrivers map[string]contracts.GuardProvider
+	guards       map[string]contracts.Guard
 
 	userDrivers   map[string]contracts.UserProviderProvider
 	userProviders map[string]contracts.UserProvider

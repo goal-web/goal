@@ -1,8 +1,8 @@
 package hashing
 
 import (
-	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/utils"
+	"github.com/goal-web/contracts"
+	"github.com/qbhy/goal/supports/utils"
 )
 
 type Md5 struct {
@@ -24,4 +24,3 @@ func (this *Md5) Make(value string, _ contracts.Fields) string {
 func (this *Md5) Check(value, hashedValue string, _ contracts.Fields) bool {
 	return this.Make(value, nil) == hashedValue
 }
-

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/labstack/echo/v4"
 	"github.com/qbhy/goal/container"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 var (

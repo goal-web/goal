@@ -1,6 +1,6 @@
 package exceptions
 
-import "github.com/qbhy/goal/contracts"
+import "github.com/goal-web/contracts"
 
 type TransactionException struct {
 	contracts.Exception

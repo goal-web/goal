@@ -2,7 +2,7 @@ package tests
 
 import (
 	"github.com/qbhy/goal/filesystem"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 	"github.com/stretchr/testify/assert"
 	"io/fs"
 	"os"

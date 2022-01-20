@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 type ConfigProvider func(env contracts.Env) interface{}

@@ -1,6 +1,6 @@
 package http
 
-import "github.com/qbhy/goal/contracts"
+import "github.com/goal-web/contracts"
 
 type RequestBefore struct {
 	request contracts.HttpRequest

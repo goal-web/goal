@@ -3,7 +3,7 @@ package scheduling
 import (
 	"github.com/qbhy/goal/application"
 	"github.com/qbhy/goal/console/inputs"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/logs"
 )
 

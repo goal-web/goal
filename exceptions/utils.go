@@ -1,8 +1,8 @@
 package exceptions
 
 import (
+	"github.com/goal-web/contracts"
 	"github.com/pkg/errors"
-	"github.com/qbhy/goal/contracts"
 )
 
 // ResolveException 包装 recover 的返回值

@@ -23,6 +23,8 @@ github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LB
 github.com/go-sql-driver/mysql v1.6.0 h1:BCTh4TKNUYmOmMUcQ3IipzF5prigylS7XXjEkfCHuOE=
 github.com/go-sql-driver/mysql v1.6.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
 github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0/go.mod h1:fyg7847qk6SyHyPtNmDHnmrv/HOrqktSC+C9fM+CJOE=
+github.com/goal-web/contracts v0.0.0-20220120002635-287c7ed72d25 h1:wPl7wzDg9msIpTgkeI9hyxJcEunuV7VqI6jcqjdPSAo=
+github.com/goal-web/contracts v0.0.0-20220120002635-287c7ed72d25/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/golang-jwt/jwt v3.2.2+incompatible/go.mod h1:8pz2t5EyA70fFQQSrl6XZXzqecmYZeUEB8OUGHkxJ+I=
 github.com/golang-module/carbon/v2 v2.0.1 h1:lck7WgSNVvUIRbwE+MJG3qyrT+Vrcz1tp6TkZ91gFgE=
 github.com/golang-module/carbon/v2 v2.0.1/go.mod h1:NF5unWf838+pyRY0o+qZdIwBMkFf7w0hmLIguLiEpzU=

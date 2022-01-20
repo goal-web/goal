@@ -3,7 +3,7 @@ package redis
 import (
 	"context"
 	goredis "github.com/go-redis/redis/v8"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/exceptions"
 	"time"
 )

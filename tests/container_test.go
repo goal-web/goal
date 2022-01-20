@@ -2,9 +2,9 @@ package tests
 
 import (
 	"fmt"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/container"
-	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"

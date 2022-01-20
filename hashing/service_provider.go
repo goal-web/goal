@@ -1,8 +1,8 @@
 package hashing
 
 import (
-	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/utils"
+	"github.com/goal-web/contracts"
+	"github.com/qbhy/goal/supports/utils"
 )
 
 type ServiceProvider struct {
@@ -16,9 +16,8 @@ func (this ServiceProvider) Start() error {
 	return nil
 }
 
-
 func (this ServiceProvider) Register(container contracts.Application) {
-	container.Singleton( "hash", func(config contracts.Config) contracts.HasherFactory {
+	container.Singleton("hash", func(config contracts.Config) contracts.HasherFactory {
 		return &Factory{
 			config:  config,
 			hashers: make(map[string]contracts.Hasher),

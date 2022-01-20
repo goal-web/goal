@@ -2,7 +2,7 @@ package container
 
 import (
 	"errors"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"reflect"
 )
 

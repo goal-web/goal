@@ -1,11 +1,10 @@
 package builder
 
 import (
+	"errors"
 	"fmt"
-	"github.com/pkg/errors"
-	"github.com/qbhy/goal/contracts"
-	"github.com/qbhy/goal/exceptions"
-	"github.com/qbhy/goal/utils"
+	"github.com/goal-web/contracts"
+	"github.com/goal-web/supports/utils"
 	"strings"
 )
 
@@ -92,10 +91,10 @@ func (this *Builder) prepareArgs(condition string, args interface{}) (raw string
 			bindings = arg
 			return
 		default:
-			panic(exceptions.WithError(errors.New("不支持的参数类型"), contracts.Fields{
+			panic(ParamException{errors.New("不支持的参数类型"), contracts.Fields{
 				"arg":       arg,
 				"condition": condition,
-			}))
+			}})
 		}
 		bindings = utils.StringArray2InterfaceArray(strings.Split(stringArg, joinSymbol))
 		if isInGrammar {

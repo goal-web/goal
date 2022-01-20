@@ -3,7 +3,7 @@ package tests
 import (
 	"fmt"
 	"github.com/labstack/echo/v4"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 	"reflect"
 	"testing"
 )

@@ -2,7 +2,7 @@ package tests
 
 import (
 	"fmt"
-	"github.com/qbhy/goal/utils"
+	"github.com/qbhy/goal/supports/utils"
 	"os"
 	"path/filepath"
 	"testing"
@@ -15,7 +15,7 @@ func TestCurrentPath(t *testing.T) {
 	filesPath, _ := filepath.Glob(path + "/../*.env")
 
 	for _, file := range filesPath {
-		fields ,_ := utils.LoadEnv(file, "=")
+		fields, _ := utils.LoadEnv(file, "=")
 		fmt.Println(fields)
 	}
 }

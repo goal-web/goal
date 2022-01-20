@@ -2,7 +2,7 @@ package tests
 
 import (
 	"errors"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"github.com/qbhy/goal/events"
 	"github.com/qbhy/goal/exceptions"
 	"github.com/qbhy/goal/logs"

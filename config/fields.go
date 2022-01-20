@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 type FieldsProvider struct {
@@ -11,4 +11,3 @@ type FieldsProvider struct {
 func (provider FieldsProvider) Fields() contracts.Fields {
 	return provider.Data
 }
-

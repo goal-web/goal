@@ -3,7 +3,7 @@ package scheduling
 import (
 	"fmt"
 	"github.com/golang-module/carbon/v2"
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 	"strconv"
 	"strings"
 	"time"

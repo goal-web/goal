@@ -1,7 +1,7 @@
 package scheduling
 
 import (
-	"github.com/qbhy/goal/contracts"
+	"github.com/goal-web/contracts"
 )
 
 type Mutex struct {
