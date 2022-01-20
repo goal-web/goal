@@ -2,7 +2,7 @@ package tests
 
 import (
 	"fmt"
-	"github.com/qbhy/goal/encryption"
+	"github.com/goal-web/encryption"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

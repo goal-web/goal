@@ -3,8 +3,8 @@ package tests
 import (
 	"errors"
 	"github.com/goal-web/contracts"
+	"github.com/goal-web/events"
 	"github.com/goal-web/supports/logs"
-	"github.com/qbhy/goal/events"
 	"github.com/qbhy/goal/exceptions"
 	"github.com/stretchr/testify/assert"
 	"testing"

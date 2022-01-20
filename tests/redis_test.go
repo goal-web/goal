@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"github.com/qbhy/goal/container"
+	"github.com/goal-web/container"
 	"github.com/goal-web/contracts"
 	"github.com/stretchr/testify/assert"
 	"os"
