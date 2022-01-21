@@ -15,25 +15,29 @@ type table struct {
 	primaryKey string
 }
 
+func getTable(name string) *table {
+	builder := querybuilder.NewQuery(name)
+	instance := &table{
+		QueryBuilder: builder,
+		primaryKey:   "id",
+	}
+	builder.Bind(instance)
+	return instance
+}
+
 // Query 将使用默认 connection
 func Query(name string) *table {
-	return &table{
-		querybuilder.NewQuery(name),
-		application.Get("db").(contracts.DBConnection),
-		nil,
-		"id",
-	}
+	return getTable(name).SetConnection(application.Get("db").(contracts.DBConnection))
 }
 
 // WithConnection 使用指定链接
 func WithConnection(name string, connection interface{}) *table {
-	return (&table{querybuilder.NewQuery(name), nil, nil, "id"}).
-		SetConnection(connection)
+	return getTable(name).SetConnection(connection)
 }
 
 // WithTX 使用TX
-func WithTX(name string, tx contracts.DBTx) *table {
-	return &table{querybuilder.NewQuery(name), nil, tx, "id"}
+func WithTX(name string, tx contracts.DBTx) contracts.QueryBuilder {
+	return getTable(name).SetTX(tx)
 }
 
 // SetConnection 参数要么是 contracts.DBConnection 要么是 string
@@ -65,55 +69,15 @@ func (this *table) SetTX(tx interface{}) contracts.QueryBuilder {
 	this.tx = tx.(contracts.DBTx)
 	return this
 }
-
-func (this *table) Paginate(perPage int64, current ...int64) (interface{}, int64) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (this *table) Create(fields contracts.Fields) interface{} {
-	sql, bindings := this.CreateSql(fields)
+func (this *table) Delete() int64 {
+	sql, bindings := this.DeleteSql()
 	result, err := this.getExecutor().Exec(sql, bindings...)
 	if err != nil {
-		panic(CreateException{exceptions.WithError(err, fields)})
+		panic(DeleteException{exceptions.WithError(err, contracts.Fields{"sql": sql, "bindings": bindings})})
 	}
-	id, err := result.LastInsertId()
+	num, err := result.RowsAffected()
 	if err != nil {
-		panic(CreateException{exceptions.WithError(err, fields)})
+		panic(DeleteException{exceptions.WithError(err, contracts.Fields{"sql": sql, "bindings": bindings})})
 	}
-
-	if _, existsPrimaryKey := fields[this.primaryKey]; !existsPrimaryKey {
-		fields[this.primaryKey] = id
-	}
-	return fields
-}
-
-func (this *table) Insert(values ...contracts.Fields) interface{} {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (this *table) Delete() int64 {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (this *table) Update(fields contracts.Fields) int64 {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (this *table) Get() interface{} {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (this *table) Find(key interface{}) interface{} {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (this *table) First() interface{} {
-	//TODO implement me
-	panic("implement me")
+	return num
 }

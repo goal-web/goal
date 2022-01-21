@@ -6,10 +6,11 @@ import (
 	"github.com/goal-web/supports/utils"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/qbhy/goal/application"
 )
 
 type Sqlite struct {
-	base
+	*Base
 }
 
 func SqliteConnector(config contracts.Fields) contracts.DBConnection {
@@ -19,5 +20,5 @@ func SqliteConnector(config contracts.Fields) contracts.DBConnection {
 		logs.WithError(err).WithField("config", config).Fatal("sqlite 数据库初始化失败")
 	}
 
-	return &Sqlite{base{db}}
+	return &Sqlite{&Base{db, application.Get("events").(contracts.EventDispatcher)}}
 }

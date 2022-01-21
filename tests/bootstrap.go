@@ -14,6 +14,7 @@ import (
 	"github.com/qbhy/goal/config"
 	"github.com/qbhy/goal/database"
 	"github.com/qbhy/goal/examples/helloworld/app/exceptions"
+	"github.com/qbhy/goal/examples/helloworld/app/providers"
 	config2 "github.com/qbhy/goal/examples/helloworld/config"
 	"github.com/qbhy/goal/hashing"
 	"github.com/qbhy/goal/session"
@@ -49,6 +50,7 @@ func getApp(path string) contracts.Application {
 		&session.ServiceProvider{},
 		auth.ServiceProvider{},
 		&database.ServiceProvider{},
+		providers.AppServiceProvider{},
 		//&http.ServiceProvider{RouteCollectors: []interface{}{
 		//	// 路由收集器
 		//	routes.V1Routes,

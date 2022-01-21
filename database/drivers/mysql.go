@@ -7,10 +7,11 @@ import (
 	"github.com/goal-web/supports/logs"
 	"github.com/goal-web/supports/utils"
 	"github.com/jmoiron/sqlx"
+	"github.com/qbhy/goal/application"
 )
 
 type Mysql struct {
-	base
+	*Base
 }
 
 func MysqlConnector(config contracts.Fields) contracts.DBConnection {
@@ -32,5 +33,5 @@ func MysqlConnector(config contracts.Fields) contracts.DBConnection {
 	db.SetMaxOpenConns(utils.GetIntField(config, "max_connections"))
 	db.SetMaxIdleConns(utils.GetIntField(config, "max_idles"))
 
-	return &Mysql{base{db}}
+	return &Mysql{&Base{db, application.Get("events").(contracts.EventDispatcher)}}
 }

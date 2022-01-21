@@ -7,10 +7,11 @@ import (
 	"github.com/goal-web/supports/utils"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"github.com/qbhy/goal/application"
 )
 
 type PostgreSql struct {
-	base
+	*Base
 }
 
 func PostgreSqlConnector(config contracts.Fields) contracts.DBConnection {
@@ -28,5 +29,5 @@ func PostgreSqlConnector(config contracts.Fields) contracts.DBConnection {
 	db.SetMaxOpenConns(utils.GetIntField(config, "max_connections"))
 	db.SetMaxIdleConns(utils.GetIntField(config, "max_idles"))
 
-	return &PostgreSql{base{db}}
+	return &PostgreSql{&Base{db, application.Get("events").(contracts.EventDispatcher)}}
 }
