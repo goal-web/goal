@@ -12,6 +12,7 @@ func (this *ServiceProvider) Register(application contracts.Application) {
 	application.Singleton("db.factory", func(config contracts.Config) contracts.DBFactory {
 		return &Factory{
 			config:      config,
+			dbConfig:    config.Get("database").(Config),
 			connections: make(map[string]contracts.DBConnection),
 			drivers: map[string]contracts.DBConnector{
 				"mysql":    drivers.MysqlConnector,
@@ -21,7 +22,7 @@ func (this *ServiceProvider) Register(application contracts.Application) {
 		}
 	})
 	application.Singleton("db", func(config contracts.Config, factory contracts.DBFactory) contracts.DBConnection {
-		return factory.Connection(config.Get("database").(Config).Default)
+		return factory.Connection()
 	})
 }
 

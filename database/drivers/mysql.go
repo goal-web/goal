@@ -26,11 +26,11 @@ func MysqlConnector(config contracts.Fields) contracts.DBConnection {
 		)
 	}
 	db, err := sqlx.Connect("mysql", dsn)
-	db.SetMaxOpenConns(utils.GetIntField(config, "max_connections"))
-	db.SetMaxIdleConns(utils.GetIntField(config, "max_idles"))
-
 	if err != nil {
 		logs.WithError(err).WithField("config", config).Fatal("mysql 数据库初始化失败")
 	}
+	db.SetMaxOpenConns(utils.GetIntField(config, "max_connections"))
+	db.SetMaxIdleConns(utils.GetIntField(config, "max_idles"))
+
 	return &Mysql{base{db}}
 }

@@ -10,16 +10,21 @@ type Factory struct {
 	config      contracts.Config
 	connections map[string]contracts.DBConnection
 	drivers     map[string]contracts.DBConnector
+	dbConfig    Config
 }
 
-func (this *Factory) Connection(name string) contracts.DBConnection {
-	if connection, existsConnection := this.connections[name]; existsConnection {
+func (this *Factory) Connection(name ...string) contracts.DBConnection {
+	connection := this.dbConfig.Default
+	if len(name) > 0 {
+		connection = name[0]
+	}
+	if connection, existsConnection := this.connections[connection]; existsConnection {
 		return connection
 	}
 
-	this.connections[name] = this.make(name)
+	this.connections[connection] = this.make(connection)
 
-	return this.connections[name]
+	return this.connections[connection]
 }
 
 func (this *Factory) Extend(name string, driver contracts.DBConnector) {

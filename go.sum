@@ -31,6 +31,8 @@ github.com/goal-web/contracts v0.0.0-20220120002635-287c7ed72d25 h1:wPl7wzDg9msI
 github.com/goal-web/contracts v0.0.0-20220120002635-287c7ed72d25/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/goal-web/contracts v0.0.0-20220120093117-be8f72613bff h1:icWPUCgywE8+1zYemJ3t5mVHQBDVVprhVdhaULkrx9E=
 github.com/goal-web/contracts v0.0.0-20220120093117-be8f72613bff/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
+github.com/goal-web/contracts v0.0.0-20220121055606-01749c3a724f h1:WV6M+UpoRXXOhNhxOXcZwHdSmhMnFUQd6W2wChxiG/8=
+github.com/goal-web/contracts v0.0.0-20220121055606-01749c3a724f/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/goal-web/encryption v0.0.0-20220120143436-7d5c8b4fd5ad h1:4Q6DxYfyxmwXWYD0dnjD8IpiAyP1Z8S7yI546Lz2fNY=
 github.com/goal-web/encryption v0.0.0-20220120143436-7d5c8b4fd5ad/go.mod h1:DxbqcDiUqsAkMctcqDyfrRxt79neAkwWbIaddF3LBRM=
 github.com/goal-web/events v0.0.0-20220120141646-81402d06ff43 h1:h4UpsFAVEAeHeI+NWyRp+2oL995uzaRYcil/IXEr3EQ=
@@ -39,6 +41,8 @@ github.com/goal-web/filesystem v0.0.0-20220120135714-dc3dd88b880a h1:V0gIkcTyd8c
 github.com/goal-web/filesystem v0.0.0-20220120135714-dc3dd88b880a/go.mod h1:c2cHJGsFsSSTqqCOEOw8mY5h87dL+rZOM+D6+du0zbc=
 github.com/goal-web/querybuilder v0.0.0-20220120024354-7749c8205c88 h1:R7xFPX/e5Jvj1XqLz7nZTq9fYy0lHdxl6KttCLcXzkI=
 github.com/goal-web/querybuilder v0.0.0-20220120024354-7749c8205c88/go.mod h1:39lGoSUJ+PVo8DHzY8akgvemXdC0MG31tbNoZkDlGMQ=
+github.com/goal-web/querybuilder v0.0.0-20220120103538-5c2fbbda44cb h1:/F4PECyAhZnyzTD5+YG9bV7J+pTJjAD/2ZuWEPven48=
+github.com/goal-web/querybuilder v0.0.0-20220120103538-5c2fbbda44cb/go.mod h1:1bJQtLIa2u0tbTC9YOqgyjT3ssTEoBRAZusCz/7hvu8=
 github.com/goal-web/redis v0.0.0-20220120142441-d9fea47c5755 h1:qHx6ZrVdJhe03QTMkjrZ/2oIHYvB+oY28oPKdiOv7No=
 github.com/goal-web/redis v0.0.0-20220120142441-d9fea47c5755/go.mod h1:Rsd+e+++LC+A/cI6j73+urWSMuwnRByiRnfnDTMzr0o=
 github.com/goal-web/supports v0.0.0-20220120022343-2b715d6e81fc h1:VsT1h9claNluQ2y0K2Qf8Q7dZeX040mZVgBjbOjwno8=

@@ -22,11 +22,11 @@ func PostgreSqlConnector(config contracts.Fields) contracts.DBConnection {
 		utils.GetStringField(config, "database"),
 		utils.GetStringField(config, "sslmode"),
 	))
-	db.SetMaxOpenConns(utils.GetIntField(config, "max_connections"))
-	db.SetMaxIdleConns(utils.GetIntField(config, "max_idles"))
-
 	if err != nil {
 		logs.WithError(err).WithField("config", config).Fatal("postgreSql 数据库初始化失败")
 	}
+	db.SetMaxOpenConns(utils.GetIntField(config, "max_connections"))
+	db.SetMaxIdleConns(utils.GetIntField(config, "max_idles"))
+
 	return &PostgreSql{base{db}}
 }

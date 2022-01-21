@@ -25,3 +25,7 @@ func Singleton() contracts.Application {
 func SetSingleton(app contracts.Application) {
 	instance = app
 }
+
+func Get(key string, args ...interface{}) interface{} {
+	return Singleton().Get(key, args...)
+}
