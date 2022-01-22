@@ -52,11 +52,6 @@ func TestTableQuery(t *testing.T) {
 	assert.True(t, getQuery().Count() == 1)
 
 	// 修改数据
-	assert.True(t, getQuery().Where("name", "qbhy").Update(contracts.Fields{
-		"name": "goal",
-	}) == 1)
-
-	// 修改数据
 	num := getQuery().Where("name", "qbhy").Update(contracts.Fields{
 		"name": "goal",
 	})
@@ -66,4 +61,6 @@ func TestTableQuery(t *testing.T) {
 
 	assert.True(t, user["id"] == userId)
 	assert.True(t, getQuery().Find(userId).(contracts.Fields)["id"] == userId)
+	assert.True(t, getQuery().Where("id", userId).Delete() == 1)
+	assert.Nil(t, getQuery().Find(userId))
 }
