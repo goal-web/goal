@@ -44,6 +44,8 @@ github.com/goal-web/events v0.1.5 h1:vtoXRd0oYBZMdC/Z58TTFKtJXe8QWcgBgUgZOdm9N7A
 github.com/goal-web/events v0.1.5/go.mod h1:iS8y/sKknId/0+PoI6OBOL5M9pSLi65lsUgW4OTAqy0=
 github.com/goal-web/filesystem v0.0.0-20220120135714-dc3dd88b880a h1:V0gIkcTyd8c6ficlY/SUl7D6lQ33CPW2TcIS0YWbS/8=
 github.com/goal-web/filesystem v0.0.0-20220120135714-dc3dd88b880a/go.mod h1:c2cHJGsFsSSTqqCOEOw8mY5h87dL+rZOM+D6+du0zbc=
+github.com/goal-web/hashing v0.1.0 h1:HF3Anivhii4kF7xUY1u5tirOefxq5f+0/uZWUHeO6f0=
+github.com/goal-web/hashing v0.1.0/go.mod h1:Jw+8TqulgshfQmAUQyVUl67S9o501bkGuh8bz2Nz4Nc=
 github.com/goal-web/querybuilder v0.1.7 h1:ZSjxvqPQkCdsAA5aSXJU0MdGZNfKvIYWjxS9QkaSCnE=
 github.com/goal-web/querybuilder v0.1.7/go.mod h1:rFj84jKudYMik7//erLQWylcOTGokFjV8+YMORqSLpY=
 github.com/goal-web/redis v0.0.0-20220120142441-d9fea47c5755 h1:qHx6ZrVdJhe03QTMkjrZ/2oIHYvB+oY28oPKdiOv7No=
@@ -167,6 +169,8 @@ golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9/go.mod h1:LzIPMQfyMNhhGPh
 golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2/go.mod h1:T9bdIzuCu7OtxOm1hfPfRQxPLYneinmdGuTeoZ9dtd4=
 golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 h1:7I4JAnoQBe7ZtJcBaYHi5UtiO8tQHbUSXxL+pnGRANg=
 golang.org/x/crypto v0.0.0-20210921155107-089bfa567519/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=
+golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce h1:Roh6XWxHFKrPgC/EQhVubSAGQ6Ozk6IdxHSzt1mR0EI=
+golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
 golang.org/x/mod v0.3.0/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/net v0.0.0-20180906233101-161cd47e91fd/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20190311183353-d8887717615a/go.mod h1:t9HGtf8HONx5eT2rtn7q6eTqICYqUVnKs3thJo3Qplg=
@@ -178,6 +182,8 @@ golang.org/x/net v0.0.0-20210226172049-e18ecbb05110/go.mod h1:m0MpNAwzfU5UDzcl9v
 golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4/go.mod h1:p54w0d4576C0XHj96bSt6lcn1PtDYWL6XObtHCRCNQM=
 golang.org/x/net v0.0.0-20210428140749-89ef3d95e781 h1:DzZ89McO9/gWPsQXS/FVKAlG02ZjaQ6AlZRBimEYOd0=
 golang.org/x/net v0.0.0-20210428140749-89ef3d95e781/go.mod h1:OJAsFXCWl8Ukc7SiCT/9KSuxbyM7479/AVlXFRxuMCk=
+golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 h1:CIJ76btIcR3eFI5EgSo6k1qKw9KJexJuRLI9G7Hp5wE=
+golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
