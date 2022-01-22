@@ -60,6 +60,7 @@ func TestTableQuery(t *testing.T) {
 	user = getQuery("users").Where("name", "goal").First().(contracts.Fields)
 
 	assert.True(t, user["id"] == userId)
+	assert.True(t, user["name"] == "goal")
 	assert.True(t, getQuery("users").Find(userId).(contracts.Fields)["id"] == userId)
 	assert.True(t, getQuery("users").Where("id", userId).Delete() == 1)
 	assert.Nil(t, getQuery("users").Find(userId))
