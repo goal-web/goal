@@ -13,11 +13,12 @@ func NewKernel(app contracts.Application) contracts.Console {
 	return &Kernel{console.NewKernel(app, []console.CommandProvider{
 		commands.Runner,
 		commands2.NewHello,
-	})}
+	}), app}
 }
 
 type Kernel struct {
 	*console.Kernel
+	app contracts.Application
 }
 
 func (this *Kernel) Schedule(schedule contracts.Schedule) {
@@ -36,7 +37,7 @@ func (this *Kernel) Schedule(schedule contracts.Schedule) {
 		logs.Default().Info("八点到九点，每秒更新一次")
 	}).EverySecond().Between("20:00", "22:00")
 
-	schedule.Command(commands2.NewHello(nil), "每秒钟").EverySecond().Between("20:00", "23:59")
+	schedule.Command(commands2.NewHello(this.app), "每秒钟").EverySecond().Between("20:00", "23:59")
 
 	schedule.Exec("hello", "隔五秒").EveryFiveSeconds().Between("20:00", "23:59")
 

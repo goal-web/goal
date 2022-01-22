@@ -2,8 +2,8 @@ package scheduling
 
 import (
 	"fmt"
-	"github.com/golang-module/carbon/v2"
 	"github.com/goal-web/contracts"
+	"github.com/golang-module/carbon/v2"
 	"strconv"
 	"strings"
 	"time"
@@ -185,7 +185,7 @@ func (this *Event) Weekly() contracts.ScheduleEvent {
 }
 
 func (this *Event) Sundays() contracts.ScheduleEvent {
-	return this.Days(fmt.Sprintf("%d", time.Saturday))
+	return this.Days(fmt.Sprintf("%d", time.Sunday))
 }
 
 func (this *Event) Saturdays() contracts.ScheduleEvent {
