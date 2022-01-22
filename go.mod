@@ -34,6 +34,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/goal-web/cache v0.0.0-20220120131444-19db721c20bf
+	github.com/goal-web/config v0.1.0
 	github.com/goal-web/container v0.1.3
 	github.com/goal-web/encryption v0.1.1
 	github.com/goal-web/events v0.1.5

@@ -2,18 +2,18 @@ package config
 
 import (
 	"fmt"
+	"github.com/goal-web/config"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/supports/utils"
 	"github.com/qbhy/goal/application"
-	"github.com/qbhy/goal/config"
 	"os"
 )
 
 var (
-	configs = make(map[string]config.ConfigProvider)
+	configs = make(map[string]config.Provider)
 )
 
-func Configs() map[string]config.ConfigProvider {
+func Configs() map[string]config.Provider {
 	return configs
 }
 
