@@ -8,13 +8,13 @@ import (
 	"testing"
 )
 
-func getQuery() contracts.QueryBuilder {
+func getQuery(name string) contracts.QueryBuilder {
 	getApp("/Users/qbhy/project/go/goal-web/goal/examples/helloworld")
-	return table.WithConnection("users", "sqlite")
+	return table.WithConnection(name, "sqlite")
 }
 
 func TestTableCreate(t *testing.T) {
-	user := getQuery().Create(contracts.Fields{
+	user := getQuery("users").Create(contracts.Fields{
 		"name": "qbhy",
 	}).(contracts.Fields)
 
@@ -24,7 +24,7 @@ func TestTableCreate(t *testing.T) {
 
 func TestTableSelect(t *testing.T) {
 
-	users := getQuery().Get().([]contracts.Fields)
+	users := getQuery("users").Get().([]contracts.Fields)
 
 	fmt.Println(users)
 
@@ -37,9 +37,9 @@ func TestTableSelect(t *testing.T) {
 
 func TestTableQuery(t *testing.T) {
 
-	getQuery().Delete()
+	getQuery("users").Delete()
 
-	user := getQuery().Create(contracts.Fields{
+	user := getQuery("users").Create(contracts.Fields{
 		"name": "qbhy",
 	}).(contracts.Fields)
 
@@ -49,18 +49,18 @@ func TestTableQuery(t *testing.T) {
 	assert.True(t, userId > 0)
 
 	// 获取数据总量
-	assert.True(t, getQuery().Count() == 1)
+	assert.True(t, getQuery("users").Count() == 1)
 
 	// 修改数据
-	num := getQuery().Where("name", "qbhy").Update(contracts.Fields{
+	num := getQuery("users").Where("name", "qbhy").Update(contracts.Fields{
 		"name": "goal",
 	})
 	assert.True(t, num == 1)
 	// 判断修改后的数据
-	user = getQuery().Where("name", "goal").First().(contracts.Fields)
+	user = getQuery("users").Where("name", "goal").First().(contracts.Fields)
 
 	assert.True(t, user["id"] == userId)
-	assert.True(t, getQuery().Find(userId).(contracts.Fields)["id"] == userId)
-	assert.True(t, getQuery().Where("id", userId).Delete() == 1)
-	assert.Nil(t, getQuery().Find(userId))
+	assert.True(t, getQuery("users").Find(userId).(contracts.Fields)["id"] == userId)
+	assert.True(t, getQuery("users").Where("id", userId).Delete() == 1)
+	assert.Nil(t, getQuery("users").Find(userId))
 }
