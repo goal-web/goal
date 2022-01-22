@@ -1,16 +1,16 @@
 package main
 
 import (
+	"github.com/goal-web/application"
 	"github.com/goal-web/cache"
 	"github.com/goal-web/config"
+	"github.com/goal-web/console"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/encryption"
 	"github.com/goal-web/events"
 	"github.com/goal-web/filesystem"
 	"github.com/goal-web/redis"
-	"github.com/qbhy/goal/application"
 	"github.com/qbhy/goal/auth"
-	"github.com/qbhy/goal/console"
 	"github.com/qbhy/goal/database"
 	console2 "github.com/qbhy/goal/examples/helloworld/app/console"
 	"github.com/qbhy/goal/examples/helloworld/app/exceptions"

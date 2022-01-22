@@ -2,19 +2,19 @@ package drivers
 
 import (
 	"fmt"
+	"github.com/goal-web/application"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/supports/logs"
 	"github.com/goal-web/supports/utils"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"github.com/qbhy/goal/application"
 )
 
-type PostgreSql struct {
+type PostgresSQL struct {
 	*Base
 }
 
-func PostgreSqlConnector(config contracts.Fields) contracts.DBConnection {
+func PostgresSqlConnector(config contracts.Fields) contracts.DBConnection {
 	db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		utils.GetStringField(config, "host"),
 		utils.GetStringField(config, "port"),
@@ -29,5 +29,5 @@ func PostgreSqlConnector(config contracts.Fields) contracts.DBConnection {
 	db.SetMaxOpenConns(utils.GetIntField(config, "max_connections"))
 	db.SetMaxIdleConns(utils.GetIntField(config, "max_idles"))
 
-	return &PostgreSql{&Base{db, application.Get("events").(contracts.EventDispatcher)}}
+	return &PostgresSQL{&Base{db, application.Get("events").(contracts.EventDispatcher)}}
 }

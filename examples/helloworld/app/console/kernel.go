@@ -1,10 +1,10 @@
 package console
 
 import (
+	"github.com/goal-web/console"
+	"github.com/goal-web/console/commands"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/supports/logs"
-	"github.com/qbhy/goal/console"
-	"github.com/qbhy/goal/console/commands"
 	commands2 "github.com/qbhy/goal/examples/helloworld/app/console/commands"
 	"time"
 )

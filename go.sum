@@ -23,10 +23,14 @@ github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LB
 github.com/go-sql-driver/mysql v1.6.0 h1:BCTh4TKNUYmOmMUcQ3IipzF5prigylS7XXjEkfCHuOE=
 github.com/go-sql-driver/mysql v1.6.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
 github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0/go.mod h1:fyg7847qk6SyHyPtNmDHnmrv/HOrqktSC+C9fM+CJOE=
+github.com/goal-web/application v0.1.0 h1:4zOgmL1DdW7RSF5u1dsEhItecENCl0Kwt5VuP//0OfI=
+github.com/goal-web/application v0.1.0/go.mod h1:pHFKbdFw0UsckCsgHKF6agBqdfxT/qNoY1OEWhI5HKM=
 github.com/goal-web/cache v0.0.0-20220120131444-19db721c20bf h1:2qFhf0O3VQgenBYa+V3hvGGYn/LPELqual2cC218OmU=
 github.com/goal-web/cache v0.0.0-20220120131444-19db721c20bf/go.mod h1:2xzAb1Mob13wEsq8TQdIxC1wdjCu4HT0k8mw1Q3MeEI=
 github.com/goal-web/config v0.1.0 h1:mZjlTYEUDOIngauKq6mbJBnJFOVYudH+mtt8VJq1GGY=
 github.com/goal-web/config v0.1.0/go.mod h1:d2/W9nOfLMLBq1ICpNXZe/4cKMWIQdYzz4wS9qmpxbk=
+github.com/goal-web/console v0.1.0 h1:5PZ3HjWq3p7FjnOxDfRBGcChJdaBrpDTs1QZ1X4iVcc=
+github.com/goal-web/console v0.1.0/go.mod h1:5lMH08MI1Wa2+8LW+U7GF/yoGgMg9fNyDCnpm2KFrjY=
 github.com/goal-web/container v0.1.3 h1:Xt1mbfDptgGnXEbQegjC078j5cPNXZMgKXmc9O0t/fE=
 github.com/goal-web/container v0.1.3/go.mod h1:IpfV+0J1xaKUTl7Pymc02h0wNQtCKWcQqI8ASFd/p/Y=
 github.com/goal-web/contracts v0.0.0-20220120002635-287c7ed72d25/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=

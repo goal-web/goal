@@ -2,10 +2,10 @@ package config
 
 import (
 	"fmt"
+	"github.com/goal-web/application"
 	"github.com/goal-web/config"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/supports/utils"
-	"github.com/qbhy/goal/application"
 	"os"
 )
 

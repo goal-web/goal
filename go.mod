@@ -48,4 +48,6 @@ require (
 require (
 	github.com/apex/log v1.9.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.4 // indirect
+	github.com/goal-web/application v0.1.0 // indirect
+	github.com/goal-web/console v0.1.0 // indirect
 )

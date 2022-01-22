@@ -1,10 +1,10 @@
 package table
 
 import (
+	"github.com/goal-web/application"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/querybuilder"
 	"github.com/goal-web/supports/exceptions"
-	"github.com/qbhy/goal/application"
 )
 
 type table struct {
