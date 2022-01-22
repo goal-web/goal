@@ -42,14 +42,14 @@ func (this *Factory) make(name string) contracts.DBConnection {
 
 		panic(DBConnectionException{
 			error:  errors.New("该数据库驱动不存在：" + driverName),
-			Code:   DB_DRIVER_DONT_EXIST,
+			Code:   DbDriverDontExist,
 			fields: connectionConfig,
 		})
 	}
 
 	panic(DBConnectionException{
 		error:      errors.New("数据库连接不存在：" + name),
-		Code:       DB_CONNECTION_DONT_EXIST,
+		Code:       DbConnectionDontExist,
 		Connection: name,
 	})
 }

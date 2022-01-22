@@ -3,8 +3,8 @@ package auth
 import (
 	"fmt"
 	"github.com/goal-web/contracts"
+	"github.com/goal-web/supports/exceptions"
 	"github.com/goal-web/supports/utils"
-	"github.com/qbhy/goal/exceptions"
 )
 
 type Auth struct {

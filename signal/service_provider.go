@@ -22,7 +22,7 @@ func (this *ServiceProvider) Start() (err error) {
 	signal.Notify(this.signalChannel, this.signals...)
 	for sign := range this.signalChannel {
 		this.app.Call(func(dispatcher contracts.EventDispatcher) {
-			dispatcher.Dispatch(&SignalReceived{sign})
+			dispatcher.Dispatch(&Received{sign})
 		})
 
 		switch sign {

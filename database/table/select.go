@@ -3,7 +3,7 @@ package table
 import (
 	"errors"
 	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/exceptions"
+	"github.com/goal-web/supports/exceptions"
 )
 
 func (this *table) Get() interface{} {

@@ -4,10 +4,10 @@ import (
 	"os"
 )
 
-type SignalReceived struct {
+type Received struct {
 	Signal os.Signal
 }
 
-func (this *SignalReceived) Event() string {
+func (this *Received) Event() string {
 	return "SIGNAL_RECEIVED"
 }

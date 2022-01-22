@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// 后期会拆成 session 和 session store ，支持用 redis 、memcache、database 等其他方式存储 session
+// Session 后期会拆成 session 和 session store ，支持用 redis 、memcached、database 等其他方式存储 session
 type Session struct {
 	id         string
 	name       string

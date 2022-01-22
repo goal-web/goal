@@ -7,8 +7,8 @@ import (
 type ConnectionErrorCode int
 
 const (
-	DB_DRIVER_DONT_EXIST ConnectionErrorCode = iota
-	DB_CONNECTION_DONT_EXIST
+	DbDriverDontExist ConnectionErrorCode = iota
+	DbConnectionDontExist
 )
 
 type DBConnectionException struct {

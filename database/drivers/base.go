@@ -2,12 +2,12 @@ package drivers
 
 import (
 	"github.com/goal-web/contracts"
+	"github.com/goal-web/supports/exceptions"
 	"github.com/jmoiron/sqlx"
 	"github.com/qbhy/goal/database/events"
 	exceptions2 "github.com/qbhy/goal/database/exceptions"
 	"github.com/qbhy/goal/database/table"
 	"github.com/qbhy/goal/database/tx"
-	"github.com/qbhy/goal/exceptions"
 )
 
 type Base struct {
@@ -66,7 +66,7 @@ func (this *Base) Transaction(fn func(tx contracts.SqlExecutor) error) (err erro
 			rollbackErr := sqlxTx.Rollback()
 			err = recoverErr.(error)
 			if rollbackErr != nil {
-				err = exceptions2.RollbackException{Exception: exceptions.WithPrevious(rollbackErr, nil, err)}
+				err = exceptions2.RollbackException{Exception: exceptions.WithPrevious(rollbackErr, nil, exceptions.WithError(err, nil))}
 			} else {
 				err = exceptions2.TransactionException{Exception: exceptions.WithError(err, nil)}
 			}
@@ -78,7 +78,7 @@ func (this *Base) Transaction(fn func(tx contracts.SqlExecutor) error) (err erro
 	if err != nil {
 		rollbackErr := sqlxTx.Rollback()
 		if rollbackErr != nil {
-			return exceptions2.RollbackException{Exception: exceptions.WithPrevious(rollbackErr, nil, err)}
+			return exceptions2.RollbackException{Exception: exceptions.WithPrevious(rollbackErr, nil, exceptions.WithError(err, nil))}
 		}
 		return exceptions2.TransactionException{Exception: exceptions.WithError(err, nil)}
 	}

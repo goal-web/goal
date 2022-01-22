@@ -1,6 +1,6 @@
 package auth
 
-import "github.com/qbhy/goal/exceptions"
+import "github.com/goal-web/supports/exceptions"
 
 type Exception struct {
 	exceptions.Exception
