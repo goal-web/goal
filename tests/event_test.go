@@ -8,15 +8,17 @@ import (
 	"github.com/qbhy/goal/exceptions"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 const Demo string = "demo"
 
 type DemoEvent struct {
+	IsSync bool
 }
 
 func (d DemoEvent) Sync() bool {
-	return true
+	return d.IsSync
 }
 
 func (d DemoEvent) Event() string {
@@ -42,6 +44,8 @@ func TestEvent(t *testing.T) {
 	dispatcher.Register(Demo, DemoPanicListener{})
 	dispatcher.Register(Demo, DemoListener{})
 	dispatcher.Dispatch(DemoEvent{})
+	dispatcher.Dispatch(DemoEvent{true})
 
+	time.Sleep(time.Second)
 	assert.Nil(t, recover())
 }

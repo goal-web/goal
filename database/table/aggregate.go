@@ -2,7 +2,7 @@ package table
 
 import (
 	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/exceptions"
+	"github.com/goal-web/supports/exceptions"
 )
 
 func (this *table) Count(columns ...string) int64 {
@@ -10,7 +10,7 @@ func (this *table) Count(columns ...string) int64 {
 	var num int64
 	err := this.getExecutor().Get(&num, sql, bindings...)
 	if err != nil {
-		panic(SelectException{exceptions.WithError(err, contracts.Fields{
+		exceptions.Throw(SelectException{exceptions.WithError(err, contracts.Fields{
 			"columns":  columns,
 			"sql":      sql,
 			"bindings": bindings,
@@ -24,7 +24,7 @@ func (this *table) Avg(column string, as ...string) int64 {
 	var num int64
 	err := this.getExecutor().Get(&num, sql, bindings...)
 	if err != nil {
-		panic(SelectException{exceptions.WithError(err, contracts.Fields{
+		exceptions.Throw(SelectException{exceptions.WithError(err, contracts.Fields{
 			"column":   column,
 			"sql":      sql,
 			"bindings": bindings,
@@ -38,7 +38,7 @@ func (this *table) Sum(column string, as ...string) int64 {
 	var num int64
 	err := this.getExecutor().Get(&num, sql, bindings...)
 	if err != nil {
-		panic(SelectException{exceptions.WithError(err, contracts.Fields{
+		exceptions.Throw(SelectException{exceptions.WithError(err, contracts.Fields{
 			"column":   column,
 			"sql":      sql,
 			"bindings": bindings,
@@ -52,7 +52,7 @@ func (this *table) Max(column string, as ...string) int64 {
 	var num int64
 	err := this.getExecutor().Get(&num, sql, bindings...)
 	if err != nil {
-		panic(SelectException{exceptions.WithError(err, contracts.Fields{
+		exceptions.Throw(SelectException{exceptions.WithError(err, contracts.Fields{
 			"column":   column,
 			"sql":      sql,
 			"bindings": bindings,
@@ -66,7 +66,7 @@ func (this *table) Min(column string, as ...string) int64 {
 	var num int64
 	err := this.getExecutor().Get(&num, sql, bindings...)
 	if err != nil {
-		panic(SelectException{exceptions.WithError(err, contracts.Fields{
+		exceptions.Throw(SelectException{exceptions.WithError(err, contracts.Fields{
 			"column":   column,
 			"sql":      sql,
 			"bindings": bindings,

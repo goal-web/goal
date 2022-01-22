@@ -18,7 +18,7 @@ require (
 	github.com/modood/table v0.0.0-20200225102042-88de94bb9876
 	github.com/pkg/errors v0.8.1
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/qbhy/parallel v1.2.0
+	github.com/qbhy/parallel v1.3.0
 	github.com/stretchr/testify v1.7.0
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
@@ -36,11 +36,11 @@ require (
 	github.com/goal-web/cache v0.0.0-20220120131444-19db721c20bf
 	github.com/goal-web/container v0.1.3
 	github.com/goal-web/encryption v0.1.1
-	github.com/goal-web/events v0.0.0-20220120141646-81402d06ff43
+	github.com/goal-web/events v0.1.5
 	github.com/goal-web/filesystem v0.0.0-20220120135714-dc3dd88b880a
 	github.com/goal-web/querybuilder v0.1.7
 	github.com/goal-web/redis v0.0.0-20220120142441-d9fea47c5755
-	github.com/goal-web/supports v0.1.1
+	github.com/goal-web/supports v0.1.2
 	github.com/smartystreets/goconvey v1.7.2 // indirect
 )
 
