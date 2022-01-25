@@ -58,6 +58,14 @@ github.com/goal-web/contracts v0.1.14 h1:y9tU3sSp8opD993wYBtR/4plZtLGeBzBRs4mXXS
 github.com/goal-web/contracts v0.1.14/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/goal-web/contracts v0.1.15 h1:Ejv+0806jbAg6Z1MJ5hcESeYQOHFN0YXWda2ErpVvH4=
 github.com/goal-web/contracts v0.1.15/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
+github.com/goal-web/contracts v0.1.16 h1:sDvlEpzLyTOn6YmFwo64iYR8Giwv4afWLXeeyAkH/fM=
+github.com/goal-web/contracts v0.1.16/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
+github.com/goal-web/database v0.0.0-20220125151500-22bed4953877 h1:R5ttKdwn/vQDNtj078e85EJcq9HFKVU/2lYEPlAVEAM=
+github.com/goal-web/database v0.0.0-20220125151500-22bed4953877/go.mod h1:4l+vIuWaCZJ8LB1sfjY2JrBkh4T/oDRMZfc1yiq4WGU=
+github.com/goal-web/database v0.1.0 h1:jezBM0NdmTPiWmFReM0xsxTl/DMmuvOoBWerACNe6ps=
+github.com/goal-web/database v0.1.0/go.mod h1:4l+vIuWaCZJ8LB1sfjY2JrBkh4T/oDRMZfc1yiq4WGU=
+github.com/goal-web/database v0.1.1 h1:2ZdLOdKKxJ+/mMWSj/K7SRduoxaNJO+1OedV2I6m7o8=
+github.com/goal-web/database v0.1.1/go.mod h1:4l+vIuWaCZJ8LB1sfjY2JrBkh4T/oDRMZfc1yiq4WGU=
 github.com/goal-web/encryption v0.1.1 h1:KzzERSwbyOEFFVdGaeekYlTq5MT3Jo+mHKP/AMrOCrU=
 github.com/goal-web/encryption v0.1.1/go.mod h1:gBm2Yqu4zumYlbPg4USNZSHkd/tw2xyz6rGxzOHQq7k=
 github.com/goal-web/events v0.1.5 h1:vtoXRd0oYBZMdC/Z58TTFKtJXe8QWcgBgUgZOdm9N7A=

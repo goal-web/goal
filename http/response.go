@@ -2,6 +2,7 @@ package http
 
 import (
 	"errors"
+	"fmt"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/supports/logs"
 	"github.com/labstack/echo/v4"
@@ -20,6 +21,10 @@ func HandleResponse(response interface{}, ctx echo.Context) {
 		panic(res)
 	case string:
 		logs.WithError(ctx.String(200, res)).Debug("response error")
+	case fmt.Stringer:
+		logs.WithError(ctx.String(200, res.String())).Debug("response error")
+	case contracts.Json:
+		logs.WithError(ctx.String(200, res.ToJson())).Debug("response error")
 	case contracts.HttpResponse:
 		logs.WithError(res.Response(ctx)).Debug("response error")
 	case types.Nil:

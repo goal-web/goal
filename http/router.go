@@ -44,12 +44,12 @@ func (this *router) errHandler(err error, ctx echo.Context) {
 	if ignoreError == err {
 		return
 	}
-	var httpException HttpException
+	var httpException Exception
 	switch rawErr := err.(type) {
-	case HttpException:
+	case Exception:
 		httpException = rawErr
 	default:
-		httpException = HttpException{
+		httpException = Exception{
 			Exception: exceptions.ResolveException(err),
 			Request:   request,
 		}

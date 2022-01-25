@@ -4,16 +4,16 @@ import (
 	"github.com/goal-web/contracts"
 )
 
-type HttpException struct {
+type Exception struct {
 	Exception contracts.Exception
 	Request   contracts.HttpRequest
 }
 
-func (this HttpException) Error() string {
+func (this Exception) Error() string {
 	return this.Exception.Error()
 }
 
-func (this HttpException) Fields() contracts.Fields {
+func (this Exception) Fields() contracts.Fields {
 	return contracts.Fields{
 		"method": this.Request.Request().Method,
 		"path":   this.Request.Path(),
