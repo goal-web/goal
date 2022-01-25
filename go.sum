@@ -31,6 +31,8 @@ github.com/goal-web/collection v0.1.2 h1:Q+hL7QynDxO79QbwZdLMLg9E+EOQlhG5UvkmU2a
 github.com/goal-web/collection v0.1.2/go.mod h1:YEhkDJisOlxORuWDaXbeGhZZHvg8UW1ZtVxXMC6aK5k=
 github.com/goal-web/collection v0.1.3 h1:qK7hSH8z7RJU6wzieDouQ2NStts45jbD3H6hl88S57w=
 github.com/goal-web/collection v0.1.3/go.mod h1:YEhkDJisOlxORuWDaXbeGhZZHvg8UW1ZtVxXMC6aK5k=
+github.com/goal-web/collection v0.1.4 h1:O4uSYVeoO/CS/ztLp4FsOIBEFXG6oHwbdPU08hnOtVw=
+github.com/goal-web/collection v0.1.4/go.mod h1:Syaj+9lKGoSAenQTJErMvAG/iBAZlr+Rn4rENR1S5J4=
 github.com/goal-web/config v0.1.0 h1:mZjlTYEUDOIngauKq6mbJBnJFOVYudH+mtt8VJq1GGY=
 github.com/goal-web/config v0.1.0/go.mod h1:d2/W9nOfLMLBq1ICpNXZe/4cKMWIQdYzz4wS9qmpxbk=
 github.com/goal-web/console v0.1.0 h1:5PZ3HjWq3p7FjnOxDfRBGcChJdaBrpDTs1QZ1X4iVcc=
@@ -50,6 +52,8 @@ github.com/goal-web/contracts v0.1.11 h1:otWTk+4Sybu1GzZmw8i7lNHD58WeyQjKoe9xLJI
 github.com/goal-web/contracts v0.1.11/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/goal-web/contracts v0.1.12 h1:dw5CjyOXJ0appUg/xSij02qDvXWIgVgN4VgGfPUrWyg=
 github.com/goal-web/contracts v0.1.12/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
+github.com/goal-web/contracts v0.1.13 h1:GC9uH1UI/wlYRC5jXptptAGjBirf43ocwZhqxXs5NkI=
+github.com/goal-web/contracts v0.1.13/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/goal-web/encryption v0.1.1 h1:KzzERSwbyOEFFVdGaeekYlTq5MT3Jo+mHKP/AMrOCrU=
 github.com/goal-web/encryption v0.1.1/go.mod h1:gBm2Yqu4zumYlbPg4USNZSHkd/tw2xyz6rGxzOHQq7k=
 github.com/goal-web/events v0.1.5 h1:vtoXRd0oYBZMdC/Z58TTFKtJXe8QWcgBgUgZOdm9N7A=
@@ -64,6 +68,8 @@ github.com/goal-web/querybuilder v0.1.8 h1:R2nailQgoXnrciPzPM5iePsH6xRPCwoib3iuX
 github.com/goal-web/querybuilder v0.1.8/go.mod h1:n11wqG1WAELltOz3ipD3fgGwS+uqHhMESFbdKls1DTo=
 github.com/goal-web/querybuilder v0.1.9 h1:DDNT+K1FI6+ZrbEJPRKP69D37pTXOQeh4a7tVXrSrUI=
 github.com/goal-web/querybuilder v0.1.9/go.mod h1:Cd9T+ae085sonFBbc+sd6GcDNjtCSmB/QPwYbHE9mkg=
+github.com/goal-web/querybuilder v0.1.10 h1:+jJScOMVczLLEYYXJexKjelOE3ukaZc9ulEg/ij4UtY=
+github.com/goal-web/querybuilder v0.1.10/go.mod h1:2sOjB1+J49xpem9Y8CwZZCNdkRzWh7Mc287W5z80TMQ=
 github.com/goal-web/redis v0.0.0-20220120142441-d9fea47c5755 h1:qHx6ZrVdJhe03QTMkjrZ/2oIHYvB+oY28oPKdiOv7No=
 github.com/goal-web/redis v0.0.0-20220120142441-d9fea47c5755/go.mod h1:Rsd+e+++LC+A/cI6j73+urWSMuwnRByiRnfnDTMzr0o=
 github.com/goal-web/supports v0.0.0-20220120125805-772978390d53/go.mod h1:F4to2eJ5J8Wasj+iC2Ks20YQChPuY5A6XyvKkvcxPYA=

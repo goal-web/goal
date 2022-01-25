@@ -9,7 +9,7 @@ import (
 )
 
 func getQuery(name string) contracts.QueryBuilder {
-	getApp("/Users/qbhy/project/go/goal-web/goal/examples/helloworld")
+	getApp("/Users/qbhy/project/go/goal-web/goal/example")
 	return table.WithConnection(name, "sqlite")
 }
 
@@ -58,6 +58,14 @@ func TestTableQuery(t *testing.T) {
 	assert.True(t, num == 1)
 	// 判断修改后的数据
 	user = getQuery("users").Where("name", "goal").First().(contracts.Fields)
+
+	err := getQuery("users").Chunk(10, func(collection contracts.Collection, page int) error {
+		assert.True(t, collection.Len() == 1)
+		fmt.Println(collection.ToJson())
+		return nil
+	})
+
+	assert.Nil(t, err)
 
 	assert.True(t, user["id"] == userId)
 	assert.True(t, user["name"] == "goal")

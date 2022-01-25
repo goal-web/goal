@@ -2,11 +2,11 @@ package tests
 
 import (
 	"fmt"
+	"github.com/goal-web/console/commands"
+	"github.com/goal-web/console/inputs"
+	"github.com/goal-web/console/scheduling"
 	"github.com/golang-module/carbon/v2"
 	"github.com/gorhill/cronexpr"
-	"github.com/goal-web/goal/console/commands"
-	"github.com/goal-web/goal/console/inputs"
-	"github.com/goal-web/goal/console/scheduling"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
