@@ -49,9 +49,9 @@ func TestBaseConfig(t *testing.T) {
 	assert.True(t, conf.Get("sub.b", "default sub b") == "sub b")
 
 	// 测试获取 fields 实例
-	assert.True(t, conf.GetFields("do not exists fields")["test"] == nil)
-	conf.Set("field", contracts.Fields{"test": "test"})
-	assert.True(t, conf.GetFields("field")["test"] == "test")
+	assert.True(t, conf.GetFields("do not exists fields")["tests"] == nil)
+	conf.Set("field", contracts.Fields{"tests": "tests"})
+	assert.True(t, conf.GetFields("field")["tests"] == "tests")
 
 	// 测试获取 子配置 实例
 	assert.True(t, conf.GetConfig("sub_config") == nil)

@@ -59,7 +59,7 @@ type TestCommand struct {
 
 func NewTestCommand(t *testing.T) TestCommand {
 	return TestCommand{
-		Base: commands.BaseCommand("test {name} {avatar?} {--queue=redis} {--daemon} {--v}", "测试一下命令行"),
+		Base: commands.BaseCommand("tests {name} {avatar?} {--queue=redis} {--daemon} {--v}", "测试一下命令行"),
 		t:    t,
 	}
 }
@@ -75,7 +75,7 @@ func (this *TestCommand) Handle() interface{} {
 
 func TestCommandCase(t *testing.T) {
 	command := NewTestCommand(t)
-	array := inputs.StringArray([]string{"test", "名称", "头像", "--queue=队列", "--daemon"})
+	array := inputs.StringArray([]string{"tests", "名称", "头像", "--queue=队列", "--daemon"})
 	args := array.GetArguments()
 	assert.True(t, command.InjectArguments(args) == nil)
 	command.Handle()

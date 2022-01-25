@@ -6,7 +6,7 @@ import (
 	"github.com/goal-web/supports/exceptions"
 )
 
-func (this *table) Get() interface{} {
+func (this *table) Get() contracts.Collection {
 	sql, bindings := this.SelectSql()
 	rows, err := this.getExecutor().Query(sql, bindings...)
 	if err != nil {
@@ -20,10 +20,7 @@ func (this *table) Find(key interface{}) interface{} {
 }
 
 func (this *table) First() interface{} {
-	if results := this.Take(1).Get().([]contracts.Fields); len(results) > 0 {
-		return results[0]
-	}
-	return nil
+	return this.Take(1).Get().First()
 }
 
 func (this *table) FirstOrFail() interface{} {

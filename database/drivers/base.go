@@ -1,6 +1,7 @@
 package drivers
 
 import (
+	"github.com/goal-web/collection"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/supports/exceptions"
 	"github.com/jmoiron/sqlx"
@@ -15,7 +16,7 @@ type Base struct {
 	events contracts.EventDispatcher
 }
 
-func (this *Base) Query(query string, args ...interface{}) (results []contracts.Fields, err error) {
+func (this *Base) Query(query string, args ...interface{}) (results contracts.Collection, err error) {
 	defer func() {
 		if err == nil {
 			this.events.Dispatch(&events.QueryExecuted{Sql: query, Bindings: args})
@@ -27,7 +28,13 @@ func (this *Base) Query(query string, args ...interface{}) (results []contracts.
 		return nil, err
 	}
 
-	return table.ParseRows(rows)
+	data, err := table.ParseRows(rows)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return collection.FromFieldsSlice(data), nil
 }
 
 func (this *Base) Get(dest interface{}, query string, args ...interface{}) (err error) {
@@ -52,7 +59,7 @@ func (this *Base) Begin() (contracts.DBTx, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &tx.Tx{Tx: sqlxTx}, err
+	return tx.New(sqlxTx, this.events), err
 }
 
 func (this *Base) Transaction(fn func(tx contracts.SqlExecutor) error) (err error) {

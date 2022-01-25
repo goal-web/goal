@@ -24,13 +24,13 @@ func TestTableCreate(t *testing.T) {
 
 func TestTableSelect(t *testing.T) {
 
-	users := getQuery("users").Get().([]contracts.Fields)
+	users := getQuery("users").Get()
 
 	fmt.Println(users)
 
-	for _, user := range users {
+	users.Map(func(user contracts.Fields) {
 		fmt.Println(user, user["id"])
-	}
+	})
 
 	assert.True(t, users != nil)
 }

@@ -1,33 +1,41 @@
 package tx
 
 import (
+	"github.com/goal-web/collection"
 	"github.com/goal-web/contracts"
 	"github.com/jmoiron/sqlx"
+	"github.com/qbhy/goal/database/events"
+	"github.com/qbhy/goal/database/table"
 )
 
 type Tx struct {
 	*sqlx.Tx
+	events contracts.EventDispatcher
 }
 
-func (this *Tx) Query(query string, args ...interface{}) ([]contracts.Fields, error) {
-	rows, err := this.Tx.Queryx(query, args...)
+func New(tx *sqlx.Tx, events contracts.EventDispatcher) *Tx {
+	return &Tx{
+		Tx:     tx,
+		events: events,
+	}
+}
+
+func (this *Tx) Query(query string, args ...interface{}) (results contracts.Collection, err error) {
+	defer func() {
+		if err == nil {
+			this.events.Dispatch(&events.QueryExecuted{Sql: query, Bindings: args})
+		}
+	}()
+	rows, err := this.Tx.Query(query, args...)
 
 	if err != nil {
 		return nil, err
 	}
 
-	results := make([]contracts.Fields, 0)
+	data, err := table.ParseRows(rows)
+	results = collection.FromFieldsSlice(data)
 
-	for rows.Next() {
-		row := make(map[string]interface{})
-		err = rows.MapScan(row)
-		if err != nil {
-			return nil, err
-		}
-		results = append(results, row)
-	}
-
-	return results, nil
+	return
 }
 
 func (this *Tx) Exec(query string, args ...interface{}) (contracts.Result, error) {
