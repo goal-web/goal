@@ -79,6 +79,8 @@ github.com/goal-web/supports v0.1.2 h1:gTcce76mI3osy+xtWonyseTKYQkuIh8RnfnE0m/T6
 github.com/goal-web/supports v0.1.2/go.mod h1:TlQ+7igTZhAN2//GcF9lM6hmi3xh/We/PxDjtFTB4Ow=
 github.com/goal-web/supports v0.1.10 h1:SZx4ARHVK4Tp8R5/BlKdQjJ+xfMEZ7cOaZRtBXzy4GM=
 github.com/goal-web/supports v0.1.10/go.mod h1:md5XsCyIjSwYO0qU+ECXd6kCtLm7OeiqgUjoC6vW284=
+github.com/goal-web/supports v0.1.11 h1:IY9f0X1T/vi2tYWlhrJZiFhev1bH0M4ndhqQlkddA9Y=
+github.com/goal-web/supports v0.1.11/go.mod h1:md5XsCyIjSwYO0qU+ECXd6kCtLm7OeiqgUjoC6vW284=
 github.com/golang-jwt/jwt v3.2.2+incompatible/go.mod h1:8pz2t5EyA70fFQQSrl6XZXzqecmYZeUEB8OUGHkxJ+I=
 github.com/golang-module/carbon/v2 v2.0.1 h1:lck7WgSNVvUIRbwE+MJG3qyrT+Vrcz1tp6TkZ91gFgE=
 github.com/golang-module/carbon/v2 v2.0.1/go.mod h1:NF5unWf838+pyRY0o+qZdIwBMkFf7w0hmLIguLiEpzU=

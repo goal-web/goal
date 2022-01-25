@@ -5,7 +5,7 @@ import (
 	"github.com/goal-web/supports/exceptions"
 )
 
-func (this *table) Count(columns ...string) int64 {
+func (this *Table) Count(columns ...string) int64 {
 	sql, bindings := this.WithCount(columns...).SelectSql()
 	var num int64
 	err := this.getExecutor().Get(&num, sql, bindings...)
@@ -19,7 +19,7 @@ func (this *table) Count(columns ...string) int64 {
 	return num
 }
 
-func (this *table) Avg(column string, as ...string) int64 {
+func (this *Table) Avg(column string, as ...string) int64 {
 	sql, bindings := this.WithAvg(column, as...).SelectSql()
 	var num int64
 	err := this.getExecutor().Get(&num, sql, bindings...)
@@ -33,7 +33,7 @@ func (this *table) Avg(column string, as ...string) int64 {
 	return num
 }
 
-func (this *table) Sum(column string, as ...string) int64 {
+func (this *Table) Sum(column string, as ...string) int64 {
 	sql, bindings := this.WithSum(column, as...).SelectSql()
 	var num int64
 	err := this.getExecutor().Get(&num, sql, bindings...)
@@ -47,7 +47,7 @@ func (this *table) Sum(column string, as ...string) int64 {
 	return num
 }
 
-func (this *table) Max(column string, as ...string) int64 {
+func (this *Table) Max(column string, as ...string) int64 {
 	sql, bindings := this.WithMax(column, as...).SelectSql()
 	var num int64
 	err := this.getExecutor().Get(&num, sql, bindings...)
@@ -61,7 +61,7 @@ func (this *table) Max(column string, as ...string) int64 {
 	return num
 }
 
-func (this *table) Min(column string, as ...string) int64 {
+func (this *Table) Min(column string, as ...string) int64 {
 	sql, bindings := this.WithMin(column, as...).SelectSql()
 	var num int64
 	err := this.getExecutor().Get(&num, sql, bindings...)

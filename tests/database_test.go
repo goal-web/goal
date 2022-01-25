@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/goal/database/table"
+	"github.com/goal-web/supports/class"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -11,6 +12,10 @@ import (
 func getQuery(name string) contracts.QueryBuilder {
 	getApp("/Users/qbhy/project/go/goal-web/goal/example")
 	return table.WithConnection(name, "sqlite")
+}
+func userModel() contracts.QueryBuilder {
+	getApp("/Users/qbhy/project/go/goal-web/goal/example")
+	return UserModel().SetConnection("sqlite")
 }
 
 func TestTableCreate(t *testing.T) {
@@ -72,4 +77,30 @@ func TestTableQuery(t *testing.T) {
 	assert.True(t, getQuery("users").Find(userId).(contracts.Fields)["id"] == userId)
 	assert.True(t, getQuery("users").Where("id", userId).Delete() == 1)
 	assert.Nil(t, getQuery("users").Find(userId))
+}
+
+var UserClass = class.Make(new(User1))
+
+func UserModel() *table.Table {
+	return table.Query("users").SetClass(UserClass)
+}
+
+type User1 struct {
+	Id       int64  `json:"id"`
+	NickName string `json:"name"`
+}
+
+func TestModel(t *testing.T) {
+	userModel().Create(contracts.Fields{
+		"name": "qbhy",
+	})
+	fmt.Println("用table查询：", getQuery("users").Get().ToJson())
+	fmt.Println(userModel().Get().ToJson())
+	fmt.Println(userModel().
+		Get().
+		Map(func(user User1) {
+			fmt.Println("id:", user.Id)
+		}).ToJson())
+
+	fmt.Println(userModel().Where("id", ">", 0).Delete())
 }

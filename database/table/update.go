@@ -6,7 +6,7 @@ import (
 	"github.com/goal-web/supports/utils"
 )
 
-func (this *table) UpdateOrInsert(attributes contracts.Fields, values ...contracts.Fields) bool {
+func (this *Table) UpdateOrInsert(attributes contracts.Fields, values ...contracts.Fields) bool {
 	this.WhereFields(attributes)
 	sql, bindings := this.UpdateSql(attributes)
 	result, err := this.getExecutor().Exec(sql, bindings...)
@@ -26,7 +26,7 @@ func (this *table) UpdateOrInsert(attributes contracts.Fields, values ...contrac
 	return this.Insert(attributes)
 }
 
-func (this *table) UpdateOrCreate(attributes contracts.Fields, values ...contracts.Fields) interface{} {
+func (this *Table) UpdateOrCreate(attributes contracts.Fields, values ...contracts.Fields) interface{} {
 	this.WhereFields(attributes)
 	sql, bindings := this.UpdateSql(attributes)
 	result, err := this.getExecutor().Exec(sql, bindings...)
@@ -46,7 +46,7 @@ func (this *table) UpdateOrCreate(attributes contracts.Fields, values ...contrac
 	return this.Insert(attributes)
 }
 
-func (this *table) Update(fields contracts.Fields) int64 {
+func (this *Table) Update(fields contracts.Fields) int64 {
 	sql, bindings := this.UpdateSql(fields)
 	result, err := this.getExecutor().Exec(sql, bindings...)
 	if err != nil {

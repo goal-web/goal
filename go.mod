@@ -41,7 +41,7 @@ require (
 	github.com/goal-web/filesystem v0.0.0-20220120135714-dc3dd88b880a
 	github.com/goal-web/querybuilder v0.1.10
 	github.com/goal-web/redis v0.0.0-20220120142441-d9fea47c5755
-	github.com/goal-web/supports v0.1.10
+	github.com/goal-web/supports v0.1.11
 	github.com/smartystreets/goconvey v1.7.2 // indirect
 )
 

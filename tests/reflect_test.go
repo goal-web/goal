@@ -16,7 +16,7 @@ func TestReflect(t *testing.T) {
 }
 
 func TestParseTag(t *testing.T) {
-	rawTag := `di:"true"`
+	rawTag := `di:"true,false"`
 
-	fmt.Println(utils.ParseStructTag(reflect.StructTag(rawTag))["di"][0])
+	fmt.Println(utils.ParseStructTag(reflect.StructTag(rawTag))["di"])
 }

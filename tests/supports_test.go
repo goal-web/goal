@@ -2,20 +2,20 @@ package tests
 
 import (
 	"fmt"
-	"github.com/goal-web/supports"
+	class2 "github.com/goal-web/supports/class"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 type User struct {
-	Name string
+	Name string `json:"nickname"`
 }
 
 func TestClass(t *testing.T) {
-	class := supports.GetClass(User{})
+	class := class2.Make(new(User))
 
 	userInstance := class.New(map[string]interface{}{
-		"name": "goal",
+		"nickname": "goal",
 	}).(User)
 
 	fmt.Println(userInstance)
