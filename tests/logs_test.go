@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/supports/logs"
-	"github.com/qbhy/goal/exceptions"
+	"github.com/goal-web/goal/exceptions"
 	"github.com/qbhy/parallel"
 	"testing"
 )

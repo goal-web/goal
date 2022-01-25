@@ -4,8 +4,8 @@ import (
 	"github.com/goal-web/collection"
 	"github.com/goal-web/contracts"
 	"github.com/jmoiron/sqlx"
-	"github.com/qbhy/goal/database/events"
-	"github.com/qbhy/goal/database/table"
+	"github.com/goal-web/goal/database/events"
+	"github.com/goal-web/goal/database/table"
 )
 
 type Tx struct {

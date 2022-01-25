@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/qbhy/goal/auth"
 	"github.com/goal-web/contracts"
+	"github.com/goal-web/goal/auth"
 )
 
 func init() {

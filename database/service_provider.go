@@ -2,7 +2,7 @@ package database
 
 import (
 	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/database/drivers"
+	"github.com/goal-web/goal/database/drivers"
 )
 
 type ServiceProvider struct {

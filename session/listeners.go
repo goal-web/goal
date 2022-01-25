@@ -2,7 +2,7 @@ package session
 
 import (
 	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/http"
+	"github.com/goal-web/goal/http"
 )
 
 type RequestBeforeListener struct {

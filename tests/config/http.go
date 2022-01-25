@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/http"
+	"github.com/goal-web/goal/http"
 )
 
 func init() {

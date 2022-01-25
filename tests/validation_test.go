@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/goal-web/contracts"
-	"github.com/qbhy/goal/validation"
-	"github.com/qbhy/goal/validation/checkers"
+	"github.com/goal-web/goal/validation"
+	"github.com/goal-web/goal/validation/checkers"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
