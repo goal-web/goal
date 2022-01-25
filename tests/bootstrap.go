@@ -2,23 +2,22 @@ package tests
 
 import (
 	"fmt"
+	"github.com/goal-web/application"
 	"github.com/goal-web/cache"
+	"github.com/goal-web/config"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/encryption"
 	"github.com/goal-web/events"
 	"github.com/goal-web/filesystem"
+	"github.com/goal-web/goal/auth"
+	"github.com/goal-web/goal/database"
+	"github.com/goal-web/goal/exceptions"
+	"github.com/goal-web/goal/session"
+	"github.com/goal-web/goal/signal"
+	config2 "github.com/goal-web/goal/tests/config"
+	"github.com/goal-web/hashing"
 	"github.com/goal-web/redis"
 	"github.com/goal-web/supports/logs"
-	"github.com/qbhy/goal/application"
-	"github.com/qbhy/goal/auth"
-	"github.com/qbhy/goal/config"
-	"github.com/qbhy/goal/database"
-	"github.com/qbhy/goal/examples/helloworld/app/exceptions"
-	"github.com/qbhy/goal/examples/helloworld/app/providers"
-	config2 "github.com/qbhy/goal/examples/helloworld/config"
-	"github.com/qbhy/goal/hashing"
-	"github.com/qbhy/goal/session"
-	"github.com/qbhy/goal/signal"
 	"io/ioutil"
 	"os"
 )
@@ -30,7 +29,7 @@ func getApp(path string) contracts.Application {
 
 	// 设置异常处理器
 	app.Singleton("exceptions.handler", func() contracts.ExceptionHandler {
-		return exceptions.NewHandler()
+		return exceptions.DefaultExceptionHandler{}
 	})
 
 	app.RegisterServices(
@@ -50,7 +49,6 @@ func getApp(path string) contracts.Application {
 		&session.ServiceProvider{},
 		auth.ServiceProvider{},
 		&database.ServiceProvider{},
-		providers.AppServiceProvider{},
 		//&http.ServiceProvider{RouteCollectors: []interface{}{
 		//	// 路由收集器
 		//	routes.V1Routes,

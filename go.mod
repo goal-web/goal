@@ -1,4 +1,4 @@
-module github.com/qbhy/goal
+module github.com/goal-web/goal
 
 go 1.17
 
