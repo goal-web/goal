@@ -54,6 +54,10 @@ github.com/goal-web/contracts v0.1.12 h1:dw5CjyOXJ0appUg/xSij02qDvXWIgVgN4VgGfPU
 github.com/goal-web/contracts v0.1.12/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/goal-web/contracts v0.1.13 h1:GC9uH1UI/wlYRC5jXptptAGjBirf43ocwZhqxXs5NkI=
 github.com/goal-web/contracts v0.1.13/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
+github.com/goal-web/contracts v0.1.14 h1:y9tU3sSp8opD993wYBtR/4plZtLGeBzBRs4mXXS2llg=
+github.com/goal-web/contracts v0.1.14/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
+github.com/goal-web/contracts v0.1.15 h1:Ejv+0806jbAg6Z1MJ5hcESeYQOHFN0YXWda2ErpVvH4=
+github.com/goal-web/contracts v0.1.15/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/goal-web/encryption v0.1.1 h1:KzzERSwbyOEFFVdGaeekYlTq5MT3Jo+mHKP/AMrOCrU=
 github.com/goal-web/encryption v0.1.1/go.mod h1:gBm2Yqu4zumYlbPg4USNZSHkd/tw2xyz6rGxzOHQq7k=
 github.com/goal-web/events v0.1.5 h1:vtoXRd0oYBZMdC/Z58TTFKtJXe8QWcgBgUgZOdm9N7A=

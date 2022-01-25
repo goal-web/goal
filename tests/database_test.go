@@ -79,26 +79,33 @@ func TestTableQuery(t *testing.T) {
 	assert.Nil(t, getQuery("users").Find(userId))
 }
 
+// 定义 class
 var UserClass = class.Make(new(User1))
 
-func UserModel() *table.Table {
-	return table.Query("users").SetClass(UserClass)
-}
-
+// 定义结构体
 type User1 struct {
 	Id       int64  `json:"id"`
 	NickName string `json:"name"`
 }
 
+// 定义模型
+func UserModel() *table.Table {
+	return table.Model(UserClass, "users")
+}
+
 func TestModel(t *testing.T) {
-	userModel().Create(contracts.Fields{
+	user := userModel().Create(contracts.Fields{
 		"name": "qbhy",
-	})
-	fmt.Println("用table查询：", getQuery("users").Get().ToJson())
-	fmt.Println(userModel().Get().ToJson())
-	fmt.Println(userModel().
-		Get().
-		Map(func(user User1) {
+	}).(User1)
+
+	fmt.Println("创建后返回模型", user)
+
+	fmt.Println("用table查询：",
+		getQuery("users").Get().ToJson()) // query 返回 Collection<contracts.Fields>
+
+	fmt.Println(userModel(). // model 返回 Collection<User1>
+					Get().
+					Map(func(user User1) {
 			fmt.Println("id:", user.Id)
 		}).ToJson())
 

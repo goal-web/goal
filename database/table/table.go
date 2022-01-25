@@ -4,7 +4,6 @@ import (
 	"github.com/goal-web/application"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/querybuilder"
-	"github.com/goal-web/supports/class"
 	"github.com/goal-web/supports/exceptions"
 )
 
@@ -14,7 +13,7 @@ type Table struct {
 
 	table      string
 	primaryKey string
-	class      *class.Class
+	class      contracts.Class
 }
 
 func getTable(name string) *Table {
@@ -33,8 +32,15 @@ func Query(name string) *Table {
 	return getTable(name).SetConnection(application.Get("db").(contracts.DBConnection))
 }
 
+func FromModel(model contracts.Model) *Table {
+	return WithConnection(model.GetTable(), model.GetConnection()).SetClass(model.GetClass())
+}
+
 // WithConnection 使用指定链接
 func WithConnection(name string, connection interface{}) *Table {
+	if connection == "" || connection == nil {
+		return getTable(name)
+	}
 	return getTable(name).SetConnection(connection)
 }
 
@@ -54,7 +60,7 @@ func (this *Table) SetConnection(connection interface{}) *Table {
 }
 
 // SetClass 设置类
-func (this *Table) SetClass(class *class.Class) *Table {
+func (this *Table) SetClass(class contracts.Class) *Table {
 	this.class = class
 	return this
 }

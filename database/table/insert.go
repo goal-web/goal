@@ -20,6 +20,11 @@ func (this *Table) Create(fields contracts.Fields) interface{} {
 	if _, existsPrimaryKey := fields[this.primaryKey]; !existsPrimaryKey {
 		fields[this.primaryKey] = id
 	}
+
+	if this.class != nil {
+		return this.class.New(fields)
+	}
+
 	return fields
 }
 

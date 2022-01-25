@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/goal-web/contracts v0.1.13
+	github.com/goal-web/contracts v0.1.15
 	github.com/golang-module/carbon/v2 v2.0.1
 	github.com/gorhill/cronexpr v0.0.0-20180427100037-88b0669f7d75
 	github.com/jmoiron/sqlx v1.3.4
