@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/supports/logs"
-	"github.com/labstack/echo/v4"
 	"go/types"
 	"os"
 )
@@ -15,7 +14,7 @@ var (
 )
 
 // HandleResponse 处理控制器函数的响应
-func HandleResponse(response interface{}, ctx echo.Context) {
+func HandleResponse(response interface{}, ctx contracts.HttpRequest) {
 	switch res := response.(type) {
 	case error, contracts.Exception:
 		panic(res)
@@ -43,7 +42,7 @@ type Response struct {
 	File     *os.File
 }
 
-func StringResponse(str string, code ...int) Response {
+func StringResponse(str string, code ...int) contracts.HttpResponse {
 	status := 200
 	if len(code) > 0 {
 		status = code[0]
@@ -54,7 +53,7 @@ func StringResponse(str string, code ...int) Response {
 	}
 }
 
-func JsonResponse(json interface{}, code ...int) Response {
+func JsonResponse(json interface{}, code ...int) contracts.HttpResponse {
 	status := 200
 	if len(code) > 0 {
 		status = code[0]
@@ -66,7 +65,7 @@ func JsonResponse(json interface{}, code ...int) Response {
 }
 
 // FileResponse 响应文件
-func FileResponse(file interface{}) Response {
+func FileResponse(file interface{}) contracts.HttpResponse {
 	switch f := file.(type) {
 	case *os.File:
 		return Response{File: f}

@@ -13,6 +13,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * [x] examples 各种程序的例子（还在完善中...）
 * [x] contracts 定义模块接口
 * [x] container 容器实现！！！
+* [x] pipeline 简单但是很强大的洋葱模型的管道
 * [x] supports 支持库
   * [x] logs 日志模块
   * [x] collection 集合库
@@ -44,6 +45,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
     * [x] postgresql
     * [x] sqlite
     * [ ] sqlserver
+* [ ] eloquent ORM模块，计划 golang 1.18 发布后完成，因为泛型
 * [x] http http相关模块，请求、响应、中间件等
   * [x] routing http 路由服务
   * [x] session 会话服务
@@ -53,6 +55,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
     * [ ] database
     * [ ] memcached
 * [x] console 命令行模块
+  * [x] commands 自定义命令模块
   * [x] scheduling 任务调度模块
 * [ ] rate limiter 限流器
 * [ ] auth 用户认证模块
@@ -76,7 +79,6 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * [ ] rabbitMQ
 * [ ] view 视图模块
 * [ ] translation 多语言模块
-* [ ] eloquent ORM模块，计划 golang 1.18 发布后完成，因为泛型
 
 ## 参与项目
 

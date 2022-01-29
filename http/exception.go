@@ -5,12 +5,8 @@ import (
 )
 
 type Exception struct {
-	Exception contracts.Exception
-	Request   contracts.HttpRequest
-}
-
-func (this Exception) Error() string {
-	return this.Exception.Error()
+	error
+	Request contracts.HttpRequest
 }
 
 func (this Exception) Fields() contracts.Fields {

@@ -15,10 +15,12 @@ func NewDefaultHandler(dontReportExceptions []contracts.Exception) DefaultExcept
 	return DefaultExceptionHandler{utils.ConvertToTypes(dontReportExceptions)}
 }
 
-func (handler DefaultExceptionHandler) Handle(exception contracts.Exception) {
+func (handler DefaultExceptionHandler) Handle(exception contracts.Exception) (result interface{}) {
 	logs.WithException(exception).
 		WithField("exception", reflect.TypeOf(exception).String()).
 		Error("DefaultExceptionHandler")
+
+	return
 }
 
 func (handler DefaultExceptionHandler) Report(exception contracts.Exception) {
