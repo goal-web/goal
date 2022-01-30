@@ -1,11 +1,11 @@
 package session
 
 import (
-	"github.com/labstack/echo/v4"
 	"github.com/goal-web/contracts"
+	"github.com/goal-web/pipeline"
 )
 
-func StartSession(session contracts.Session, request contracts.HttpRequest, next echo.HandlerFunc) error {
+func StartSession(session contracts.Session, request contracts.HttpRequest, next pipeline.Pipe) interface{} {
 	session.Start()
-	return next(request.(echo.Context))
+	return next(request)
 }

@@ -4,61 +4,48 @@ import (
 	"errors"
 	"github.com/goal-web/container"
 	"github.com/goal-web/contracts"
-	"github.com/goal-web/supports/exceptions"
-	"github.com/goal-web/supports/logs"
+	"github.com/goal-web/pipeline"
 	"github.com/labstack/echo/v4"
 	"strings"
 )
 
 var (
-	ignoreError = errors.New("忽略该错误") // 用于中间件直接返回响应
+	ignoreError     = errors.New("忽略该错误")            // 用于中间件直接返回响应
+	MiddlewareError = errors.New("middleware error") // 中间件必须有一个返回值
 
-	// magical functions
+	// magical middlewares
 	exceptionHandler = container.NewMagicalFunc(func(handler contracts.ExceptionHandler, exception Exception) interface{} {
 		return handler.Handle(exception)
 	})
 )
 
 func New(container contracts.Application) contracts.Router {
-	return &router{
-		app:       container,
-		events:    container.Get("events").(contracts.EventDispatcher),
-		echo:      echo.New(),
-		routes:    make([]contracts.Route, 0),
-		groups:    make([]contracts.RouteGroup, 0),
-		functions: make([]contracts.MagicalFunc, 0),
-	}
-}
-
-type router struct {
-	events    contracts.EventDispatcher
-	app       contracts.Application
-	echo      *echo.Echo
-	groups    []contracts.RouteGroup
-	routes    []contracts.Route
-	functions []contracts.MagicalFunc
-}
-
-func (this *router) errHandler(err interface{}, request contracts.HttpRequest) (result interface{}) {
-	if ignoreError == err || err == nil {
-		return nil
-	}
-	var httpException Exception
-	switch rawErr := err.(type) {
-	case Exception:
-		httpException = rawErr
-	default:
-		httpException = Exception{
-			error:   exceptions.ResolveException(err),
-			Request: request,
-		}
+	router := &Router{
+		app:         container,
+		events:      container.Get("events").(contracts.EventDispatcher),
+		echo:        echo.New(),
+		routes:      make([]contracts.Route, 0),
+		groups:      make([]contracts.RouteGroup, 0),
+		middlewares: make([]contracts.MagicalFunc, 0),
 	}
 
-	// 调用容器内的异常处理器
-	return this.app.StaticCall(exceptionHandler, httpException)
+	router.Use(router.recovery)
+
+	return router
 }
 
-func (this *router) Group(prefix string, middlewares ...interface{}) contracts.RouteGroup {
+type Router struct {
+	events contracts.EventDispatcher
+	app    contracts.Application
+	echo   *echo.Echo
+	groups []contracts.RouteGroup
+	routes []contracts.Route
+
+	// 全局中间件
+	middlewares []contracts.MagicalFunc
+}
+
+func (this *Router) Group(prefix string, middlewares ...interface{}) contracts.RouteGroup {
 	groupInstance := NewGroup(prefix, middlewares...)
 
 	this.groups = append(this.groups, groupInstance)
@@ -66,61 +53,56 @@ func (this *router) Group(prefix string, middlewares ...interface{}) contracts.R
 	return groupInstance
 }
 
-func (this *router) Close() error {
+func (this *Router) Close() error {
 	return this.echo.Close()
 }
 
-// addFunc 添加一个静态方法并且返回对应的索引
-func (this *router) addFunc(handler interface{}) int {
-	id := len(this.functions)
-	if magicalFunc, ok := handler.(contracts.MagicalFunc); ok {
-		this.functions = append(this.functions, magicalFunc)
-	} else {
-		this.functions = append(this.functions, container.NewMagicalFunc(handler))
-	}
-	return id
-}
-
-func (this *router) Static(path, directory string) {
+func (this *Router) Static(path, directory string) {
 	if strings.HasPrefix(directory, "/") {
 		directory = this.app.Get("path").(string) + "/" + directory
 	}
 	this.echo.Static(path, directory)
 }
 
-func (this *router) Get(path string, handler interface{}, middlewares ...interface{}) {
+func (this *Router) Get(path string, handler interface{}, middlewares ...interface{}) {
 	this.Add(echo.GET, path, handler, middlewares...)
 }
 
-func (this *router) Post(path string, handler interface{}, middlewares ...interface{}) {
+func (this *Router) Post(path string, handler interface{}, middlewares ...interface{}) {
 	this.Add(echo.POST, path, handler, middlewares...)
 }
 
-func (this *router) Delete(path string, handler interface{}, middlewares ...interface{}) {
+func (this *Router) Delete(path string, handler interface{}, middlewares ...interface{}) {
 	this.Add(echo.DELETE, path, handler, middlewares...)
 }
 
-func (this *router) Put(path string, handler interface{}, middlewares ...interface{}) {
+func (this *Router) Put(path string, handler interface{}, middlewares ...interface{}) {
 	this.Add(echo.PUT, path, handler, middlewares...)
 }
 
-func (this *router) Patch(path string, handler interface{}, middlewares ...interface{}) {
+func (this *Router) Patch(path string, handler interface{}, middlewares ...interface{}) {
 	this.Add(echo.PATCH, path, handler, middlewares...)
 }
 
-func (this *router) Options(path string, handler interface{}, middlewares ...interface{}) {
+func (this *Router) Options(path string, handler interface{}, middlewares ...interface{}) {
 	this.Add(echo.OPTIONS, path, handler, middlewares...)
 }
 
-func (this *router) Trace(path string, handler interface{}, middlewares ...interface{}) {
+func (this *Router) Trace(path string, handler interface{}, middlewares ...interface{}) {
 	this.Add(echo.TRACE, path, handler, middlewares...)
 }
 
-func (this *router) Use(middleware ...interface{}) {
-	this.echo.Use(this.resolveMiddlewares(middleware)...)
+func (this *Router) Use(middlewares ...interface{}) {
+	for _, middleware := range middlewares {
+		if magicalFunc, ok := middleware.(contracts.MagicalFunc); ok {
+			this.middlewares = append(this.middlewares, magicalFunc)
+		} else {
+			this.middlewares = append(this.middlewares, container.NewMagicalFunc(middleware))
+		}
+	}
 }
 
-func (this *router) Add(method interface{}, path string, handler interface{}, middlewares ...interface{}) {
+func (this *Router) Add(method interface{}, path string, handler interface{}, middlewares ...interface{}) {
 	methods := make([]string, 0)
 	switch v := method.(type) {
 	case string:
@@ -133,28 +115,13 @@ func (this *router) Add(method interface{}, path string, handler interface{}, mi
 	this.routes = append(this.routes, &route{
 		method:      methods,
 		path:        path,
-		middlewares: middlewares,
+		middlewares: convertToMiddlewares(middlewares...),
 		handler:     container.NewMagicalFunc(handler),
 	})
 }
 
 // Start 启动 httpserver
-func (this *router) Start(address string) error {
-	// recovery 。 这里为了 contracts 不依赖 echo ，要求 Request 必须继承自 echo.Context !!!
-	this.Use(
-		func(request *Request, next echo.HandlerFunc) (result error) {
-			defer func() {
-				if res := this.errHandler(recover(), request); res != nil {
-					HandleResponse(res, request)
-					result = ignoreError
-				}
-			}()
-
-			// 触发钩子
-			this.events.Dispatch(&RequestBefore{request})
-			return next(request)
-		},
-	)
+func (this *Router) Start(address string) error {
 
 	this.mountRoutes(this.routes)
 
@@ -171,57 +138,29 @@ func (this *router) Start(address string) error {
 }
 
 // mountRoutes 装配路由
-func (this *router) mountRoutes(routes []contracts.Route, middlewares ...interface{}) {
+func (this *Router) mountRoutes(routes []contracts.Route, middlewares ...contracts.MagicalFunc) {
 	for _, routeItem := range routes {
 		(func(routeInstance contracts.Route) {
 			this.echo.Match(routeInstance.Method(), routeInstance.Path(), func(context echo.Context) error {
-				// 包装 request
 				request := NewRequest(context)
-				// 调用控制器方法
-				results := this.app.StaticCall(routeInstance.Handler(), request)
-				this.events.Dispatch(&RequestAfter{request})
-				// 若有返回值则处理返回并且不继续往下执行
-				if len(results) > 0 {
-					if result, isErr := results[0].(error); isErr {
-						return result
-					}
-					HandleResponse(results[0], request)
-					return ignoreError
-				}
+				defer func() {
+					this.events.Dispatch(&RequestAfter{request})
+				}()
+
+				result := pipeline.Static(this.app).SendStatic(request).
+					ThroughStatic(
+						this.middlewares...,
+					).
+					ThroughStatic(
+						append(middlewares, routeInstance.Middlewares()...)...,
+					).
+					ThenStatic(routeInstance.Handler())
+
+				this.events.Dispatch(&ResponseBefore{request})
+				HandleResponse(result, request)
+
 				return nil
-			}, this.resolveMiddlewares(append(middlewares, routeInstance.Middlewares()...))...)
+			})
 		})(routeItem)
 	}
-}
-
-// resolveMiddlewares 装配中间件
-func (this *router) resolveMiddlewares(interfaceMiddlewares []interface{}) []echo.MiddlewareFunc {
-	middlewares := make([]echo.MiddlewareFunc, 0)
-
-	for _, middlewareItem := range interfaceMiddlewares {
-		if middleware, isEchoMiddleware := middlewareItem.(echo.MiddlewareFunc); isEchoMiddleware {
-			middlewares = append(middlewares, middleware)
-			continue
-		}
-
-		// 如果不是 echo 原生的中间件，包装成 echo 中间件并且静态化
-		(func(middleware interface{}) {
-			id := this.addFunc(middleware) // 静态化
-			middlewares = append(middlewares, func(next echo.HandlerFunc) echo.HandlerFunc {
-				return func(context echo.Context) (err error) {
-					request := NewRequest(context)
-					rawResult := this.app.StaticCall(this.functions[id], request, next)[0]
-					switch result := rawResult.(type) {
-					case contracts.HttpResponse: // 如果中间件直接返回 response 实例，则直接响应
-						logs.WithError(result.Response(request)).Error("response err from middleware")
-						this.events.Dispatch(&RequestAfter{request})
-						return ignoreError
-					}
-					return
-				}
-			})
-		})(middlewareItem)
-	}
-
-	return middlewares
 }

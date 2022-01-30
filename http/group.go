@@ -13,15 +13,17 @@ var (
 
 type group struct {
 	prefix      string
-	middlewares []interface{}
+	middlewares []contracts.MagicalFunc
 	routes      []contracts.Route
+	groups      []contracts.RouteGroup
 }
 
 func NewGroup(prefix string, middlewares ...interface{}) contracts.RouteGroup {
 	return &group{
 		prefix:      prefix,
 		routes:      make([]contracts.Route, 0),
-		middlewares: middlewares,
+		groups:      make([]contracts.RouteGroup, 0),
+		middlewares: convertToMiddlewares(middlewares...),
 	}
 }
 
@@ -30,6 +32,15 @@ func (group *group) AddRoute(route contracts.Route) contracts.RouteGroup {
 	group.routes = append(group.routes, route)
 
 	return group
+}
+
+// Group 添加一个子组
+func (group *group) Group(prefix string, middlewares ...interface{}) contracts.RouteGroup {
+	groupInstance := NewGroup(prefix, middlewares...)
+
+	group.groups = append(group.groups, groupInstance)
+
+	return groupInstance
 }
 
 // Add 添加路由，method 只允许字符串或者字符串数组
@@ -46,7 +57,7 @@ func (group *group) Add(method interface{}, path string, handler interface{}, mi
 	group.AddRoute(&route{
 		method:      methods,
 		path:        group.prefix + path,
-		middlewares: middlewares,
+		middlewares: convertToMiddlewares(middlewares...),
 		handler:     container.NewMagicalFunc(handler),
 	})
 
@@ -81,7 +92,7 @@ func (group *group) Options(path string, handler interface{}, middlewares ...int
 	return group.Add(echo.OPTIONS, path, handler, middlewares...)
 }
 
-func (group *group) Middlewares() []interface{} {
+func (group *group) Middlewares() []contracts.MagicalFunc {
 	return group.middlewares
 }
 

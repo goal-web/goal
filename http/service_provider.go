@@ -17,7 +17,7 @@ type ServiceProvider struct {
 func (this *ServiceProvider) Stop() {
 	this.app.Call(func(dispatcher contracts.EventDispatcher, router contracts.Router) {
 		if err := router.Close(); err != nil {
-			logs.WithError(err).Info("router 关闭报错")
+			logs.WithError(err).Info("Router 关闭报错")
 		}
 		dispatcher.Dispatch(&HttpServeClosed{})
 	})
@@ -50,7 +50,7 @@ func (this *ServiceProvider) Start() error {
 func (this *ServiceProvider) Register(app contracts.Application) {
 	this.app = app
 
-	app.Singleton("router", func() contracts.Router {
+	app.Singleton("Router", func() contracts.Router {
 		return New(this.app)
 	})
 }

@@ -5,11 +5,11 @@ import "github.com/goal-web/contracts"
 type route struct {
 	method      []string
 	path        string
-	middlewares []interface{}
+	middlewares []contracts.MagicalFunc
 	handler     contracts.MagicalFunc
 }
 
-func (route *route) Middlewares() []interface{} {
+func (route *route) Middlewares() []contracts.MagicalFunc {
 	return route.middlewares
 }
 

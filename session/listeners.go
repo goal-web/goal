@@ -16,8 +16,8 @@ type RequestAfterListener struct {
 
 // Handle 如果开启了 session 那么请求结束时保存 session
 func (this *RequestAfterListener) Handle(event contracts.Event) {
-	if requestAfterEvent, ok := event.(*http.RequestAfter); ok {
-		if session, isSession := requestAfterEvent.Request().Get("session").(contracts.Session); isSession {
+	if responseBeforeEvent, ok := event.(*http.ResponseBefore); ok {
+		if session, isSession := responseBeforeEvent.Request().Get("session").(contracts.Session); isSession {
 			if session.IsStarted() {
 				session.Save()
 			}

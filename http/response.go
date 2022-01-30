@@ -6,6 +6,7 @@ import (
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/supports/logs"
 	"go/types"
+	"net/http"
 	"os"
 )
 
@@ -15,15 +16,18 @@ var (
 
 // HandleResponse 处理控制器函数的响应
 func HandleResponse(response interface{}, ctx contracts.HttpRequest) {
+	if response == nil {
+		return
+	}
 	switch res := response.(type) {
-	case error, contracts.Exception:
-		panic(res)
+	case error:
+		logs.WithError(ctx.String(http.StatusInternalServerError, res.Error())).Debug("response error")
 	case string:
-		logs.WithError(ctx.String(200, res)).Debug("response error")
+		logs.WithError(ctx.String(http.StatusOK, res)).Debug("response error")
 	case fmt.Stringer:
-		logs.WithError(ctx.String(200, res.String())).Debug("response error")
+		logs.WithError(ctx.String(http.StatusOK, res.String())).Debug("response error")
 	case contracts.Json:
-		logs.WithError(ctx.String(200, res.ToJson())).Debug("response error")
+		logs.WithError(ctx.String(http.StatusOK, res.ToJson())).Debug("response error")
 	case contracts.HttpResponse:
 		logs.WithError(res.Response(ctx)).Debug("response error")
 	case types.Nil:
