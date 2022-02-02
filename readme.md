@@ -49,8 +49,8 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * [x] http http相关模块，请求、响应、中间件等
   * [x] routing http 路由服务
   * [x] session 会话服务
-    * [x] cookie
-    * [ ] redis
+    * [x] cookie 将会话信息存储到加密的 cookie 中
+    * [x] redis
     * [ ] file
     * [ ] database
     * [ ] memcached
