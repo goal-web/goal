@@ -11,3 +11,7 @@ type Received struct {
 func (this *Received) Event() string {
 	return "SIGNAL_RECEIVED"
 }
+
+func (this *Received) IsSync() bool {
+	return true
+}
