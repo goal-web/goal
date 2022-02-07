@@ -59,6 +59,11 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * [x] scheduling 任务调度模块
 * [ ] rate limiter 限流器
 * [x] auth 用户认证模块
+* [x] serialize 序列化模块
+  * [x] json
+  * [ ] xml
+  * [x] gob
+  * [ ] protobuf
 * [x] queue 消息队列模块
   * [ ] redis
   * [x] kafka
@@ -71,11 +76,6 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * [ ] rpc 远程调用模块
   * [ ] jsonrpc
   * [ ] grpc
-* [ ] serialize 序列化模块
-  * [ ] json
-  * [ ] xml
-  * [ ] gob
-  * [ ] protobuf
 * [ ] mail 邮件模块
 * [ ] view 视图模块
 * [ ] translation 多语言模块
