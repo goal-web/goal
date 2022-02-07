@@ -67,7 +67,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * [x] queue 消息队列模块
   * [ ] redis
   * [x] kafka
-  * [ ] nsq
+  * [x] nsq
   * [ ] rocketMQ
   * [ ] rabbitMQ
 * [ ] gates 用户授权模块
