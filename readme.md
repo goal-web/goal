@@ -61,7 +61,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * [x] auth 用户认证模块
 * [x] serialize 序列化模块
   * [x] json
-  * [ ] xml
+  * [x] xml
   * [x] gob
   * [ ] protobuf
 * [x] queue 消息队列模块
