@@ -58,7 +58,6 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * [x] console 命令行模块
   * [x] commands 自定义命令模块
   * [x] scheduling 任务调度模块
-* [ ] rate limiter 限流器
 * [x] auth 用户认证模块
 * [x] serialize 序列化模块
   * [x] json
@@ -71,7 +70,9 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * [x] nsq
   * [ ] rocketMQ
   * [ ] rabbitMQ
+* [ ] rate limiter 限流器
 * [ ] gates 用户授权模块
+* [ ] bloom-filter 布隆过滤器
 * [ ] websocket socket通信模块
   * [ ] socket.io socket.io 实现
 * [ ] sse server-sent-events模块(简称sse)
