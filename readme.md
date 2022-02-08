@@ -70,7 +70,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * [x] nsq
   * [ ] rocketMQ
   * [ ] rabbitMQ
-* [ ] rate limiter 限流器
+* [x] rate limiter 限流器
 * [ ] gates 用户授权模块
 * [ ] bloom-filter 布隆过滤器
 * [ ] websocket socket通信模块
