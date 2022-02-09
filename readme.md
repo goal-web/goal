@@ -59,6 +59,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * [x] commands 自定义命令模块
   * [x] scheduling 任务调度模块
 * [x] auth 用户认证模块
+  * [x] gate 用户授权模块
 * [x] serialize 序列化模块
   * [x] json
   * [x] xml
@@ -71,7 +72,6 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * [ ] rocketMQ
   * [ ] rabbitMQ
 * [x] rate limiter 限流器
-* [ ] gates 用户授权模块
 * [ ] bloom-filter 布隆过滤器
 * [ ] websocket socket通信模块
   * [ ] socket.io socket.io 实现
