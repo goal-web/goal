@@ -45,6 +45,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
     * [x] mysql
     * [x] postgresql
     * [x] sqlite
+    * [ ] clickhouse
     * [ ] sqlserver
 * [ ] eloquent ORM模块，计划 golang 1.18 发布后完成，因为泛型
 * [x] http http相关模块，请求、响应、中间件等
@@ -72,7 +73,9 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * [ ] rocketMQ
   * [ ] rabbitMQ
 * [x] rate limiter 限流器
-* [ ] bloom-filter 布隆过滤器
+* [x] bloom-filter 布隆过滤器
+  * [x] file 持久化到文件
+  * [x] redis 通过 redis bit 实现的过滤器，支持分布式
 * [ ] websocket socket通信模块
   * [ ] socket.io socket.io 实现
 * [ ] sse server-sent-events模块(简称sse)
