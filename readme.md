@@ -4,9 +4,9 @@
 
 ## 框架特点
 goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥梁，为开发者提供丰富的功能和服务，这点与 laravel 是相似的。
-* [x] 强大的容器
-* [x] 使用服务提供者对应用进行扩展
-* [x] 支持依赖注入
+* 强大的容器
+* 服务提供者
+* 契约精神
 
 ## 功能特性
 
@@ -17,8 +17,11 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * [x] supports 支持库
   * [x] logs 日志模块
   * [x] collection 集合库
+  * [x] utils 工具库，封装了包含字符串处理、默认参数处理、类型转换、反射等工具函数 
+* [x] application 应用
+  * [x] exceptions 异常处理模块
+  * [x] signal 信号监听，goal 实现了优雅关闭功能
 * [x] config 配置模块
-* [x] exceptions 异常处理模块
 * [x] redis Redis模块
 * [x] cache 缓存模块
   * [x] redis
@@ -36,7 +39,6 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * [x] local 本地文件系统
   * [ ] qiniu 七牛文件系统
   * [ ] oss 阿里云文件系统
-* [x] signal 信号监听，goal 实现了优雅关闭功能
 * [x] database 数据库操作模块
   * [x] query builder 查询构造器
   * [ ] seeders 数据填充
