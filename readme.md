@@ -42,7 +42,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * [x] database 数据库操作模块
   * [x] query builder 查询构造器
   * [ ] seeders 数据填充
-  * [ ] migration 数据迁移
+  * [x] migration 数据迁移
   * [x] drivers 数据库驱动
     * [x] mysql
     * [x] postgresql
