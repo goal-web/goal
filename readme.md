@@ -78,7 +78,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * [x] bloom-filter 布隆过滤器
   * [x] file 持久化到文件
   * [x] redis 通过 redis bit 实现的过滤器，支持分布式
-* [ ] websocket socket通信模块
+* [x] websocket socket通信模块
   * [ ] socket.io socket.io 实现
 * [ ] sse server-sent-events模块(简称sse)
 * [ ] rpc 远程调用模块
