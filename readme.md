@@ -51,6 +51,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
     * [ ] sqlserver
 * [ ] eloquent ORM模块，计划 golang 1.18 发布后完成，因为泛型
 * [x] http http相关模块，请求、响应、中间件等
+  * [x] sse server-sent-events模块(简称sse)
   * [x] routing http 路由服务
   * [x] session 会话服务
     * [x] cookie 将会话信息存储到加密的 cookie 中
@@ -80,11 +81,9 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * [x] redis 通过 redis bit 实现的过滤器，支持分布式
 * [x] websocket socket通信模块
   * [ ] socket.io socket.io 实现
-* [ ] sse server-sent-events模块(简称sse)
 * [ ] rpc 远程调用模块
   * [ ] jsonrpc
   * [ ] grpc
-* [ ] view 视图模块
 * [ ] translation 多语言模块
 
 ## 参与项目
