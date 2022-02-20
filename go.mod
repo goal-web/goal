@@ -7,7 +7,7 @@ require (
 	github.com/goal-web/application v0.1.4
 	github.com/goal-web/auth v0.1.5
 	github.com/goal-web/bloomfilter v0.1.2
-	github.com/goal-web/cache v0.1.0
+	github.com/goal-web/cache v0.1.2
 	github.com/goal-web/config v0.1.3
 	github.com/goal-web/console v0.1.1
 	github.com/goal-web/contracts v0.1.49

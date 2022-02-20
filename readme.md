@@ -25,10 +25,10 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * [x] redis Redis模块
 * [x] cache 缓存模块
   * [x] redis
+  * [x] memory 将数据存储在内存中，不支持持久化和分布式
   * [ ] memcached
   * [ ] file
   * [ ] database 数据库驱动
-  * [ ] memory
   * [ ] multi 高可用多级缓存
 * [x] encryption 加密模块
 * [x] hashing 哈希模块
