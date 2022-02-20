@@ -43,12 +43,7 @@ func main() {
 	})
 
 	app.RegisterServices(
-		&config.ServiceProvider{
-			Env:             os.Getenv("env"),
-			Paths:           []string{path},
-			Sep:             "=",
-			ConfigProviders: config2.Configs(),
-		},
+		config.Service(os.Getenv("env"), path, config2.Configs()),
 		hashing.ServiceProvider{},
 		encryption.ServiceProvider{},
 		filesystem.ServiceProvider{},
