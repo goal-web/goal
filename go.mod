@@ -15,7 +15,7 @@ require (
 	github.com/goal-web/email v0.1.1
 	github.com/goal-web/encryption v0.1.1
 	github.com/goal-web/events v0.1.5
-	github.com/goal-web/filesystem v0.1.1
+	github.com/goal-web/filesystem v0.1.2
 	github.com/goal-web/hashing v0.1.0
 	github.com/goal-web/http v0.1.7
 	github.com/goal-web/micro v0.1.0
