@@ -10,12 +10,12 @@ require (
 	github.com/goal-web/cache v0.1.2
 	github.com/goal-web/config v0.1.3
 	github.com/goal-web/console v0.1.1
-	github.com/goal-web/contracts v0.1.49
+	github.com/goal-web/contracts v0.1.50
 	github.com/goal-web/database v0.1.7
 	github.com/goal-web/email v0.1.1
 	github.com/goal-web/encryption v0.1.1
 	github.com/goal-web/events v0.1.5
-	github.com/goal-web/filesystem v0.0.0-20220120135714-dc3dd88b880a
+	github.com/goal-web/filesystem v0.1.1
 	github.com/goal-web/hashing v0.1.0
 	github.com/goal-web/http v0.1.7
 	github.com/goal-web/micro v0.1.0
@@ -93,6 +93,7 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.14 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/qbhy/parallel v1.4.0 // indirect
+	github.com/qiniu/go-sdk/v7 v7.11.1 // indirect
 	github.com/russross/blackfriday/v2 v2.0.1 // indirect
 	github.com/segmentio/kafka-go v0.4.27 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
