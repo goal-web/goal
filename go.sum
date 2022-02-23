@@ -293,8 +293,8 @@ github.com/goal-web/encryption v0.1.1 h1:KzzERSwbyOEFFVdGaeekYlTq5MT3Jo+mHKP/AMr
 github.com/goal-web/encryption v0.1.1/go.mod h1:gBm2Yqu4zumYlbPg4USNZSHkd/tw2xyz6rGxzOHQq7k=
 github.com/goal-web/events v0.1.5 h1:vtoXRd0oYBZMdC/Z58TTFKtJXe8QWcgBgUgZOdm9N7A=
 github.com/goal-web/events v0.1.5/go.mod h1:iS8y/sKknId/0+PoI6OBOL5M9pSLi65lsUgW4OTAqy0=
-github.com/goal-web/filesystem v0.1.1 h1:n7Gqz+gU/ktMCwTm9e5NWHn5FCYcZ+NMG7x89Q1YpZE=
-github.com/goal-web/filesystem v0.1.1/go.mod h1:ASkOns9h/ba4fs9YIVD3qFrhSZovlOM9wDv0Rx4skNw=
+github.com/goal-web/filesystem v0.1.2 h1:Kijfk1JrE8ciEE2YMyNMETiXduUKCEBVumZX8Xh2sR8=
+github.com/goal-web/filesystem v0.1.2/go.mod h1:ASkOns9h/ba4fs9YIVD3qFrhSZovlOM9wDv0Rx4skNw=
 github.com/goal-web/hashing v0.1.0 h1:HF3Anivhii4kF7xUY1u5tirOefxq5f+0/uZWUHeO6f0=
 github.com/goal-web/hashing v0.1.0/go.mod h1:Jw+8TqulgshfQmAUQyVUl67S9o501bkGuh8bz2Nz4Nc=
 github.com/goal-web/http v0.1.2/go.mod h1:h7wTlBkmJca59BBCY9hZqu8sBOqRJ4Gle6KRM13t9uY=
