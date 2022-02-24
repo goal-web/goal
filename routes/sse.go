@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/goal-web/contracts"
-	sse2 "github.com/goal-web/goal/app/sse"
+	sse2 "github.com/goal-web/goal/app/http/sse"
 	"github.com/goal-web/http/sse"
 )
 

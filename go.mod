@@ -3,21 +3,21 @@ module github.com/goal-web/goal
 go 1.17
 
 require (
-	github.com/asim/go-micro/plugins/registry/etcd/v4 v4.0.0-20220216084336-d47c2d984b92
+	github.com/asim/go-micro/plugins/registry/etcd/v4 v4.0.0-20220223051450-69b4b5d1c603
 	github.com/goal-web/application v0.1.4
 	github.com/goal-web/auth v0.1.5
 	github.com/goal-web/bloomfilter v0.1.2
 	github.com/goal-web/cache v0.1.2
 	github.com/goal-web/config v0.1.3
 	github.com/goal-web/console v0.1.1
-	github.com/goal-web/contracts v0.1.50
+	github.com/goal-web/contracts v0.1.53
 	github.com/goal-web/database v0.1.7
 	github.com/goal-web/email v0.1.1
 	github.com/goal-web/encryption v0.1.1
 	github.com/goal-web/events v0.1.5
 	github.com/goal-web/filesystem v0.1.2
 	github.com/goal-web/hashing v0.1.0
-	github.com/goal-web/http v0.1.11
+	github.com/goal-web/http v0.1.17
 	github.com/goal-web/micro v0.1.0
 	github.com/goal-web/microdemo v0.0.0-20220219171937-6f3fca7dfbcb
 	github.com/goal-web/queue v0.1.1
@@ -25,7 +25,7 @@ require (
 	github.com/goal-web/redis v0.1.3
 	github.com/goal-web/serialization v0.1.8
 	github.com/goal-web/session v0.1.4
-	github.com/goal-web/supports v0.1.21
+	github.com/goal-web/supports v0.1.25
 	github.com/goal-web/validation v0.1.0
 	github.com/goal-web/websocket v0.1.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible

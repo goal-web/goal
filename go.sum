@@ -86,8 +86,8 @@ github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da/go.mod h1:Q73ZrmV
 github.com/armon/go-radix v0.0.0-20180808171621-7fddfc383310/go.mod h1:ufUuZ+zHj4x4TnLV4JWEpy2hxWSpsRywHrMgIH9cCH8=
 github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5 h1:0CwZNZbxp69SHPdPJAN/hZIm0C4OItdklCFmMRWYpio=
 github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5/go.mod h1:wHh0iHkYZB8zMSxRWpUBQtwG5a7fFgvEO+odwuTv2gs=
-github.com/asim/go-micro/plugins/registry/etcd/v4 v4.0.0-20220216084336-d47c2d984b92 h1:JoQZ00Y0yjHTzf06DEiMjERk4jEZxL/GBHGmG75Qh9o=
-github.com/asim/go-micro/plugins/registry/etcd/v4 v4.0.0-20220216084336-d47c2d984b92/go.mod h1:maR33ztnKc7VeMioGfl1vq3Jm7fzztbNoRWTncu96sc=
+github.com/asim/go-micro/plugins/registry/etcd/v4 v4.0.0-20220223051450-69b4b5d1c603 h1:t3iq8LJdFWfYHVLq6v9HLrWlqgYIlJi0jk2hrGMJzyw=
+github.com/asim/go-micro/plugins/registry/etcd/v4 v4.0.0-20220223051450-69b4b5d1c603/go.mod h1:maR33ztnKc7VeMioGfl1vq3Jm7fzztbNoRWTncu96sc=
 github.com/aws/aws-sdk-go v1.20.6/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
 github.com/aws/aws-sdk-go v1.37.27/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
 github.com/aybabtme/rgbterm v0.0.0-20170906152045-cc83f3b3ce59/go.mod h1:q/89r3U2H7sSsE2t6Kca0lfwTK8JdoNGS/yzM/4iH5I=
@@ -282,8 +282,9 @@ github.com/goal-web/contracts v0.1.45/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrC
 github.com/goal-web/contracts v0.1.46/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/goal-web/contracts v0.1.48/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/goal-web/contracts v0.1.49/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
-github.com/goal-web/contracts v0.1.50 h1:42L+xwE1svmvs8wK7INZj8TQGe8bwnZQhfYdOVj6aQo=
 github.com/goal-web/contracts v0.1.50/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
+github.com/goal-web/contracts v0.1.53 h1:Z5vlL8gOYx/fuvI8WprxZZ23lwcyENd3lOuGLzEzsu0=
+github.com/goal-web/contracts v0.1.53/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/goal-web/database v0.1.3/go.mod h1:qpO/1MlTMUA5CjyhptRsTowUeRZzf8POAA2aqx2GSCs=
 github.com/goal-web/database v0.1.7 h1:ZFqHDuHWpIbZnlqD8j4kAA2seCVWLvk+2OtwsSqMIMc=
 github.com/goal-web/database v0.1.7/go.mod h1:ZX2B3WKamsH/oZQvQSjeDGB67cQ2mQuUvj5uOpnQfiY=
@@ -299,8 +300,8 @@ github.com/goal-web/hashing v0.1.0 h1:HF3Anivhii4kF7xUY1u5tirOefxq5f+0/uZWUHeO6f
 github.com/goal-web/hashing v0.1.0/go.mod h1:Jw+8TqulgshfQmAUQyVUl67S9o501bkGuh8bz2Nz4Nc=
 github.com/goal-web/http v0.1.2/go.mod h1:h7wTlBkmJca59BBCY9hZqu8sBOqRJ4Gle6KRM13t9uY=
 github.com/goal-web/http v0.1.6/go.mod h1:tSDd4mwDxwYma+6OeHU9kv4mj2Vp80fMz2XN34rccQM=
-github.com/goal-web/http v0.1.11 h1:eH2Flwm0+EuqTp9G3xsNEvxC5RuxXT5oiAhl/ktbDDA=
-github.com/goal-web/http v0.1.11/go.mod h1:c0h5tAAkjM13GGbgRGcYSgHRWPuzo/dQWKq95didIZY=
+github.com/goal-web/http v0.1.17 h1:qB1jvdWHbVtLjf5QCwiOS18uIjpEPOTXTgLEp3TwhBk=
+github.com/goal-web/http v0.1.17/go.mod h1:5Xh2IW8WrIgbBAKGJlWTv3fmekMp3fjtaj/tNLSVzqM=
 github.com/goal-web/micro v0.1.0 h1:6H83k4vNrN/rig4xFOgRqzVdAYvu0BcADFsXuiAegYM=
 github.com/goal-web/micro v0.1.0/go.mod h1:6PHp6Ua5A/GEr0cslHJ/1vygGvJSPkHIdm8fN8k4igk=
 github.com/goal-web/microdemo v0.0.0-20220219171937-6f3fca7dfbcb h1:mDAVWOxZ/tqGL28cHL7YNbFLqQAsLemW84fu1ARrg3s=
@@ -331,8 +332,9 @@ github.com/goal-web/supports v0.1.14/go.mod h1:QAvaUh/dtKUA027AvZaPPk5y/E1wlfJie
 github.com/goal-web/supports v0.1.16/go.mod h1:/+evgdJrancJk2NRGrdnxAgc+fiApcBFieI9sPdvXvg=
 github.com/goal-web/supports v0.1.17/go.mod h1:q+tkIGrGM70Gamio3AkfuKiKAKcZHzICB0pXdgcxmFo=
 github.com/goal-web/supports v0.1.18/go.mod h1:YJr7ostl2k0mFpdhu+AyKGWQkw58xQ0bpuqlq2Y7tCQ=
-github.com/goal-web/supports v0.1.21 h1:vQ7FuywDYJPSx7jIMucBWMdtl8c9jyLNnznSs/1nblc=
-github.com/goal-web/supports v0.1.21/go.mod h1:YJr7ostl2k0mFpdhu+AyKGWQkw58xQ0bpuqlq2Y7tCQ=
+github.com/goal-web/supports v0.1.22/go.mod h1:YJr7ostl2k0mFpdhu+AyKGWQkw58xQ0bpuqlq2Y7tCQ=
+github.com/goal-web/supports v0.1.25 h1:ICdf1iWdJoa+ZNgYkswgaPENuqXZ8nxUdDj38WSMYZ8=
+github.com/goal-web/supports v0.1.25/go.mod h1:YJr7ostl2k0mFpdhu+AyKGWQkw58xQ0bpuqlq2Y7tCQ=
 github.com/goal-web/validation v0.1.0 h1:1o0VougRRJQCQR65qvY8zLNpMeOjtCUeTBYqusI4j7w=
 github.com/goal-web/validation v0.1.0/go.mod h1:5GCyNmjOu8BjYMuq8aXHQQq8WgYGt5tMZfCPMVURh/I=
 github.com/goal-web/websocket v0.1.2 h1:WV0oWMnyKEuZcrfZb51bjy7oRlvwDv73NP3CtSef9LI=
