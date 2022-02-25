@@ -46,7 +46,7 @@ func init() {
 				},
 				"clickhouse": {
 					"driver":          "clickhouse",
-					"dsn":             "tcp://127.0.0.1:9000/default?debug=true", // see https://github.com/ClickHouse/clickhouse-go#dsn
+					"dsn":             env.GetString("db.clickhouse.dsn"), // see https://github.com/ClickHouse/clickhouse-go#dsn
 					"max_connections": env.GetInt("db.clickhouse.max_connections"),
 					"max_idles":       env.GetInt("db.clickhouse.max_idles"),
 					"address":         strings.Split(env.GetString("db.clickhouse.address"), ","),
