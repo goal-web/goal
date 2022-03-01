@@ -331,8 +331,8 @@ github.com/goal-web/supports v0.1.17/go.mod h1:q+tkIGrGM70Gamio3AkfuKiKAKcZHzICB
 github.com/goal-web/supports v0.1.18/go.mod h1:YJr7ostl2k0mFpdhu+AyKGWQkw58xQ0bpuqlq2Y7tCQ=
 github.com/goal-web/supports v0.1.22/go.mod h1:YJr7ostl2k0mFpdhu+AyKGWQkw58xQ0bpuqlq2Y7tCQ=
 github.com/goal-web/supports v0.1.26/go.mod h1:YJr7ostl2k0mFpdhu+AyKGWQkw58xQ0bpuqlq2Y7tCQ=
-github.com/goal-web/supports v0.1.27 h1:e44/ovZ9L9xYVPqLhB+jusYdM3UHgTpIs+BFavQNRmM=
-github.com/goal-web/supports v0.1.27/go.mod h1:YJr7ostl2k0mFpdhu+AyKGWQkw58xQ0bpuqlq2Y7tCQ=
+github.com/goal-web/supports v0.1.28 h1:HfzIq2agZcXwEIWXhwaj2okfmJVQa7zM4PpZcbm8kJc=
+github.com/goal-web/supports v0.1.28/go.mod h1:YJr7ostl2k0mFpdhu+AyKGWQkw58xQ0bpuqlq2Y7tCQ=
 github.com/goal-web/validation v0.1.0 h1:1o0VougRRJQCQR65qvY8zLNpMeOjtCUeTBYqusI4j7w=
 github.com/goal-web/validation v0.1.0/go.mod h1:5GCyNmjOu8BjYMuq8aXHQQq8WgYGt5tMZfCPMVURh/I=
 github.com/goal-web/websocket v0.1.2 h1:WV0oWMnyKEuZcrfZb51bjy7oRlvwDv73NP3CtSef9LI=
