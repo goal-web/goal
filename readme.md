@@ -86,7 +86,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
   * [x] 服务发现
   * [x] 负载均衡
   * [x] 自定义 go-micro
-  * [x] 微服务demo
+  * [x] [微服务demo](https://github.com/goal-web/microdemo)
 * [ ] 第三方sdk
   * [x] [支付宝sdk](https://github.com/qbhy/goal-alipay)
   * [x] [微信sdk](https://github.com/qbhy/goal-wechat)
