@@ -25,7 +25,7 @@ require (
 	github.com/goal-web/redis v0.1.3
 	github.com/goal-web/serialization v0.1.8
 	github.com/goal-web/session v0.1.4
-	github.com/goal-web/supports v0.1.27
+	github.com/goal-web/supports v0.1.28
 	github.com/goal-web/validation v0.1.0
 	github.com/goal-web/websocket v0.1.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
