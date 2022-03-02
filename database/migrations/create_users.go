@@ -9,7 +9,7 @@ import (
 func init() {
 	Migrations = append(Migrations, contracts.Migrate{
 		CreatedAt:  carbon.Parse("2022-02-15 15:43:39").Carbon2Time(),
-		Connection: "sqlite",
+		Connection: "mysql",
 		Name:       "2022_02_15_154339_create_users",
 		Up: migrations.Exec(`create table users
 (
