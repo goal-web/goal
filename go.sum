@@ -254,8 +254,8 @@ github.com/goal-web/collection v0.1.5 h1:tkLBn0n9osENDnvWToaDvb1hbApR5OvHdNu3eLF
 github.com/goal-web/collection v0.1.5/go.mod h1:Syaj+9lKGoSAenQTJErMvAG/iBAZlr+Rn4rENR1S5J4=
 github.com/goal-web/config v0.1.3 h1:i31CoKkwtv0i1WWwqtUaD7kfuJWDd0RgRNASadN1Qms=
 github.com/goal-web/config v0.1.3/go.mod h1:3rY+j12pspZ8ORNPpU/nWT9bG971XW+ZsN8IcNDUhrc=
-github.com/goal-web/console v0.1.1 h1:Fcs8Xozr1DjtaWrjwnPY1ZhERXH4IOnb0DbJtMpl9vg=
-github.com/goal-web/console v0.1.1/go.mod h1:4l0wcQ/CLvfFm8xNWiyGNDfpfqu7OMXGWVzkofHNoO4=
+github.com/goal-web/console v0.1.2 h1:S9GA/XgnnZ6nm6Bi6OSr+6AxcmK5yCVIk18XwEaFSGk=
+github.com/goal-web/console v0.1.2/go.mod h1:4l0wcQ/CLvfFm8xNWiyGNDfpfqu7OMXGWVzkofHNoO4=
 github.com/goal-web/container v0.1.3/go.mod h1:IpfV+0J1xaKUTl7Pymc02h0wNQtCKWcQqI8ASFd/p/Y=
 github.com/goal-web/container v0.1.4/go.mod h1:xbOKGHxV8Pg4IPTVDEEVQ21YZ2Fr2u7sjMUSTVmh05A=
 github.com/goal-web/container v0.1.5 h1:tQi2FvmIEPua70TNFMKB3/XKGz6AKLmbq0IwtUK6VoA=
