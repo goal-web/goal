@@ -6,7 +6,7 @@ import (
 	"github.com/goal-web/goal/app/http/controllers"
 )
 
-func ApiRoutes(router contracts.Router) {
+func Api(router contracts.Router) {
 
 	router.Get("/queue", controllers.DemoJob)
 

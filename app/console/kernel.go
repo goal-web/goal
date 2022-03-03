@@ -7,6 +7,10 @@ import (
 	commands2 "github.com/goal-web/goal/app/console/commands"
 )
 
+func Service() contracts.ServiceProvider {
+	return &console.ServiceProvider{ConsoleProvider: NewKernel}
+}
+
 func NewKernel(app contracts.Application) contracts.Console {
 	return &Kernel{console.NewKernel(app, []contracts.CommandProvider{
 		commands.Runner,

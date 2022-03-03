@@ -7,14 +7,13 @@ import (
 	"github.com/goal-web/bloomfilter"
 	"github.com/goal-web/cache"
 	"github.com/goal-web/config"
-	"github.com/goal-web/console"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/database"
 	"github.com/goal-web/email"
 	"github.com/goal-web/encryption"
 	"github.com/goal-web/events"
 	"github.com/goal-web/filesystem"
-	console2 "github.com/goal-web/goal/app/console"
+	"github.com/goal-web/goal/app/console"
 	"github.com/goal-web/goal/app/exceptions"
 	"github.com/goal-web/goal/app/providers"
 	config2 "github.com/goal-web/goal/config"
@@ -23,7 +22,7 @@ import (
 	"github.com/goal-web/hashing"
 	"github.com/goal-web/http"
 	"github.com/goal-web/http/sse"
-	"github.com/goal-web/queue"
+	//"github.com/goal-web/queue"
 	"github.com/goal-web/ratelimiter"
 	"github.com/goal-web/redis"
 	"github.com/goal-web/serialization"
@@ -55,23 +54,21 @@ func main() {
 		&session.ServiceProvider{},
 		auth.ServiceProvider{},
 		&ratelimiter.ServiceProvider{},
-		&console.ServiceProvider{
-			ConsoleProvider: console2.NewKernel,
-		},
+		console.Service(),
 		database.Service(migrations.Migrations),
-		&queue.ServiceProvider{},
+		//&queue.ServiceProvider{},
 		&email.ServiceProvider{},
 		&http.ServiceProvider{RouteCollectors: []interface{}{
 			// 路由收集器
-			routes.ApiRoutes,
-			routes.WebSocketRoutes,
-			routes.SseRoutes,
+			routes.Api,
+			routes.WebSocket,
+			routes.Sse,
 		}},
 		sse.ServiceProvider{},
 		websocket.ServiceProvider{},
 		providers.App{},
 		providers.Gate(),
-		providers.Micro(),
+		//providers.Micro(),
 		&signal.ServiceProvider{},
 	)
 
