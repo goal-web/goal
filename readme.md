@@ -91,7 +91,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * [ ] 第三方sdk
   * [x] [支付宝sdk](https://github.com/qbhy/goal-alipay)
   * [x] [微信sdk](https://github.com/qbhy/goal-wechat)
-  * [ ] 阿里云 sdk
+  * [x] [阿里云sdk](https://github.com/qbhy/goal-aliyun)
   * [ ] 极光推送 sdk
   * [ ] 字节跳动 sdk
   * [ ] QQ sdk
