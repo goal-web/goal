@@ -9,7 +9,8 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 
 ## 链接
 * [goal 仓库](https://github.com/goal-web/goal)
-* [快速开始](https://github.com/goal-web/goal/wiki/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B---quick-start)
+* [快速开始](https://github.com/goal-web/goal/wiki/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
+* [目录结构](https://github.com/goal-web/goal/wiki/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84)
 
 ## 功能特性
 
