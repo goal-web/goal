@@ -1,6 +1,6 @@
 # goal
-
-一个继承了 laravel 思想的 golang web 框架
+一个继承了 laravel 思想的 golang web 框架  
+[goal仓库](https://github.com/goal-web/goal)
 
 ## 框架特点
 goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥梁，为开发者提供丰富的功能和服务，这点与 laravel 是相似的。
@@ -99,17 +99,18 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 
 你可以通过以下方式参与到项目中来
 
-* [x] 完善已有模块（优化或者改bug）
-* [x] 完善或者修复测试用例
-* [x] 开发新的模块（比如标记为未完成的模块）
-* [x] 添加或者修改完善注释（用英语）
-* [x] 修改错别字或者不当用词（文档和代码都可以，比如变量命名）
-* [x] 帮助开发独立文档（readme是临时的，后面需要独立的文档项目）
-* [x] 开发扩展包（goal 的扩展相当容易，后面我会写教程，现阶段进群聊）
-* [x] 使用 goal 实现各种例子（放examples文件夹或者新建仓库在这里引用）
-* [x] 更多方式进群聊吧
+* 完善已有模块（优化或者改bug）
+* 完善或者修复测试用例
+* 开发新的模块（比如标记为未完成的模块）
+* 添加或者修改完善注释（用英语）
+* 修改错别字或者不当用词（文档和代码都可以，比如变量命名）
+* 帮助开发独立文档（readme是临时的，后面需要独立的文档项目）
+* 开发扩展包（goal 的扩展相当容易，后面我会写教程，现阶段进群聊）
+* 使用 goal 实现各种例子（放examples文件夹或者新建仓库在这里引用）
+* 更多方式进群聊吧
 
 ## 交流
-
-扫码加入QQ群  
-![qq_pic_merged_1635476228621.jpg](https://i.loli.net/2021/10/29/dpLvehizJCX7EUN.jpg)
+微信群  
+<a href="https://sm.ms/image/n9jESh6r4e3WQsL" target="_blank"><img  style="max-width: 200px" src="https://s2.loli.net/2022/03/03/n9jESh6r4e3WQsL.png" /></a>  
+QQ群    
+<img style="max-width: 200px" src="https://i.loli.net/2021/10/29/dpLvehizJCX7EUN.jpg">
