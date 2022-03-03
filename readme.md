@@ -49,6 +49,7 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
     * [x] sqlite
     * [x] clickhouse
     * [ ] sqlserver
+    * [ ] oracle
 * [ ] eloquent ORM模块，计划 golang 1.18 发布后完成，因为泛型
 * [x] http http相关模块，请求、响应、中间件等
   * [x] sse server-sent-events模块(简称sse)
