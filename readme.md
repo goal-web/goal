@@ -1,12 +1,15 @@
 # goal
-一个继承了 laravel 思想的 golang web 框架  
-[goal仓库](https://github.com/goal-web/goal)
+一个继承了 laravel 思想的 golang web 框架
 
 ## 框架特点
 goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥梁，为开发者提供丰富的功能和服务，这点与 laravel 是相似的。
 * 强大的容器
 * 服务提供者
 * 契约精神
+
+## 链接
+* [goal 仓库](https://github.com/goal-web/goal)
+* [快速开始](https://github.com/goal-web/goal/wiki/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B---quick-start)
 
 ## 功能特性
 
@@ -112,6 +115,6 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 
 ## 交流
 微信群  
-<a href="https://sm.ms/image/n9jESh6r4e3WQsL" target="_blank"><img  style="max-width: 200px" src="https://s2.loli.net/2022/03/03/n9jESh6r4e3WQsL.png" /></a>  
+<img style="max-width: 200px" src="https://s2.loli.net/2022/03/03/n9jESh6r4e3WQsL.png"/>  
 QQ群    
-<img style="max-width: 200px" src="https://i.loli.net/2021/10/29/dpLvehizJCX7EUN.jpg">
+<img style="max-width: 200px" src="https://i.loli.net/2021/10/29/dpLvehizJCX7EUN.jpg"/>
