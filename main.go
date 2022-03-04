@@ -4,7 +4,6 @@ import (
 	"github.com/goal-web/application"
 	"github.com/goal-web/application/signal"
 	"github.com/goal-web/auth"
-	"github.com/goal-web/bloomfilter"
 	"github.com/goal-web/cache"
 	"github.com/goal-web/config"
 	"github.com/goal-web/contracts"
@@ -12,7 +11,6 @@ import (
 	"github.com/goal-web/email"
 	"github.com/goal-web/encryption"
 	"github.com/goal-web/events"
-	"github.com/goal-web/filesystem"
 	"github.com/goal-web/goal/app/console"
 	"github.com/goal-web/goal/app/exceptions"
 	"github.com/goal-web/goal/app/providers"
@@ -21,13 +19,9 @@ import (
 	"github.com/goal-web/goal/routes"
 	"github.com/goal-web/hashing"
 	"github.com/goal-web/http"
-	"github.com/goal-web/http/sse"
-	//"github.com/goal-web/queue"
 	"github.com/goal-web/ratelimiter"
 	"github.com/goal-web/redis"
 	"github.com/goal-web/serialization"
-	"github.com/goal-web/session"
-	"github.com/goal-web/websocket"
 	"os"
 )
 
@@ -45,13 +39,12 @@ func main() {
 		config.Service(os.Getenv("env"), path, config2.Configs()),
 		hashing.ServiceProvider{},
 		encryption.ServiceProvider{},
-		filesystem.ServiceProvider{},
+		//filesystem.ServiceProvider{},
 		&serialization.ServiceProvider{},
 		events.ServiceProvider{},
 		redis.ServiceProvider{},
 		cache.ServiceProvider{},
-		&bloomfilter.ServiceProvider{},
-		&session.ServiceProvider{},
+		//&bloomfilter.ServiceProvider{},
 		auth.ServiceProvider{},
 		&ratelimiter.ServiceProvider{},
 		console.Service(),
@@ -64,10 +57,11 @@ func main() {
 			routes.WebSocket,
 			routes.Sse,
 		}},
-		sse.ServiceProvider{},
-		websocket.ServiceProvider{},
+		//&session.ServiceProvider{},
+		//sse.ServiceProvider{},
+		//websocket.ServiceProvider{},
 		providers.App{},
-		providers.Gate(),
+		//providers.Gate(),
 		//providers.Micro(),
 		&signal.ServiceProvider{},
 	)
