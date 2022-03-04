@@ -8,7 +8,6 @@ import (
 	"github.com/goal-web/config"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/database"
-	"github.com/goal-web/email"
 	"github.com/goal-web/encryption"
 	"github.com/goal-web/events"
 	"github.com/goal-web/goal/app/console"
@@ -19,7 +18,6 @@ import (
 	"github.com/goal-web/goal/routes"
 	"github.com/goal-web/hashing"
 	"github.com/goal-web/http"
-	"github.com/goal-web/ratelimiter"
 	"github.com/goal-web/redis"
 	"github.com/goal-web/serialization"
 	"os"
@@ -46,11 +44,11 @@ func main() {
 		cache.ServiceProvider{},
 		//&bloomfilter.ServiceProvider{},
 		auth.ServiceProvider{},
-		&ratelimiter.ServiceProvider{},
+		//&ratelimiter.ServiceProvider{},
 		console.Service(),
 		database.Service(migrations.Migrations),
 		//&queue.ServiceProvider{},
-		&email.ServiceProvider{},
+		//&email.ServiceProvider{},
 		&http.ServiceProvider{RouteCollectors: []interface{}{
 			// 路由收集器
 			routes.Api,
