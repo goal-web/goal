@@ -118,4 +118,4 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 微信群  
 <img style="max-width: 200px" src="https://s2.loli.net/2022/03/03/n9jESh6r4e3WQsL.png"/>  
 QQ群    
-<img style="max-width: 200px" src="https://i.loli.net/2021/10/29/dpLvehizJCX7EUN.jpg"/>
+<img style="max-width: 200px" src="https://s2.loli.net/2022/03/08/wAdeRgFZQUHaCXl.png"/>
