@@ -14,14 +14,14 @@ require (
 	github.com/goal-web/database v0.1.10
 	github.com/goal-web/email v0.1.1
 	github.com/goal-web/encryption v0.1.1
-	github.com/goal-web/events v0.1.5
+	github.com/goal-web/events v0.1.6
 	github.com/goal-web/filesystem v0.1.3
 	github.com/goal-web/hashing v0.1.0
 	github.com/goal-web/http v0.1.18
 	github.com/goal-web/micro v0.1.0
 	github.com/goal-web/microdemo v0.0.0-20220219171937-6f3fca7dfbcb
 	github.com/goal-web/queue v0.1.2
-	github.com/goal-web/redis v0.1.3
+	github.com/goal-web/redis v0.1.4
 	github.com/goal-web/serialization v0.1.10
 	github.com/goal-web/session v0.1.4
 	github.com/goal-web/supports v0.1.29
