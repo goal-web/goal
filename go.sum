@@ -306,8 +306,9 @@ github.com/goal-web/pipeline v0.1.5/go.mod h1:W4DFIzdiRvfEPQaK91HtQgp9oD8ywlj5eh
 github.com/goal-web/pipeline v0.1.6 h1:/4hwryM//nJbGLcHvwUFhi4r2prG/+Zw50QulV/7dmA=
 github.com/goal-web/pipeline v0.1.6/go.mod h1:heg8/W6brqpaq2StsyyvhfmCt4Iq+SCfKEHdQYdJmv8=
 github.com/goal-web/querybuilder v0.1.12/go.mod h1:55Y9TFAlG1uSoO7ox8n4t2jjFaF2Fz8nO9kFtnV6bsQ=
-github.com/goal-web/querybuilder v0.1.13 h1:KFaUIEQrnFnyRmFG4R4NojtholK5Z2x3qAItS0JWaNU=
 github.com/goal-web/querybuilder v0.1.13/go.mod h1:nqNpXreTOLYvTYsZ2HOAPTlrjL2jZeXDGXq33cykbHE=
+github.com/goal-web/querybuilder v0.1.14 h1:VR16QP1NQFlTpXSosqzMYB+INWL+IEJ6me0C1Ym8MeU=
+github.com/goal-web/querybuilder v0.1.14/go.mod h1:nqNpXreTOLYvTYsZ2HOAPTlrjL2jZeXDGXq33cykbHE=
 github.com/goal-web/queue v0.1.2 h1:Fua2kDiv4oIRVIk5xTAHivIBn7uoFDarNpzbqAYS/bs=
 github.com/goal-web/queue v0.1.2/go.mod h1:PIDVy4qoq9aTo0kqgYyCVwr8dUh9DA+UJq9+JwQBtts=
 github.com/goal-web/redis v0.1.4 h1:ljWemx4Zbc2qjhmLfvmEtvEe6LPK9t9tto4QcyT3BDA=
