@@ -59,7 +59,7 @@ require (
 	github.com/goal-web/collection v0.1.5 // indirect
 	github.com/goal-web/container v0.1.5 // indirect
 	github.com/goal-web/pipeline v0.1.6 // indirect
-	github.com/goal-web/querybuilder v0.1.13 // indirect
+	github.com/goal-web/querybuilder v0.1.14 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
