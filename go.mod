@@ -10,7 +10,7 @@ require (
 	github.com/goal-web/cache v0.1.2
 	github.com/goal-web/config v0.1.3
 	github.com/goal-web/console v0.1.2
-	github.com/goal-web/contracts v0.1.53
+	github.com/goal-web/contracts v0.1.57
 	github.com/goal-web/database v0.1.10
 	github.com/goal-web/email v0.1.1
 	github.com/goal-web/encryption v0.1.1
@@ -59,7 +59,7 @@ require (
 	github.com/goal-web/collection v0.1.5 // indirect
 	github.com/goal-web/container v0.1.5 // indirect
 	github.com/goal-web/pipeline v0.1.6 // indirect
-	github.com/goal-web/querybuilder v0.1.14 // indirect
+	github.com/goal-web/querybuilder v0.1.16 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
