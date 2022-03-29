@@ -242,8 +242,8 @@ github.com/goal-web/application v0.1.0/go.mod h1:pHFKbdFw0UsckCsgHKF6agBqdfxT/qN
 github.com/goal-web/application v0.1.2/go.mod h1:Kukcao7X+pkhk4J9Vn/fNWnjVkhAb1+82Wt31HmeVWo=
 github.com/goal-web/application v0.1.4 h1:TJGM3ci+tSLYQ79PdqgDwc1IS6LS9qLmolaasvql53Q=
 github.com/goal-web/application v0.1.4/go.mod h1:J82RNWrZfzUlwW6uoXKRKdmo0xs1lpJKXPSSd0Pj2ns=
-github.com/goal-web/auth v0.1.9 h1:gJRn3UMk5okIjXjNBRxx0xt0SJn45eR9VItA0HS4HaM=
-github.com/goal-web/auth v0.1.9/go.mod h1:nkTjON3ipd4lLvN62Q/GcSig8m9Cb5324/Vs0BH0F4k=
+github.com/goal-web/auth v0.1.10 h1:Ice4xQNtCgV3woL3yboMjFacytcEuGQhTCRqcPk2G18=
+github.com/goal-web/auth v0.1.10/go.mod h1:nkTjON3ipd4lLvN62Q/GcSig8m9Cb5324/Vs0BH0F4k=
 github.com/goal-web/bloomfilter v0.1.2 h1:cNvzxFZupzZ/t8E8A52cToexnWZMjD8Ce4RmA/C/zOs=
 github.com/goal-web/bloomfilter v0.1.2/go.mod h1:7g57fH7lbbTqKgB4ArGcIhrCOoKev1A+yLJlDFRdp4I=
 github.com/goal-web/cache v0.1.2 h1:Qh0etC5odjUhjUFSGnsdqYBoO83idTYhZKTe+z+dMHs=
@@ -283,8 +283,8 @@ github.com/goal-web/contracts v0.1.53/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrC
 github.com/goal-web/contracts v0.1.57 h1:aPu9CBOuRjaxAEXtXgnzi1aLuuNSWViGSceeKC0Rsu0=
 github.com/goal-web/contracts v0.1.57/go.mod h1:lKHynU2Kgk6xyxL4afOJM4TO1kSa3RrCJ2bm5RtFMBw=
 github.com/goal-web/database v0.1.8/go.mod h1:ZX2B3WKamsH/oZQvQSjeDGB67cQ2mQuUvj5uOpnQfiY=
-github.com/goal-web/database v0.1.10 h1:rHq+8QSRmfkqYz3126lsYOeBox41NSW1QUjKkwbElCE=
-github.com/goal-web/database v0.1.10/go.mod h1:ZX2B3WKamsH/oZQvQSjeDGB67cQ2mQuUvj5uOpnQfiY=
+github.com/goal-web/database v0.1.12 h1:nxrEYiuD+ql6wWFR3yxgIPfAJXSksPASLxwX+2LGOk4=
+github.com/goal-web/database v0.1.12/go.mod h1:ZX2B3WKamsH/oZQvQSjeDGB67cQ2mQuUvj5uOpnQfiY=
 github.com/goal-web/email v0.1.1 h1:WxuzCCD6hW9YRcmGFb7tfeO8Wuzx8ZKRzs1U14oXPSU=
 github.com/goal-web/email v0.1.1/go.mod h1:tN89zl1j9dYcydImU2xPEnfvweYjIRzV3y6vX8lLbyI=
 github.com/goal-web/encryption v0.1.1 h1:KzzERSwbyOEFFVdGaeekYlTq5MT3Jo+mHKP/AMrOCrU=

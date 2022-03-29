@@ -5,13 +5,13 @@ go 1.17
 require (
 	github.com/asim/go-micro/plugins/registry/etcd/v4 v4.0.0-20220224093209-dca3a3b5535c
 	github.com/goal-web/application v0.1.4
-	github.com/goal-web/auth v0.1.9
+	github.com/goal-web/auth v0.1.10
 	github.com/goal-web/bloomfilter v0.1.2
 	github.com/goal-web/cache v0.1.2
 	github.com/goal-web/config v0.1.3
 	github.com/goal-web/console v0.1.2
 	github.com/goal-web/contracts v0.1.57
-	github.com/goal-web/database v0.1.11
+	github.com/goal-web/database v0.1.12
 	github.com/goal-web/email v0.1.1
 	github.com/goal-web/encryption v0.1.1
 	github.com/goal-web/events v0.1.6
