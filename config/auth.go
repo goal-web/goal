@@ -5,6 +5,7 @@ import (
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/goal/app/models"
 	"github.com/golang-jwt/jwt"
+	"time"
 )
 
 func init() {
@@ -19,7 +20,7 @@ func init() {
 					"driver":   "jwt",
 					"secret":   env.GetString("auth.jwt.secret"),
 					"method":   jwt.SigningMethodHS256,
-					"lifetime": 60 * 60 * 24, // 单位：秒
+					"lifetime": 60 * 60 * 24 * time.Second,
 					"provider": "db",
 				},
 				"session": {
