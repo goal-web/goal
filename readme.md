@@ -115,6 +115,11 @@ goal 通过容器和服务提供者作为框架的核心，以 contracts 为桥�
 * 使用 goal 实现各种例子（放examples文件夹或者新建仓库在这里引用）
 * 更多方式进群聊吧
 
+## 贡献者
+<a href="https://github.com/goal-web/goal/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=goal-web/goal" />
+</a>
+
 ## 交流
 微信群  
 <img style="max-width: 200px" src="https://s2.loli.net/2022/04/29/UiKvXAyk9L7fHFN.png"/>
