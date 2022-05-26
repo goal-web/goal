@@ -23,6 +23,10 @@ type Kernel struct {
 	app contracts.Application
 }
 
+func (this *Kernel) Exists(schedule string) bool {
+	return true
+}
+
 func (this *Kernel) Schedule(schedule contracts.Schedule) {
 	//schedule.Call(func() {
 	//	logs.Default().Info("周日每5秒钟打印 周日愉快")
