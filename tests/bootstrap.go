@@ -42,7 +42,7 @@ func initApp(path ...string) contracts.Application {
 			Env:             env,
 			Paths:           []string{runPath},
 			Sep:             "=",
-			ConfigProviders: config2.Configs(),
+			ConfigProviders: config2.GetConfigProviders(),
 		},
 		&console.ServiceProvider{
 			ConsoleProvider: func(application contracts.Application) contracts.Console {
@@ -61,7 +61,7 @@ func initApp(path ...string) contracts.Application {
 		auth.ServiceProvider{},
 		&email.ServiceProvider{},
 		&database.ServiceProvider{},
-		//&http.ServiceProvider{RouteCollectors: []interface{}{
+		//&http.serviceProvider{RouteCollectors: []interface{}{
 		//	// 路由收集器
 		//	routes.V1Routes,
 		//}},

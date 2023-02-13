@@ -1,6 +1,6 @@
 module github.com/goal-web/goal
 
-go 1.17
+go 1.19
 
 require (
 	github.com/asim/go-micro/plugins/registry/etcd/v4 v4.0.0-20220224093209-dca3a3b5535c
@@ -10,7 +10,7 @@ require (
 	github.com/goal-web/cache v0.1.2
 	github.com/goal-web/config v0.1.3
 	github.com/goal-web/console v0.1.5
-	github.com/goal-web/contracts v0.1.57
+	github.com/goal-web/contracts v0.1.62
 	github.com/goal-web/database v0.1.12
 	github.com/goal-web/email v0.1.1
 	github.com/goal-web/encryption v0.1.1
@@ -119,4 +119,13 @@ require (
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
+)
+
+replace (
+	github.com/goal-web/auth => ../auth
+	github.com/goal-web/bloomfilter => ../bloomfilter
+	github.com/goal-web/cache => ../cache
+	github.com/goal-web/config => ../config
+	github.com/goal-web/console => ../console
+	github.com/goal-web/container => ../container
 )

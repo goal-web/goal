@@ -12,7 +12,7 @@ var (
 	configs = make(map[string]contracts.ConfigProvider)
 )
 
-func Configs() map[string]contracts.ConfigProvider {
+func GetConfigProviders() map[string]contracts.ConfigProvider {
 	return configs
 }
 

@@ -4,6 +4,7 @@ import (
 	"github.com/goal-web/application"
 	"github.com/goal-web/application/signal"
 	"github.com/goal-web/auth"
+	"github.com/goal-web/bloomfilter"
 	"github.com/goal-web/cache"
 	"github.com/goal-web/config"
 	"github.com/goal-web/contracts"
@@ -34,30 +35,30 @@ func main() {
 	})
 
 	app.RegisterServices(
-		config.Service(os.Getenv("env"), path, config2.Configs()),
+		config.NewService(os.Getenv("env"), path, config2.GetConfigProviders()),
 		hashing.ServiceProvider{},
 		encryption.ServiceProvider{},
-		//filesystem.ServiceProvider{},
+		//filesystem.serviceProvider{},
 		&serialization.ServiceProvider{},
 		events.ServiceProvider{},
 		redis.ServiceProvider{},
-		cache.ServiceProvider{},
-		//&bloomfilter.ServiceProvider{},
-		auth.ServiceProvider{},
-		//&ratelimiter.ServiceProvider{},
-		console.Service(),
+		cache.NewService(),
+		bloomfilter.NewService(),
+		auth.NewService(),
+		//&ratelimiter.serviceProvider{},
+		console.NewService(),
 		database.Service(migrations.Migrations),
-		//&queue.ServiceProvider{},
-		//&email.ServiceProvider{},
+		//&queue.serviceProvider{},
+		//&email.serviceProvider{},
 		&http.ServiceProvider{RouteCollectors: []interface{}{
 			// 路由收集器
 			routes.Api,
 			routes.WebSocket,
 			routes.Sse,
 		}},
-		//&session.ServiceProvider{},
-		//sse.ServiceProvider{},
-		//websocket.ServiceProvider{},
+		//&session.serviceProvider{},
+		//sse.serviceProvider{},
+		//websocket.serviceProvider{},
 		providers.App{},
 		//providers.Gate(),
 		//providers.Micro(),
