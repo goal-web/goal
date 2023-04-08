@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var DemoClass = class.Make(new(Demo))
+var DemoClass = class.Any(Demo{})
 
 type Demo struct {
 	*queue.Job

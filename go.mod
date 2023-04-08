@@ -3,28 +3,28 @@ module github.com/goal-web/goal
 go 1.19
 
 require (
-	github.com/asim/go-micro/plugins/registry/etcd/v4 v4.0.0-20220224093209-dca3a3b5535c
-	github.com/goal-web/application v0.1.4
-	github.com/goal-web/auth v0.1.10
+	github.com/goal-web/application v0.1.6
+	github.com/goal-web/auth v0.1.12
 	github.com/goal-web/bloomfilter v0.1.2
 	github.com/goal-web/cache v0.1.2
-	github.com/goal-web/config v0.1.3
+	github.com/goal-web/config v0.1.4
 	github.com/goal-web/console v0.1.5
-	github.com/goal-web/contracts v0.1.62
-	github.com/goal-web/database v0.1.12
-	github.com/goal-web/email v0.1.1
-	github.com/goal-web/encryption v0.1.1
-	github.com/goal-web/events v0.1.6
+	github.com/goal-web/contracts v0.1.66
+	github.com/goal-web/database v0.1.15
+	github.com/goal-web/email v0.1.2
+	github.com/goal-web/encryption v0.1.2
+	github.com/goal-web/events v0.1.7
 	github.com/goal-web/filesystem v0.1.3
 	github.com/goal-web/hashing v0.1.0
 	github.com/goal-web/http v0.1.18
 	github.com/goal-web/micro v0.1.0
 	github.com/goal-web/microdemo v0.0.0-20220219171937-6f3fca7dfbcb
 	github.com/goal-web/queue v0.1.3
+	github.com/goal-web/ratelimiter v0.1.2
 	github.com/goal-web/redis v0.1.7
 	github.com/goal-web/serialization v0.1.11
 	github.com/goal-web/session v0.1.4
-	github.com/goal-web/supports v0.1.29
+	github.com/goal-web/supports v0.1.32
 	github.com/goal-web/validation v0.1.0
 	github.com/goal-web/websocket v0.1.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
@@ -33,11 +33,14 @@ require (
 	go-micro.dev/v4 v4.6.0
 )
 
+require github.com/asim/go-micro/plugins/registry/etcd/v4 v4.7.0
+
 require (
 	github.com/ClickHouse/clickhouse-go/v2 v2.0.9 // indirect
 	github.com/Microsoft/go-winio v0.5.0 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20210428141323-04723f9f07d7 // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect
+	github.com/andres-erbsen/clock v0.0.0-20160526145045-9e14626cd129 // indirect
 	github.com/apex/log v1.9.0 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/bits-and-blooms/bitset v1.2.1 // indirect
@@ -56,10 +59,10 @@ require (
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/goal-web/collection v0.1.5 // indirect
-	github.com/goal-web/container v0.1.5 // indirect
+	github.com/goal-web/collection v0.1.6 // indirect
+	github.com/goal-web/container v0.1.7 // indirect
 	github.com/goal-web/pipeline v0.1.6 // indirect
-	github.com/goal-web/querybuilder v0.1.16 // indirect
+	github.com/goal-web/querybuilder v0.1.19 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
@@ -71,12 +74,12 @@ require (
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible // indirect
 	github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351 // indirect
 	github.com/klauspost/compress v1.14.2 // indirect
-	github.com/labstack/echo/v4 v4.6.3 // indirect
-	github.com/labstack/gommon v0.3.1 // indirect
+	github.com/labstack/echo/v4 v4.10.2 // indirect
+	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lib/pq v1.10.4 // indirect
-	github.com/mattn/go-colorable v0.1.11 // indirect
-	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mattn/go-sqlite3 v1.14.10 // indirect
 	github.com/miekg/dns v1.1.43 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
@@ -99,7 +102,7 @@ require (
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/urfave/cli/v2 v2.3.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasttemplate v1.2.1 // indirect
+	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.0 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.0 // indirect
@@ -108,24 +111,16 @@ require (
 	go.opentelemetry.io/otel/trace v1.3.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
+	go.uber.org/ratelimit v0.2.0 // indirect
 	go.uber.org/zap v1.17.0 // indirect
-	golang.org/x/crypto v0.0.0-20220128200615-198e4374d7ed // indirect
-	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
+	golang.org/x/crypto v0.6.0 // indirect
+	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	google.golang.org/genproto v0.0.0-20210602131652-f16073e35f0c // indirect
 	google.golang.org/grpc v1.38.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
-)
-
-replace (
-	github.com/goal-web/auth => ../auth
-	github.com/goal-web/bloomfilter => ../bloomfilter
-	github.com/goal-web/cache => ../cache
-	github.com/goal-web/config => ../config
-	github.com/goal-web/console => ../console
-	github.com/goal-web/container => ../container
 )

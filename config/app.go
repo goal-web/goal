@@ -19,7 +19,7 @@ func GetConfigProviders() map[string]contracts.ConfigProvider {
 func init() {
 	hostname, _ := os.Hostname()
 	userHome, _ := os.UserHomeDir()
-	configs["app"] = func(env contracts.Env) interface{} {
+	configs["app"] = func(env contracts.Env) any {
 		return application.Config{
 			ServerId: fmt.Sprintf("%s:%s.%s", hostname, userHome, utils.RandStr(6)),
 			Name:     env.GetString("app.name"),

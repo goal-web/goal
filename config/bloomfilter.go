@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	configs["bloomfilter"] = func(env contracts.Env) interface{} {
+	configs["bloomfilter"] = func(env contracts.Env) any {
 		return bloomfilter.Config{
 			Default: "default",
 			Filters: bloomfilter.Filters{

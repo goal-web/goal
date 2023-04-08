@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	configs["mail"] = func(env contracts.Env) interface{} {
+	configs["mail"] = func(env contracts.Env) any {
 		return email.Config{
 			Default: "default",
 			Mailers: map[string]contracts.Fields{

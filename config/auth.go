@@ -9,11 +9,11 @@ import (
 )
 
 func init() {
-	configs["auth"] = func(env contracts.Env) interface{} {
+	configs["auth"] = func(env contracts.Env) any {
 		return auth.Config{
 			Defaults: auth.Defaults{
-				Guard: env.StringOption("auth.default", "jwt"),
-				User:  env.StringOption("auth.user", "db"),
+				Guard: env.StringOptional("auth.default", "jwt"),
+				User:  env.StringOptional("auth.user", "db"),
 			},
 			Guards: map[string]contracts.Fields{
 				"jwt": {
@@ -26,7 +26,7 @@ func init() {
 				"session": {
 					"driver":      "session",
 					"provider":    "db",
-					"session_key": env.StringOption("auth.session.key", "auth_session"),
+					"session_key": env.StringOptional("auth.session.key", "auth_session"),
 				},
 			},
 			Users: map[string]contracts.Fields{

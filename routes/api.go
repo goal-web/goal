@@ -8,7 +8,7 @@ import (
 
 func Api(router contracts.Router) {
 
-	router.Get("/queue", controllers.DemoJob)
+	router.Post("/queue", controllers.DemoJob)
 
 	router.Get("/", controllers.HelloWorld)
 	//router.Get("/", controllers.HelloWorld, ratelimiter.Middleware(100))

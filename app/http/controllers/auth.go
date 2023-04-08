@@ -13,9 +13,9 @@ func LoginExample(guard contracts.Guard, request requests.LoginRequest) contract
 	validation.VerifyForm(request)
 
 	//  这是伪代码
-	var user, ok = models.UserQuery().Where("name", request.GetString("username")).First().(models.User)
+	var user = models.UserQuery().Where("name", request.GetString("username")).First()
 
-	if !ok {
+	if user == nil {
 		return contracts.Fields{
 			"error": "用户不存在",
 		}
@@ -26,7 +26,7 @@ func LoginExample(guard contracts.Guard, request requests.LoginRequest) contract
 	}
 }
 
-func GetCurrentUser(guard contracts.Guard) interface{} {
+func GetCurrentUser(guard contracts.Guard) any {
 	return contracts.Fields{
 		"user": guard.User(),
 	}

@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	configs["filesystem"] = func(env contracts.Env) interface{} {
+	configs["filesystem"] = func(env contracts.Env) any {
 		return filesystem.Config{
 			Default: env.GetString("filesystem.driver"),
 			Disks: map[string]contracts.Fields{

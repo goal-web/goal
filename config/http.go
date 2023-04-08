@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	configs["http"] = func(env contracts.Env) interface{} {
+	configs["http"] = func(env contracts.Env) any {
 		return http.Config{
 			Host: env.GetString("http.host"),
 			Port: env.GetString("http.port"),

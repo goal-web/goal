@@ -61,7 +61,7 @@ func initApp(path ...string) contracts.Application {
 		auth.ServiceProvider{},
 		&email.ServiceProvider{},
 		&database.ServiceProvider{},
-		//&http.serviceProvider{RouteCollectors: []interface{}{
+		//&http.serviceProvider{RouteCollectors: []any{
 		//	// 路由收集器
 		//	routes.V1Routes,
 		//}},

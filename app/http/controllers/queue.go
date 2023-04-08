@@ -7,10 +7,12 @@ import (
 	"time"
 )
 
-func DemoJob(queue contracts.Queue, request contracts.HttpRequest) string {
+func DemoJob(queue contracts.Queue, request contracts.HttpRequest) any {
 	var err = queue.Push(jobs.NewDemo(request.GetString("info")))
 	if err != nil {
-		return err.Error()
+		return contracts.Fields{
+			"error": err.Error(),
+		}
 	}
 
 	err = queue.Later(
@@ -18,8 +20,12 @@ func DemoJob(queue contracts.Queue, request contracts.HttpRequest) string {
 		jobs.NewDemo("delay+"+request.GetString("info")),
 	)
 	if err != nil {
-		return err.Error()
+		return contracts.Fields{
+			"error": err.Error(),
+		}
 	}
 
-	return carbon.Now().String()
+	return contracts.Fields{
+		"now": carbon.Now().String(),
+	}
 }

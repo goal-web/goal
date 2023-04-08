@@ -6,7 +6,7 @@ import (
 	"github.com/goal-web/http"
 )
 
-func Example(request contracts.HttpRequest, next contracts.Pipe) interface{} {
+func Example(request contracts.HttpRequest, next contracts.Pipe) any {
 	fmt.Println("controller before")
 
 	result := next(request)

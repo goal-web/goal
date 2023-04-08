@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	configs["redis"] = func(env contracts.Env) interface{} {
+	configs["redis"] = func(env contracts.Env) any {
 		return redis.Config{
 			Default: utils.StringOr(env.GetString("redis.default"), "default"),
 			Stores: map[string]contracts.Fields{

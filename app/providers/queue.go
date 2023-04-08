@@ -2,7 +2,6 @@ package providers
 
 import (
 	"github.com/goal-web/application"
-	"github.com/goal-web/auth"
 	"github.com/goal-web/bloomfilter"
 	"github.com/goal-web/cache"
 	"github.com/goal-web/config"
@@ -16,30 +15,25 @@ import (
 	"github.com/goal-web/goal/app/exceptions"
 	"github.com/goal-web/goal/app/listeners"
 	config2 "github.com/goal-web/goal/config"
-	"github.com/goal-web/goal/routes"
 	"github.com/goal-web/hashing"
-	"github.com/goal-web/http"
-	"github.com/goal-web/http/sse"
 	"github.com/goal-web/queue"
 	"github.com/goal-web/ratelimiter"
 	"github.com/goal-web/redis"
 	"github.com/goal-web/serialization"
-	"github.com/goal-web/session"
 	"github.com/goal-web/supports/utils"
-	"github.com/goal-web/websocket"
 	"github.com/golang-module/carbon/v2"
 	"os"
 )
 
-type App struct {
+type Queue struct {
 	path string
 }
 
-func NewApp(path string) contracts.ServiceProvider {
-	return &App{path}
+func NewQueueWorker(path string) contracts.ServiceProvider {
+	return &Queue{path}
 }
 
-func (app App) Register(instance contracts.Application) {
+func (app Queue) Register(instance contracts.Application) {
 	// 设置异常处理器
 	instance.Singleton("exceptions.handler", func() contracts.ExceptionHandler {
 		return exceptions.NewHandler()
@@ -55,22 +49,12 @@ func (app App) Register(instance contracts.Application) {
 		redis.ServiceProvider{},
 		cache.NewService(),
 		bloomfilter.NewService(),
-		auth.NewService(),
+		//auth.NewService(),
 		&ratelimiter.ServiceProvider{},
 		console.NewService(),
 		database.NewService(),
-		queue.NewService(false),
 		&email.ServiceProvider{},
-		&http.ServiceProvider{RouteCollectors: []any{
-			// 路由收集器
-			routes.Api,
-			routes.WebSocket,
-			routes.Sse,
-		}},
-		&session.ServiceProvider{},
-		sse.ServiceProvider{},
-		websocket.ServiceProvider{},
-		Micro(),
+		queue.NewService(true),
 		//&signal.ServiceProvider{},
 	)
 
@@ -83,9 +67,9 @@ func (app App) Register(instance contracts.Application) {
 	})
 }
 
-func (app App) Start() error {
+func (app Queue) Start() error {
 	return nil
 }
 
-func (app App) Stop() {
+func (app Queue) Stop() {
 }

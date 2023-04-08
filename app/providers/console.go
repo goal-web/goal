@@ -16,9 +16,7 @@ import (
 	"github.com/goal-web/goal/app/exceptions"
 	"github.com/goal-web/goal/app/listeners"
 	config2 "github.com/goal-web/goal/config"
-	"github.com/goal-web/goal/routes"
 	"github.com/goal-web/hashing"
-	"github.com/goal-web/http"
 	"github.com/goal-web/http/sse"
 	"github.com/goal-web/queue"
 	"github.com/goal-web/ratelimiter"
@@ -31,15 +29,15 @@ import (
 	"os"
 )
 
-type App struct {
+type Console struct {
 	path string
 }
 
-func NewApp(path string) contracts.ServiceProvider {
+func NewConsole(path string) contracts.ServiceProvider {
 	return &App{path}
 }
 
-func (app App) Register(instance contracts.Application) {
+func (app Console) Register(instance contracts.Application) {
 	// 设置异常处理器
 	instance.Singleton("exceptions.handler", func() contracts.ExceptionHandler {
 		return exceptions.NewHandler()
@@ -61,12 +59,6 @@ func (app App) Register(instance contracts.Application) {
 		database.NewService(),
 		queue.NewService(false),
 		&email.ServiceProvider{},
-		&http.ServiceProvider{RouteCollectors: []any{
-			// 路由收集器
-			routes.Api,
-			routes.WebSocket,
-			routes.Sse,
-		}},
 		&session.ServiceProvider{},
 		sse.ServiceProvider{},
 		websocket.ServiceProvider{},
@@ -83,9 +75,9 @@ func (app App) Register(instance contracts.Application) {
 	})
 }
 
-func (app App) Start() error {
+func (app Console) Start() error {
 	return nil
 }
 
-func (app App) Stop() {
+func (app Console) Stop() {
 }

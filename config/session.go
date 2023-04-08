@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	configs["session"] = func(env contracts.Env) interface{} {
+	configs["session"] = func(env contracts.Env) any {
 		return session.Config{
 			Driver:     "redis", // 目前支持 cookie、redis
 			Encrypt:    true,
@@ -16,7 +16,7 @@ func init() {
 			Connection: "default",         // database、redis 用到
 			Key:        "goal_session:%s", // redis 驱动所用到的 key
 			Table:      "sessions",        // database 用到
-			Name:       env.StringOption("session.name", "goal"),
+			Name:       env.StringOptional("session.name", "goal"),
 		}
 	}
 }

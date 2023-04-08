@@ -7,11 +7,12 @@ import (
 )
 
 var (
-	UserModel = table.NewModel(class.Make(new(User)), "users")
+	UserClass = class.Make[User]()
+	UserModel = table.Model(UserClass, "users")
 )
 
-func UserQuery() *table.Table {
-	return table.FromModel(UserModel)
+func UserQuery() *table.Table[User] {
+	return table.Query[User]("users")
 }
 
 type User struct {
@@ -21,7 +22,7 @@ type User struct {
 }
 
 // Can 实现 gate 需要的方法
-func (u User) Can(ability string, arguments ...interface{}) bool {
+func (u User) Can(ability string, arguments ...any) bool {
 	return gate.Check(u, ability, arguments...)
 }
 

@@ -7,11 +7,11 @@ import (
 )
 
 func init() {
-	configs["queue"] = func(env contracts.Env) interface{} {
+	configs["queue"] = func(env contracts.Env) any {
 		return queue.Config{
 			Defaults: queue.Defaults{
-				Connection: env.StringOption("queue.connection", "default"),
-				Queue:      env.StringOption("queue.default", "default"),
+				Connection: env.StringOptional("queue.connection", "default"),
+				Queue:      env.StringOptional("queue.default", "default"),
 			},
 			Connections: map[string]contracts.Fields{
 				"default": {
@@ -34,16 +34,16 @@ func init() {
 				},
 			},
 			Failed: queue.FailedJobs{
-				Database: env.StringOption("db.connection", "mysql"),
+				Database: env.StringOptional("db.connection", "mysql"),
 				Table:    "failed_jobs",
 			},
 			Workers: map[string]queue.Workers{ // 相当于 laravel 的 horizon 配置
 				"local": { // 本地环境
 					"default": { // 工作组
-						Connection: env.StringOption("queue.connection", "default"), // 指定连接
-						Tries:      3,                                               // 最大尝试次数
-						Queue:      []string{"default", "slow", "high"},             // 处理指定队列
-						Processes:  10,                                              // 十个协程(工人)
+						Connection: env.StringOptional("queue.connection", "default"), // 指定连接
+						Tries:      3,                                                 // 最大尝试次数
+						Queue:      []string{"default", "slow", "high"},               // 处理指定队列
+						Processes:  10,                                                // 十个协程(工人)
 					},
 				},
 				"production": { // 生产环境
