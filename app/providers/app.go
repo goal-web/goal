@@ -6,6 +6,7 @@ import (
 	"github.com/goal-web/bloomfilter"
 	"github.com/goal-web/cache"
 	"github.com/goal-web/config"
+	"github.com/goal-web/console/scheduling"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/database"
 	"github.com/goal-web/email"
@@ -47,31 +48,27 @@ func (app App) Register(instance contracts.Application) {
 
 	instance.RegisterServices(
 		config.NewService(utils.StringOr(os.Getenv("env"), "local"), app.path, config2.GetConfigProviders()),
-		hashing.ServiceProvider{},
-		encryption.ServiceProvider{},
-		filesystem.ServiceProvider{},
-		&serialization.ServiceProvider{},
-		events.ServiceProvider{},
-		redis.ServiceProvider{},
+		hashing.NewService(),
+		encryption.NewService(),
+		filesystem.NewService(),
+		serialization.NewService(),
+		events.NewService(),
+		redis.NewService(),
 		cache.NewService(),
 		bloomfilter.NewService(),
 		auth.NewService(),
-		&ratelimiter.ServiceProvider{},
+		ratelimiter.NewService(),
 		console.NewService(),
+		scheduling.NewService(),
 		database.NewService(),
-		queue.NewService(false),
-		&email.ServiceProvider{},
-		&http.ServiceProvider{RouteCollectors: []any{
-			// 路由收集器
-			routes.Api,
-			routes.WebSocket,
-			routes.Sse,
-		}},
-		&session.ServiceProvider{},
-		sse.ServiceProvider{},
-		websocket.ServiceProvider{},
+		queue.NewService(true),
+		email.NewService(),
+		http.NewService(routes.Api, routes.WebSocket, routes.Sse),
+		session.NewService(),
+		sse.NewService(),
+		websocket.NewService(),
 		Micro(),
-		//&signal.ServiceProvider{},
+		//&signal.NewService(),
 	)
 
 	instance.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher) {

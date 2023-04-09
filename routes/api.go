@@ -11,6 +11,7 @@ func Api(router contracts.Router) {
 	router.Post("/queue", controllers.DemoJob)
 
 	router.Get("/", controllers.HelloWorld)
+	router.Get("/micro", controllers.RpcService)
 	//router.Get("/", controllers.HelloWorld, ratelimiter.Middleware(100))
 	router.Post("/login", controllers.LoginExample)
 

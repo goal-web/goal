@@ -1,10 +1,10 @@
 package console
 
 import (
-	"github.com/goal-web/application/commands"
 	"github.com/goal-web/console"
 	"github.com/goal-web/contracts"
-	commands2 "github.com/goal-web/goal/app/console/commands"
+	"github.com/goal-web/goal/app/console/commands"
+	"github.com/goal-web/supports/logs"
 )
 
 func NewService() contracts.ServiceProvider {
@@ -14,7 +14,7 @@ func NewService() contracts.ServiceProvider {
 func NewKernel(app contracts.Application) contracts.Console {
 	return &Kernel{console.NewKernel(app, []contracts.CommandProvider{
 		commands.Runner,
-		commands2.NewHello,
+		commands.NewHello,
 	}), app}
 }
 
@@ -23,12 +23,8 @@ type Kernel struct {
 	app contracts.Application
 }
 
-func (kernel *Kernel) Exists(schedule string) bool {
-	return true
-}
-
 func (kernel *Kernel) Schedule(schedule contracts.Schedule) {
-	//schedule.Call(func() {
-	//	logs.Default().Info("周日每5秒钟打印 周日愉快")
-	//}).EveryFiveSeconds().Sundays()
+	schedule.Call(func() {
+		logs.Default().Info("周日每5秒钟打印 周日愉快")
+	}).EveryFiveSeconds().Sundays()
 }
