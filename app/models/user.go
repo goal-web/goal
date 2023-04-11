@@ -6,13 +6,10 @@ import (
 	"github.com/goal-web/supports/class"
 )
 
-var (
-	UserClass = class.Make[User]()
-	UserModel = table.Model(UserClass, "users")
-)
+var UserClass = class.Make[User]()
 
 func UserQuery() *table.Table[User] {
-	return table.Query[User]("users")
+	return table.Class(UserClass, "users")
 }
 
 type User struct {

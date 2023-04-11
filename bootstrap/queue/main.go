@@ -21,7 +21,6 @@ import (
 	"github.com/goal-web/ratelimiter"
 	"github.com/goal-web/redis"
 	"github.com/goal-web/serialization"
-	"github.com/goal-web/supports/utils"
 	"github.com/golang-module/carbon/v2"
 	"os"
 )
@@ -36,26 +35,26 @@ func main() {
 	})
 
 	app.RegisterServices(
-		config.NewService(utils.StringOr(os.Getenv("env"), "local"), path, config2.GetConfigProviders()),
-		hashing.ServiceProvider{},
-		encryption.ServiceProvider{},
-		filesystem.ServiceProvider{},
-		&serialization.ServiceProvider{},
-		events.ServiceProvider{},
-		redis.ServiceProvider{},
+		config.NewService(config.NewDotEnv(config.File("")), config2.GetConfigProviders()),
+		hashing.NewService(),
+		encryption.NewService(),
+		filesystem.NewService(),
+		serialization.NewService(),
+		events.NewService(),
+		redis.NewService(),
 		cache.NewService(),
 		bloomfilter.NewService(),
 		//auth.NewService(),
-		&ratelimiter.ServiceProvider{},
+		ratelimiter.NewService(),
 		console.NewService(),
 		database.NewService(),
-		&email.ServiceProvider{},
+		email.NewService(),
 		queue.NewService(true),
-		//&signal.ServiceProvider{},
+		//&signal.NewService(),
 	)
 
 	app.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher) {
-		appConfig := config.Get("app").(application.Config)
+		appConfig := config.Get("app").(app.Config)
 		carbon.SetLocale(appConfig.Locale)
 		carbon.SetTimezone(appConfig.Timezone)
 

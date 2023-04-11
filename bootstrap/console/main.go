@@ -24,7 +24,6 @@ import (
 	"github.com/goal-web/redis"
 	"github.com/goal-web/serialization"
 	"github.com/goal-web/session"
-	"github.com/goal-web/supports/utils"
 	"github.com/goal-web/websocket"
 	"github.com/golang-module/carbon/v2"
 	"os"
@@ -40,7 +39,7 @@ func main() {
 	})
 
 	app.RegisterServices(
-		config.NewService(utils.StringOr(os.Getenv("env"), "local"), path, config2.GetConfigProviders()),
+		config.NewService(config.NewDotEnv(config.File("")), config2.GetConfigProviders()),
 		hashing.NewService(),
 		encryption.NewService(),
 		filesystem.NewService(),
@@ -63,7 +62,7 @@ func main() {
 	)
 
 	app.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher) {
-		appConfig := config.Get("app").(application.Config)
+		appConfig := config.Get("app").(app.Config)
 		carbon.SetLocale(appConfig.Locale)
 		carbon.SetTimezone(appConfig.Timezone)
 

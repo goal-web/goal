@@ -23,10 +23,8 @@ import (
 	"github.com/goal-web/redis"
 	"github.com/goal-web/serialization"
 	"github.com/goal-web/session"
-	"github.com/goal-web/supports/utils"
 	"github.com/goal-web/websocket"
 	"github.com/golang-module/carbon/v2"
-	"os"
 )
 
 type Console struct {
@@ -44,7 +42,7 @@ func (app Console) Register(instance contracts.Application) {
 	})
 
 	instance.RegisterServices(
-		config.NewService(utils.StringOr(os.Getenv("env"), "local"), app.path, config2.GetConfigProviders()),
+		config.NewService(config.NewDotEnv(config.File("")), config2.GetConfigProviders()),
 		hashing.ServiceProvider{},
 		encryption.ServiceProvider{},
 		filesystem.ServiceProvider{},

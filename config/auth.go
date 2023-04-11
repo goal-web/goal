@@ -3,10 +3,14 @@ package config
 import (
 	"github.com/goal-web/auth"
 	"github.com/goal-web/contracts"
+	"github.com/goal-web/database/table"
 	"github.com/goal-web/goal/app/models"
+	"github.com/goal-web/supports/class"
 	"github.com/golang-jwt/jwt"
 	"time"
 )
+
+var UserClass = class.Make[contracts.Authenticatable](models.User{})
 
 func init() {
 	configs["auth"] = func(env contracts.Env) any {
@@ -32,7 +36,7 @@ func init() {
 			Users: map[string]contracts.Fields{
 				"db": {
 					"driver": "db",
-					"model":  models.UserModel,
+					"model":  table.Auth(UserClass, "users", "id"),
 				},
 			},
 		}
