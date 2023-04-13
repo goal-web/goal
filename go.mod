@@ -1,32 +1,32 @@
 module github.com/goal-web/goal
 
-go 1.19
+go 1.20
 
 require (
-	github.com/goal-web/application v0.1.6
-	github.com/goal-web/auth v0.1.12
-	github.com/goal-web/bloomfilter v0.1.2
-	github.com/goal-web/cache v0.1.2
-	github.com/goal-web/config v0.1.4
-	github.com/goal-web/console v0.1.5
-	github.com/goal-web/contracts v0.1.66
-	github.com/goal-web/database v0.1.15
-	github.com/goal-web/email v0.1.2
-	github.com/goal-web/encryption v0.1.2
-	github.com/goal-web/events v0.1.7
-	github.com/goal-web/filesystem v0.1.3
-	github.com/goal-web/hashing v0.1.0
-	github.com/goal-web/http v0.1.18
-	github.com/goal-web/micro v0.1.0
+	github.com/goal-web/application v0.2.0
+	github.com/goal-web/auth v0.2.0
+	github.com/goal-web/bloomfilter v0.2.0
+	github.com/goal-web/cache v0.2.0
+	github.com/goal-web/config v0.2.0
+	github.com/goal-web/console v0.2.0
+	github.com/goal-web/contracts v0.2.0
+	github.com/goal-web/database v0.2.0
+	github.com/goal-web/email v0.2.0
+	github.com/goal-web/encryption v0.2.0
+	github.com/goal-web/events v0.2.0
+	github.com/goal-web/filesystem v0.2.0
+	github.com/goal-web/hashing v0.2.0
+	github.com/goal-web/http v0.2.0
+	github.com/goal-web/micro v0.2.0
 	github.com/goal-web/microdemo v0.0.0-20220219171937-6f3fca7dfbcb
-	github.com/goal-web/queue v0.1.3
-	github.com/goal-web/ratelimiter v0.1.2
-	github.com/goal-web/redis v0.1.7
-	github.com/goal-web/serialization v0.1.11
-	github.com/goal-web/session v0.1.4
-	github.com/goal-web/supports v0.1.32
-	github.com/goal-web/validation v0.1.0
-	github.com/goal-web/websocket v0.1.2
+	github.com/goal-web/queue v0.2.0
+	github.com/goal-web/ratelimiter v0.2.0
+	github.com/goal-web/redis v0.2.0
+	github.com/goal-web/serialization v0.2.0
+	github.com/goal-web/session v0.2.0
+	github.com/goal-web/supports v0.2.0
+	github.com/goal-web/validation v0.2.0
+	github.com/goal-web/websocket v0.2.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang-module/carbon/v2 v2.0.1
 	github.com/gorilla/websocket v1.5.0
@@ -34,6 +34,12 @@ require (
 )
 
 require github.com/asim/go-micro/plugins/registry/etcd/v4 v4.7.0
+
+require (
+	github.com/BurntSushi/toml v1.2.1 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+)
 
 require (
 	github.com/ClickHouse/clickhouse-go/v2 v2.0.9 // indirect
@@ -59,10 +65,10 @@ require (
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/goal-web/collection v0.1.6 // indirect
-	github.com/goal-web/container v0.1.7 // indirect
-	github.com/goal-web/pipeline v0.1.6 // indirect
-	github.com/goal-web/querybuilder v0.1.19 // indirect
+	github.com/goal-web/collection v0.2.0 // indirect
+	github.com/goal-web/container v0.2.0 // indirect
+	github.com/goal-web/pipeline v0.2.0 // indirect
+	github.com/goal-web/querybuilder v0.2.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
