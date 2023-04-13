@@ -12,10 +12,15 @@ func UserQuery() *table.Table[User] {
 	return table.Class(UserClass, "users")
 }
 
+type Settings struct {
+	XxxSwitch bool `json:"xxx_switch"`
+}
+
 type User struct {
-	Id       string `json:"id"` // 没有 db tag 默认解析 json
-	NickName string `json:"name"`
-	Role     string `json:"role"`
+	Id       string   `json:"id"` // 没有 db tag 默认解析 json
+	NickName string   `json:"name"`
+	Role     string   `json:"role"`
+	Settings Settings `json:"settings"`
 }
 
 // Can 实现 gate 需要的方法

@@ -15,37 +15,34 @@ import (
 	"github.com/goal-web/filesystem"
 	"github.com/goal-web/goal/app/console"
 	"github.com/goal-web/goal/app/exceptions"
-	"github.com/goal-web/goal/app/listeners"
+	"github.com/goal-web/goal/app/providers"
 	config2 "github.com/goal-web/goal/config"
 	"github.com/goal-web/hashing"
-	"github.com/goal-web/http/sse"
 	"github.com/goal-web/queue"
 	"github.com/goal-web/ratelimiter"
 	"github.com/goal-web/redis"
 	"github.com/goal-web/serialization"
 	"github.com/goal-web/session"
 	"github.com/goal-web/supports/logs"
-	"github.com/goal-web/websocket"
 	"github.com/golang-module/carbon/v2"
-	"os"
 )
 
 func main() {
-	app := application.Singleton()
-	path, _ := os.Getwd()
-	app.Instance("path", path)
+	env := config.NewToml(config.File("config.toml"))
+	app := application.Singleton(env.GetBool("app.debug"))
 	// 设置异常处理器
 	app.Singleton("exceptions.handler", func() contracts.ExceptionHandler {
 		return exceptions.NewHandler()
 	})
 
 	app.RegisterServices(
-		config.NewService(config.NewDotEnv(config.File("")), config2.GetConfigProviders()),
+		config.NewService(env, config2.GetConfigProviders()),
 		hashing.NewService(),
 		encryption.NewService(),
 		filesystem.NewService(),
 		serialization.NewService(),
 		events.NewService(),
+		providers.NewEvents(),
 		redis.NewService(),
 		cache.NewService(),
 		bloomfilter.NewService(),
@@ -56,18 +53,16 @@ func main() {
 		queue.NewService(false),
 		email.NewService(),
 		session.NewService(),
-		sse.NewService(),
-		websocket.NewService(),
 		scheduling.NewService(),
 	)
 
 	app.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher) {
-		appConfig := config.Get("app").(app.Config)
+		appConfig := config.Get("app").(application.Config)
 		carbon.SetLocale(appConfig.Locale)
 		carbon.SetTimezone(appConfig.Timezone)
 
-		dispatcher.Register("QUERY_EXECUTED", listeners.DebugQuery{})
 	})
+
 	if errors := app.Start(); len(errors) > 0 {
 		logs.WithField("errors", errors).Fatal("goal 异常!")
 	} else {

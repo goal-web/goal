@@ -5,4 +5,4 @@ storage/*
 
 /real.env
 
-/bin_*
+/bin*

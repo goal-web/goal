@@ -2,6 +2,7 @@
 name = "goal"
 key = "dQcxsKvBZKNfWivwnhKlDwvseguknBZPEiiDRQlIatjKLLpbzK"
 env = "local"
+debug = true
 
 [http]
 host = "0.0.0.0"
@@ -11,7 +12,7 @@ port = "8008"
 [queue]
 connection = "nsq"
 kafka.brokers = "localhost:9092"
-nsq.address = "localhost:49162"
+nsq.address = "localhost:49156"
 
 [db]
 connection = "mysql"

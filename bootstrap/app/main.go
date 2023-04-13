@@ -15,7 +15,6 @@ import (
 	"github.com/goal-web/filesystem"
 	"github.com/goal-web/goal/app/console"
 	"github.com/goal-web/goal/app/exceptions"
-	"github.com/goal-web/goal/app/listeners"
 	"github.com/goal-web/goal/app/providers"
 	config2 "github.com/goal-web/goal/config"
 	"github.com/goal-web/goal/routes"
@@ -30,27 +29,26 @@ import (
 	"github.com/goal-web/supports/signal"
 	"github.com/goal-web/websocket"
 	"github.com/golang-module/carbon/v2"
-	"os"
 	"syscall"
 )
 
 func main() {
-	app := application.Singleton()
-	path, _ := os.Getwd()
-	app.Instance("path", path)
+	env := config.NewToml(config.File("config.toml"))
+	app := application.Singleton(env.GetBool("app.debug"))
+
 	// 设置异常处理器
 	app.Singleton("exceptions.handler", func() contracts.ExceptionHandler {
 		return exceptions.NewHandler()
 	})
 
 	app.RegisterServices(
-		//config.NewService(config.NewDotEnv(config.File("")), config2.GetConfigProviders()),
-		config.NewService(config.NewToml(config.File("config.toml")), config2.GetConfigProviders()),
+		config.NewService(env, config2.GetConfigProviders()),
 		hashing.NewService(),
 		encryption.NewService(),
 		filesystem.NewService(),
 		serialization.NewService(),
 		events.NewService(),
+		providers.NewEvents(),
 		redis.NewService(),
 		cache.NewService(),
 		bloomfilter.NewService(),
@@ -65,7 +63,7 @@ func main() {
 		session.NewService(),
 		sse.NewService(),
 		websocket.NewService(),
-		providers.Micro(),
+		providers.NewMicro(true),
 		signal.NewService(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
 	)
 
@@ -73,9 +71,6 @@ func main() {
 		appConfig := config.Get("app").(application.Config)
 		carbon.SetLocale(appConfig.Locale)
 		carbon.SetTimezone(appConfig.Timezone)
-
-		dispatcher.Register("QUERY_EXECUTED", listeners.DebugQuery{})
-
 		console3.Run(input)
 	})
 }

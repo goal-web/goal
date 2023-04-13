@@ -60,7 +60,7 @@ func (app Console) Register(instance contracts.Application) {
 		&session.ServiceProvider{},
 		sse.ServiceProvider{},
 		websocket.ServiceProvider{},
-		Micro(),
+		NewMicro(false),
 		//&signal.ServiceProvider{},
 	)
 

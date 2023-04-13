@@ -22,8 +22,7 @@ func Runner(app contracts.Application) contracts.Command {
 }
 
 func (runner *runner) Handle() any {
-	path := runner.app.Get("path").(string)
-
+	path, _ := os.Getwd()
 	pidPath := path + "/goal.pid"
 	// 写入 pid 文件
 	_ = ioutil.WriteFile(pidPath, []byte(fmt.Sprintf("%d", os.Getpid())), os.ModePerm)
