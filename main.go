@@ -6,6 +6,7 @@ import (
 	"github.com/goal-web/bloomfilter"
 	"github.com/goal-web/cache"
 	"github.com/goal-web/config"
+	"github.com/goal-web/console/inputs"
 	"github.com/goal-web/console/scheduling"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/database"
@@ -26,7 +27,6 @@ import (
 	"github.com/goal-web/redis"
 	"github.com/goal-web/serialization"
 	"github.com/goal-web/session"
-	"github.com/goal-web/supports/logs"
 	"github.com/goal-web/supports/signal"
 	"github.com/goal-web/websocket"
 	"github.com/golang-module/carbon/v2"
@@ -68,10 +68,11 @@ func main() {
 		signal.NewService(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
 	)
 
-	app.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher, console3 contracts.Console, input contracts.ConsoleInput) {
+	app.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher, console3 contracts.Console) {
 		appConfig := config.Get("app").(application.Config)
 		carbon.SetLocale(appConfig.Locale)
 		carbon.SetTimezone(appConfig.Timezone)
-		logs.Default().WithField("app", app.Start()).Debug("closed.")
+
+		console3.Run(inputs.String("run"))
 	})
 }

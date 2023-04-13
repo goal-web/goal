@@ -8,7 +8,7 @@ require (
 	github.com/goal-web/bloomfilter v0.2.0
 	github.com/goal-web/cache v0.2.0
 	github.com/goal-web/config v0.2.0
-	github.com/goal-web/console v0.2.0
+	github.com/goal-web/console v0.2.2
 	github.com/goal-web/contracts v0.2.0
 	github.com/goal-web/database v0.2.0
 	github.com/goal-web/email v0.2.0
