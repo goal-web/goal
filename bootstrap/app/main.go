@@ -6,7 +6,6 @@ import (
 	"github.com/goal-web/bloomfilter"
 	"github.com/goal-web/cache"
 	"github.com/goal-web/config"
-	"github.com/goal-web/console/inputs"
 	"github.com/goal-web/console/scheduling"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/database"
@@ -68,11 +67,10 @@ func main() {
 		signal.NewService(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
 	)
 
-	app.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher, console3 contracts.Console) {
+	app.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher, console3 contracts.Console, input contracts.ConsoleInput) {
 		appConfig := config.Get("app").(application.Config)
 		carbon.SetLocale(appConfig.Locale)
 		carbon.SetTimezone(appConfig.Timezone)
-
-		console3.Run(inputs.String("run"))
+		console3.Run(input)
 	})
 }

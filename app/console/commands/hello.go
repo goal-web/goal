@@ -16,7 +16,7 @@ type Hello struct {
 	commands.Command
 }
 
-func (this Hello) Handle() interface{} {
-	logs.Default().Info("hello goal " + this.GetString("say"))
+func (hello Hello) Handle() any {
+	logs.Default().Info("hello goal " + hello.GetString("say"))
 	return nil
 }

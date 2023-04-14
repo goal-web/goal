@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var DemoClass = class.Make(new(Demo))
+var DemoClass = class.Any(Demo{})
 
 type Demo struct {
 	*queue.Job
@@ -32,5 +32,6 @@ func NewDemo(info string) contracts.Job {
 }
 
 func (demo *Demo) Handle() {
+
 	logs.Default().WithField("info", demo.Info).Info("demo job")
 }

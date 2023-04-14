@@ -6,11 +6,11 @@ import (
 )
 
 var Article contracts.Policy = map[string]contracts.GateChecker{
-	"create": func(authorizable contracts.Authorizable, data ...interface{}) bool {
+	"create": func(authorizable contracts.Authorizable, data ...any) bool {
 		user, isUser := authorizable.(models.User)
 		return isUser && user.Role == "blogger"
 	},
-	"update": func(authorizable contracts.Authorizable, data ...interface{}) bool {
+	"update": func(authorizable contracts.Authorizable, data ...any) bool {
 		user, isUser := authorizable.(models.User)
 
 		if len(data) > 0 && isUser {

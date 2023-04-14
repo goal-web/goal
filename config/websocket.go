@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	configs["websocket"] = func(env contracts.Env) interface{} {
+	configs["websocket"] = func(env contracts.Env) any {
 		return websocket.Config{
 			Upgrader: websocket2.Upgrader{
 				HandshakeTimeout: 5,

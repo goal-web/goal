@@ -7,9 +7,9 @@ import (
 )
 
 func init() {
-	configs["database"] = func(env contracts.Env) interface{} {
+	configs["database"] = func(env contracts.Env) any {
 		return database.Config{
-			Default: env.StringOption("db.connection", "mysql"),
+			Default: env.StringOptional("db.connection", "mysql"),
 			Connections: map[string]contracts.Fields{
 				"sqlite": {
 					"driver":   "sqlite",
@@ -23,8 +23,8 @@ func init() {
 					"username":        env.GetString("db.username"),
 					"password":        env.GetString("db.password"),
 					"unix_socket":     env.GetString("db.unix_socket"),
-					"charset":         env.StringOption("db.charset", "utf8mb4"),
-					"collation":       env.StringOption("db.collation", "utf8mb4_unicode_ci"),
+					"charset":         env.StringOptional("db.charset", "utf8mb4"),
+					"collation":       env.StringOptional("db.collation", "utf8mb4_unicode_ci"),
 					"prefix":          env.GetString("db.prefix"),
 					"strict":          env.GetBool("db.struct"),
 					"max_connections": env.GetInt("db.max_connections"),
@@ -37,10 +37,10 @@ func init() {
 					"database":        env.GetString("db.pgsql.database"),
 					"username":        env.GetString("db.pgsql.username"),
 					"password":        env.GetString("db.pgsql.password"),
-					"charset":         env.StringOption("db.pgsql.charset", "utf8mb4"),
+					"charset":         env.StringOptional("db.pgsql.charset", "utf8mb4"),
 					"prefix":          env.GetString("db.pgsql.prefix"),
-					"schema":          env.StringOption("db.pgsql.schema", "public"),
-					"sslmode":         env.StringOption("db.pgsql.sslmode", "disable"),
+					"schema":          env.StringOptional("db.pgsql.schema", "public"),
+					"sslmode":         env.StringOptional("db.pgsql.sslmode", "disable"),
 					"max_connections": env.GetInt("db.pgsql.max_connections"),
 					"max_idles":       env.GetInt("db.pgsql.max_idles"),
 				},
@@ -56,7 +56,6 @@ func init() {
 					"debug":           env.GetString("db.clickhouse.debug"),
 				},
 			},
-			Migrations: "migrations",
 		}
 	}
 }

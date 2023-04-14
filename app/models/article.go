@@ -6,12 +6,12 @@ import (
 )
 
 var (
-	ArticleClass = class.Make(new(User))
-	ArticleModel = table.NewModel(ArticleClass, "articles")
+	ArticleClass = class.Make[Article]()
+	//ArticleModel = table.NewModel(ArticleClass, "articles")
 )
 
-func ArticleQuery() *table.Table {
-	return table.FromModel(ArticleModel)
+func ArticleQuery() *table.Table[Article] {
+	return table.Query[Article]("articles")
 }
 
 type Article struct {

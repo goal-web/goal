@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	configs["micro"] = func(env contracts.Env) interface{} {
+	configs["micro"] = func(env contracts.Env) any {
 		return micro.Config{
 			CustomOptions: []micro2.Option{
 				micro2.Name("hello"),

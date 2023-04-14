@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	configs["cache"] = func(env contracts.Env) interface{} {
+	configs["cache"] = func(env contracts.Env) any {
 		return cache.Config{
 			Default: utils.StringOr(env.GetString("cache.default"), "redis"),
 			Stores: map[string]contracts.Fields{

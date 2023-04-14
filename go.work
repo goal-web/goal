@@ -1,0 +1,33 @@
+go 1.19
+
+replace (
+	//github.com/goal-web/application => ../application
+	//github.com/goal-web/auth => ../auth
+	//github.com/goal-web/bloomfilter => ../bloomfilter
+	//github.com/goal-web/cache => ../cache
+	//github.com/goal-web/collection => ../collection
+	//github.com/goal-web/config => ../config
+	//github.com/goal-web/console => ../console
+	//github.com/goal-web/container => ../container
+	//github.com/goal-web/contracts => ../contracts
+	//github.com/goal-web/database => ../database
+	//github.com/goal-web/email => ../email
+	//github.com/goal-web/encryption => ../encryption
+	//github.com/goal-web/events => ../events
+	//github.com/goal-web/filesystem => ../filesystem
+	//github.com/goal-web/hashing => ../hashing
+	//github.com/goal-web/http => ../http
+	//github.com/goal-web/micro => ../micro
+	//github.com/goal-web/pipeline => ../pipeline
+	//github.com/goal-web/querybuilder => ../querybuilder
+	//github.com/goal-web/queue => ../queue
+	//github.com/goal-web/ratelimiter => ../ratelimiter
+	//github.com/goal-web/redis => ../redis
+	//github.com/goal-web/serialization => ../serialization
+	//github.com/goal-web/session => ../session
+	//github.com/goal-web/supports => ../supports
+	//github.com/goal-web/validation => ../validation
+	//github.com/goal-web/websocket => ../websocket
+	//github.com/goal-web/microdemo => ../microdemo
+)
+use .
