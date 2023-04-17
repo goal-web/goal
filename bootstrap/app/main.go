@@ -28,7 +28,6 @@ import (
 	"github.com/goal-web/session"
 	"github.com/goal-web/supports/signal"
 	"github.com/goal-web/websocket"
-	"github.com/golang-module/carbon/v2"
 	"syscall"
 )
 
@@ -63,14 +62,12 @@ func main() {
 		session.NewService(),
 		sse.NewService(),
 		websocket.NewService(),
+		providers.NewApp(),
 		providers.NewMicro(true),
 		signal.NewService(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
 	)
 
-	app.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher, console3 contracts.Console, input contracts.ConsoleInput) {
-		appConfig := config.Get("app").(application.Config)
-		carbon.SetLocale(appConfig.Locale)
-		carbon.SetTimezone(appConfig.Timezone)
+	app.Call(func(console3 contracts.Console, input contracts.ConsoleInput) {
 		console3.Run(input)
 	})
 }

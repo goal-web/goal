@@ -23,12 +23,7 @@ import (
 )
 
 func initApp(path ...string) contracts.Application {
-	runPath := "/Users/qbhy/project/go/goal-web/goal"
-	if len(path) > 0 {
-		runPath = path[0]
-	}
 	app := application.Singleton()
-	app.Instance("path", runPath)
 
 	// 设置异常处理器
 	app.Singleton("exceptions.handler", func() contracts.ExceptionHandler {
@@ -36,7 +31,7 @@ func initApp(path ...string) contracts.Application {
 	})
 
 	app.RegisterServices(
-		config.NewService(config.NewDotEnv(config.File("")), config2.GetConfigProviders()),
+		config.NewService(config.NewToml(config.File("config.toml")), config2.GetConfigProviders()),
 		console.NewService(console2.NewKernel),
 		hashing.NewService(),
 		encryption.NewService(),

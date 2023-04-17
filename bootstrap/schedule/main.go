@@ -24,7 +24,6 @@ import (
 	"github.com/goal-web/serialization"
 	"github.com/goal-web/session"
 	"github.com/goal-web/supports/logs"
-	"github.com/golang-module/carbon/v2"
 )
 
 func main() {
@@ -54,14 +53,8 @@ func main() {
 		email.NewService(),
 		session.NewService(),
 		scheduling.NewService(),
+		providers.NewApp(),
 	)
-
-	app.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher) {
-		appConfig := config.Get("app").(application.Config)
-		carbon.SetLocale(appConfig.Locale)
-		carbon.SetTimezone(appConfig.Timezone)
-
-	})
 
 	if errors := app.Start(); len(errors) > 0 {
 		logs.WithField("errors", errors).Fatal("goal 异常!")

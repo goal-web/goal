@@ -1,13 +1,13 @@
 DOCKER_TAG=goal
 
 run:
-	go run bootstrap/app/main.go run
+	go run main.go run
 
 build:
-	go build -o ./bin_goal -v ./
+	go build -o ./bin -v ./
 
 test:
 	go test -json ./tests
 
-pack:
+image:
 	docker build -t $(DOCKER_TAG) .

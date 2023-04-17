@@ -5,9 +5,7 @@ import (
 	"github.com/goal-web/contracts"
 )
 
-var (
-	configs = make(map[string]contracts.ConfigProvider)
-)
+var configs = make(map[string]contracts.ConfigProvider)
 
 func GetConfigProviders() map[string]contracts.ConfigProvider {
 	return configs

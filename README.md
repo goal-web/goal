@@ -3,7 +3,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/goal-web/goal)](https://goreportcard.com/report/github.com/goal-web/goal)
 [![GoDoc](https://pkg.go.dev/badge/github.com/goal-web/goal?status.svg)](https://pkg.go.dev/github.com/goal-web/goal?tab=doc)
 [![Join the chat at https://gitter.im/goal-web/goal](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/goal-web/goal?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Sourcegraph](https://sourcegraph.com/github.com/goal-web/goal/-/badge.svg)](https://sourcegraph.com/github.com/goal-web/goal?badge)
+[![Sourcegraph](https://sourcegraph.com/github.com/goal-web/goal/-/badge.svg)](https://sourcegraph.com/github.com/goal-web/contracts?badge)
 [![Open Source Helpers](https://www.codetriage.com/goal-web/goal/badges/users.svg)](https://www.codetriage.com/goal-web/goal)
 [![Release](https://img.shields.io/github/release/goal-web/goal.svg?style=flat-square)](https://github.com/goal-web/goal/releases)
 [![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/goal-web/goal)](https://www.tickgit.com/browse?repo=github.com/goal-web/goal)

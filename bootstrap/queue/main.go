@@ -22,7 +22,6 @@ import (
 	"github.com/goal-web/ratelimiter"
 	"github.com/goal-web/redis"
 	"github.com/goal-web/serialization"
-	"github.com/golang-module/carbon/v2"
 )
 
 func main() {
@@ -50,15 +49,10 @@ func main() {
 		console.NewService(),
 		database.NewService(),
 		email.NewService(),
+		providers.NewApp(),
 		queue.NewService(true),
 		//&signal.NewService(),
 	)
-
-	app.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher) {
-		appConfig := config.Get("app").(application.Config)
-		carbon.SetLocale(appConfig.Locale)
-		carbon.SetTimezone(appConfig.Timezone)
-	})
 
 	app.Call(func(console3 contracts.Console, input contracts.ConsoleInput) {
 		console3.Run(&inputs.StringArrayInput{ArgsArray: []string{"run"}})

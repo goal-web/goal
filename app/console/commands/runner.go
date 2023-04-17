@@ -5,7 +5,6 @@ import (
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/supports/commands"
 	"github.com/goal-web/supports/logs"
-	"io/ioutil"
 	"os"
 )
 
@@ -25,7 +24,7 @@ func (runner *runner) Handle() any {
 	path, _ := os.Getwd()
 	pidPath := path + "/goal.pid"
 	// 写入 pid 文件
-	_ = ioutil.WriteFile(pidPath, []byte(fmt.Sprintf("%d", os.Getpid())), os.ModePerm)
+	_ = os.WriteFile(pidPath, []byte(fmt.Sprintf("%d", os.Getpid())), os.ModePerm)
 
 	if errors := runner.app.Start(); len(errors) > 0 {
 		logs.WithField("errors", errors).Fatal("goal 启动异常!")

@@ -1,24 +1,35 @@
 package providers
 
 import (
+	"github.com/goal-web/application"
 	"github.com/goal-web/contracts"
+	"github.com/golang-module/carbon/v2"
 )
 
-type App struct {
-	path string
+type appServiceProvider struct {
+	serviceProviders []contracts.ServiceProvider
 }
 
-func NewApp(path string) contracts.ServiceProvider {
-	return &App{path}
+func NewApp() contracts.ServiceProvider {
+	return &appServiceProvider{
+		serviceProviders: []contracts.ServiceProvider{},
+	}
 }
 
-func (app App) Register(instance contracts.Application) {
+func (app appServiceProvider) Register(instance contracts.Application) {
+	instance.RegisterServices(app.serviceProviders...)
 
+	instance.Call(func(config contracts.Config, dispatcher contracts.EventDispatcher) {
+		appConfig := config.Get("app").(application.Config)
+		carbon.SetLocale(appConfig.Locale)
+		carbon.SetTimezone(appConfig.Timezone)
+		instance.Instance("app.env", appConfig.Env)
+	})
 }
 
-func (app App) Start() error {
+func (app appServiceProvider) Start() error {
 	return nil
 }
 
-func (app App) Stop() {
+func (app appServiceProvider) Stop() {
 }
