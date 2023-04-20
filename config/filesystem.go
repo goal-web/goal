@@ -9,11 +9,11 @@ import (
 func init() {
 	configs["filesystem"] = func(env contracts.Env) any {
 		return filesystem.Config{
-			Default: env.GetString("filesystem.driver"),
+			Default: env.StringOptional("filesystem.disk", "public"),
 			Disks: map[string]contracts.Fields{
-				"local": {
+				"public": {
 					"driver": "local",
-					"root":   env.GetString("filesystem.root"),
+					"root":   env.StringOptional("filesystem.root", "storage/app/public"),
 					"perm":   os.ModePerm,
 				},
 				"qiniu": {

@@ -10,6 +10,9 @@ func init() {
 		return http.Config{
 			Host: env.GetString("http.host"),
 			Port: env.GetString("http.port"),
+			StaticDirectories: map[string]string{
+				"/static": "storage/app/public",
+			},
 		}
 	}
 }

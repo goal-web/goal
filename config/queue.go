@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/queue"
+	"github.com/nsqio/go-nsq"
 	"strings"
 )
 
@@ -27,11 +28,14 @@ func init() {
 					"driver":           "nsq",
 					"address":          env.GetString("queue.nsq.address"),
 					"lookup_addresses": strings.Split(env.GetString("queue.nsq.lookup_addresses"), ","),
-					//"config": &nsq.Config{}, // 自定义 nsq 设置
+					"config":           &nsq.Config{}, // 自定义 nsq 设置
 					"queue": []string{
 						"default", "slow", "high",
 					},
 				},
+				"sync":      {"driver": "sync"},
+				"empty":     {"driver": "empty"},
+				"goroutine": {"driver": "goroutine"},
 			},
 			Failed: queue.FailedJobs{
 				Database: env.StringOptional("db.connection", "mysql"),

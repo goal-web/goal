@@ -14,7 +14,7 @@ func init() {
 					"driver":   "file", // 将数据序列化到文件中，不支持分布式
 					"size":     100000,
 					"k":        .01,
-					"filepath": "/Users/qbhy/project/go/goal-web/goal/storage/default", // 完整路径
+					"filepath": "storage/bloomfilter/default", // 完整路径
 				},
 				"users": contracts.Fields{
 					"driver": "redis", // 通过 redis bitmap 存储，支持分布式

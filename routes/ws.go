@@ -8,7 +8,6 @@ import (
 )
 
 func WebSocket(router contracts.Router) {
-	router.Static("/", "/")
 
 	router.Get("/ws-demo", websocket.New(websocket2.DemoController{}))
 

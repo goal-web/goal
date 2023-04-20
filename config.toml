@@ -10,7 +10,7 @@ port = "8008"
 
 
 [queue]
-connection = "nsq"
+connection = "goroutine"
 kafka.brokers = "localhost:9092"
 nsq.address = "localhost:49156"
 
@@ -23,7 +23,7 @@ username = "root"
 password = 123456
 
 [db.sqlite]
-database = "/Users/qbhy/Downloads/goal-web/goal/database/database.sqlite"
+database = "database/database.sqlite"
 
 [db.pgsql]
 host = "localhost"
@@ -35,7 +35,7 @@ password = "123456"
 [redis]
 host = "hsy"
 port = "6379"
-password="123456"
+password = "123456"
 
 [redis.cache]
 host = "hsy"
@@ -60,8 +60,8 @@ md5.salt = "goal"
 
 # 文件系统配置
 [filesystem]
-driver = "local"
-root = "/Users/qbhy/project/go/goal/"
+disk = "public"
+root = "storage/app/public"
 perm = "0777"
 
 [filesystem.qiniu]

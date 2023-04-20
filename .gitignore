@@ -1,8 +1,5 @@
 .idea
 database/*.sqlite
 *.pid
-storage/*
-
-/real.env
 
 /bin*
