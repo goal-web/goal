@@ -18,17 +18,19 @@ import (
 	config2 "github.com/goal-web/goal/config"
 	"github.com/goal-web/hashing"
 	"github.com/goal-web/http/sse"
+	"github.com/goal-web/http/websocket"
+	"github.com/goal-web/migration"
 	"github.com/goal-web/queue"
 	"github.com/goal-web/ratelimiter"
 	"github.com/goal-web/redis"
 	"github.com/goal-web/serialization"
 	"github.com/goal-web/session"
-	"github.com/goal-web/websocket"
 )
 
 func main() {
 	env := config.NewToml(config.File("config.toml"))
 	app := application.Singleton(env.GetBool("app.debug"))
+	app.Instance("migrations.dir", "database/migrations")
 	// 设置异常处理器
 	app.Singleton("exceptions.handler", func() contracts.ExceptionHandler {
 		return exceptions.NewHandler()
@@ -49,6 +51,7 @@ func main() {
 		ratelimiter.NewService(),
 		console.NewService(),
 		database.NewService(),
+		migration.NewService(),
 		queue.NewService(false),
 		email.NewService(),
 		session.NewService(),

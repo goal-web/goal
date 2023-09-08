@@ -27,7 +27,7 @@ replace (
 	github.com/goal-web/session => ../session
 	github.com/goal-web/supports => ../supports
 	github.com/goal-web/validation => ../validation
-	github.com/goal-web/websocket => ../websocket
 	github.com/goal-web/microdemo => ../microdemo
+	github.com/goal-web/routing => ../routing
 )
 use .

@@ -6,7 +6,11 @@ import (
 	"github.com/goal-web/goal/app/http/controllers"
 )
 
-func Api(router contracts.Router) {
+func Api(router contracts.HttpRouter) {
+
+	router.Get("/wrk/{name}", func(request contracts.HttpRequest) any {
+		return request.Param("name")
+	})
 
 	router.Post("/queue", controllers.DemoJob)
 
@@ -15,10 +19,9 @@ func Api(router contracts.Router) {
 	//router.Get("/", controllers.HelloWorld, ratelimiter.Middleware(100))
 	router.Post("/login", controllers.LoginExample)
 
-	router.Get("/myself", controllers.GetCurrentUser, auth.Guard("jwt"))
-
 	authRouter := router.Group("", auth.Guard("jwt"))
 	authRouter.Get("/myself", controllers.GetCurrentUser, auth.Guard("jwt"))
+	router.Get("/users/{id}", controllers.GetUser)
 
 	router.Post("/mail", controllers.SendEmail)
 }

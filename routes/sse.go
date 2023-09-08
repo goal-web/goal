@@ -6,7 +6,7 @@ import (
 	"github.com/goal-web/http/sse"
 )
 
-func Sse(router contracts.Router) {
+func Sse(router contracts.HttpRouter) {
 	// 自定义 sse 控制器
 	router.Get("/sse-demo", sse.New(sse2.DemoController{}))
 

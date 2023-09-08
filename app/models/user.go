@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/goal-web/auth/gate"
 	"github.com/goal-web/database/table"
 	"github.com/goal-web/supports/class"
 )
@@ -23,10 +22,11 @@ type User struct {
 	Settings Settings `json:"settings"`
 }
 
-// Can 实现 gate 需要的方法
-func (u User) Can(ability string, arguments ...any) bool {
-	return gate.Check(u, ability, arguments...)
-}
+//
+//// Can 实现 gate 需要的方法
+//func (u User) Can(ability string, arguments ...any) bool {
+//	return gate.Check(u, ability, arguments...)
+//}
 
 // GetId 实现 auth 需要的方法
 func (u User) GetId() string {

@@ -12,7 +12,7 @@ func Example(request contracts.HttpRequest, next contracts.Pipe) any {
 	result := next(request)
 
 	fmt.Println("controller after")
-	return http.JsonResponse(contracts.Fields{
+	return http.NewJsonResponse(contracts.Fields{
 		"result": result,
 	}, 200)
 }

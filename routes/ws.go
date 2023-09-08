@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"github.com/goal-web/contracts"
 	websocket2 "github.com/goal-web/goal/app/websocket"
-	"github.com/goal-web/websocket"
+	"github.com/goal-web/http/websocket"
 )
 
-func WebSocket(router contracts.Router) {
+func WebSocket(router contracts.HttpRouter) {
 
 	router.Get("/ws-demo", websocket.New(websocket2.DemoController{}))
 

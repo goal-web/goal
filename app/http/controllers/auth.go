@@ -39,3 +39,9 @@ func GetCurrentUser(guard contracts.Guard) any {
 		"user": guard.User(),
 	}
 }
+
+func GetUser(request contracts.HttpRequest) any {
+	return contracts.Fields{
+		"user": models.UserQuery().Find(request.Get("id")),
+	}
+}
