@@ -8,10 +8,10 @@ import (
 
 func Sse(router contracts.HttpRouter) {
 	// 自定义 sse 控制器
-	router.Get("/sse-demo", sse.New(sse2.DemoController{}))
+	router.Get(sse.New("/sse-demo", sse2.DemoController{}))
 
 	// 默认 sse 控制器
-	router.Get("/sse", sse.Default())
+	router.Get(sse.Default())
 
 	router.Get("/send-sse", func(sse contracts.Sse, request contracts.HttpRequest) error {
 		return sse.Send(uint64(request.GetInt64("fd")), request.GetString("msg"))

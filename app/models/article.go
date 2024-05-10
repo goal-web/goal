@@ -7,14 +7,15 @@ import (
 
 var (
 	ArticleClass = class.Make[Article]()
-	//ArticleModel = table.NewModel(ArticleClass, "articles")
 )
 
-func ArticleQuery() *table.Table[Article] {
-	return table.Query[Article]("articles")
+func Articles() *table.Table[Article] {
+	return table.Class(ArticleClass, "articles")
 }
 
 type Article struct {
-	Id     string `json:"id"`
-	UserId string `json:"user_id"`
+	table.Model[Article] `json:"-"`
+
+	Id    string `json:"id"`
+	Title string `json:"title"`
 }

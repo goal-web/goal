@@ -11,6 +11,7 @@ replace (
 	github.com/goal-web/container => ../container
 	github.com/goal-web/contracts => ../contracts
 	github.com/goal-web/database => ../database
+	github.com/goal-web/migration => ../migration
 	github.com/goal-web/email => ../email
 	github.com/goal-web/encryption => ../encryption
 	github.com/goal-web/events => ../events

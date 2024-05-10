@@ -28,7 +28,7 @@ import (
 )
 
 func main() {
-	env := config.NewToml(config.File("config.toml"))
+	env := config.NewToml(config.File("env.toml"))
 	app := application.Singleton(env.GetBool("app.debug"))
 	app.Instance("migrations.dir", "database/migrations")
 	// 设置异常处理器

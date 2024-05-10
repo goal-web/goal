@@ -27,7 +27,7 @@ import (
 )
 
 func main() {
-	env := config.NewToml(config.File("config.toml"))
+	env := config.NewToml(config.File("env.toml"))
 	app := application.Singleton(env.GetBool("app.debug"))
 	// 设置异常处理器
 	app.Singleton("exceptions.handler", func() contracts.ExceptionHandler {

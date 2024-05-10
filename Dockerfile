@@ -1,4 +1,4 @@
-FROM golang:1.19 as builder
+FROM golang:1.20 as builder
 LABEL maintainer="qbhy <qbhy0715@qq.com>"
 
 WORKDIR /app

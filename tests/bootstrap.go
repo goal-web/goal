@@ -17,6 +17,7 @@ import (
 	config2 "github.com/goal-web/goal/config"
 	"github.com/goal-web/hashing"
 	"github.com/goal-web/redis"
+	"github.com/goal-web/serialization"
 	"github.com/goal-web/session"
 	"github.com/goal-web/supports/exceptions"
 	"github.com/goal-web/supports/logs"
@@ -31,7 +32,7 @@ func initApp(path ...string) contracts.Application {
 	})
 
 	app.RegisterServices(
-		config.NewService(config.NewToml(config.File("config.toml")), config2.GetConfigProviders()),
+		config.NewService(config.NewToml(config.File("env.toml")), config2.GetConfigProviders()),
 		console.NewService(console2.NewKernel),
 		hashing.NewService(),
 		encryption.NewService(),
@@ -43,6 +44,7 @@ func initApp(path ...string) contracts.Application {
 		session.NewService(),
 		auth.NewService(),
 		email.NewService(),
+		serialization.NewService(),
 		database.NewService(),
 		//&http.serviceProvider{RouteCollectors: []any{
 		//	// 路由收集器
