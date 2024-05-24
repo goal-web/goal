@@ -4,6 +4,7 @@ import (
 	"github.com/goal-web/auth"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/goal/app/http/controllers"
+	"github.com/goal-web/goal/app/models"
 )
 
 func Api(router contracts.HttpRouter) {
@@ -18,8 +19,8 @@ func Api(router contracts.HttpRouter) {
 	//router.Get("/", controllers.HelloWorld, ratelimiter.Middleware(100))
 	router.Post("/login", controllers.LoginExample)
 
-	authRouter := router.Group("", auth.Guard("jwt"))
-	authRouter.Get("/myself", controllers.GetCurrentUser, auth.Guard("jwt"))
+	authRouter := router.Group("", auth.Guard(models.Users(), "jwt"))
+	authRouter.Get("/myself", controllers.GetCurrentUser, auth.Guard(models.Users(), "jwt"))
 	router.Get("/users/{id}", controllers.GetUser)
 
 	router.Post("/mail", controllers.SendEmail)

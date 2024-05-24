@@ -5,7 +5,6 @@ import (
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/goal/app/models"
 	"github.com/stretchr/testify/assert"
-	"reflect"
 	"strings"
 	"testing"
 )
@@ -43,19 +42,4 @@ func TestModel(t *testing.T) {
 	assert.False(t, article.Exists(), "不存在")
 
 	fmt.Println(article)
-}
-
-func TestReflect(t *testing.T) {
-	article := models.Article{}
-
-	value := reflect.ValueOf(&article)
-	value.Elem().MethodByName("InitModel").Call([]reflect.Value{
-		reflect.ValueOf(models.ArticleClass),
-		reflect.ValueOf("articles"),
-		reflect.ValueOf("id"),
-		reflect.ValueOf(&article),
-		reflect.ValueOf(reflect.ValueOf(article)),
-	})
-	value.Elem().FieldByName("Id").SetString("1")
-	fmt.Println("success", article)
 }

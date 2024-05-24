@@ -14,7 +14,7 @@ func LoginExample(guard contracts.Guard, request requests.LoginRequest) any {
 
 	var age = request.IntOptional("age", -1)
 	//  这是伪代码
-	var users = models.UserQuery().
+	var users = models.Users().
 		Where("name", request.GetString("username")).
 		Where("age", request.GetInt("age")).
 		When(age != -1, func(q contracts.QueryBuilder[models.User]) contracts.Query[models.User] {
@@ -22,7 +22,7 @@ func LoginExample(guard contracts.Guard, request requests.LoginRequest) any {
 		}).
 		Get() // any
 
-	var user, err = models.UserQuery().Where("name", request.GetString("username")).FirstE() // any
+	var user, err = models.Users().Where("name", request.GetString("username")).FirstE() // any
 
 	if err != nil {
 		return contracts.Fields{"error": err.Error()}
@@ -42,6 +42,6 @@ func GetCurrentUser(guard contracts.Guard) any {
 
 func GetUser(request contracts.HttpRequest) any {
 	return contracts.Fields{
-		"user": models.UserQuery().Find(request.Get("id")),
+		"user": models.Users().Find(request.Get("id")),
 	}
 }

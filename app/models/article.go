@@ -10,12 +10,13 @@ var (
 )
 
 func Articles() *table.Table[Article] {
-	return table.Class(ArticleClass, "articles")
+	return table.Class(ArticleClass, "articles").SetPrimaryKey("id")
 }
 
 type Article struct {
 	table.Model[Article] `json:"-"`
 
-	Id    string `json:"id"`
-	Title string `json:"title"`
+	Id        string `json:"id"`
+	Title     string `json:"title"`
+	CreatedAt string `json:"created_at"`
 }

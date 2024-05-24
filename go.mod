@@ -11,7 +11,7 @@ require (
 	github.com/goal-web/config v0.3.0
 	github.com/goal-web/console v0.3.0
 	github.com/goal-web/contracts v0.3.0
-	github.com/goal-web/database v0.3.0
+	github.com/goal-web/database v0.3.3
 	github.com/goal-web/email v0.3.0
 	github.com/goal-web/encryption v0.3.0
 	github.com/goal-web/events v0.3.0
@@ -24,7 +24,7 @@ require (
 	github.com/goal-web/redis v0.3.1
 	github.com/goal-web/serialization v0.3.0
 	github.com/goal-web/session v0.3.0
-	github.com/goal-web/supports v0.3.0
+	github.com/goal-web/supports v0.3.2
 	github.com/goal-web/validation v0.3.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang-module/carbon/v2 v2.3.12
@@ -47,38 +47,28 @@ require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/evanphx/json-patch/v5 v5.5.0 // indirect
-	github.com/felixge/httpsnoop v1.0.1 // indirect
-	github.com/go-acme/lego/v4 v4.4.0 // indirect
+	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/goal-web/collection v0.3.1 // indirect
+	github.com/goal-web/collection v0.3.2 // indirect
 	github.com/goal-web/container v0.3.0 // indirect
 	github.com/goal-web/pipeline v0.3.0 // indirect
 	github.com/goal-web/querybuilder v0.3.1 // indirect
 	github.com/goal-web/routing v0.3.0 // indirect
-	github.com/gobwas/httphead v0.1.0 // indirect
-	github.com/gobwas/pool v0.2.1 // indirect
-	github.com/gobwas/ws v1.0.4 // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorhill/cronexpr v0.0.0-20180427100037-88b0669f7d75 // indirect
-	github.com/gorilla/handlers v1.5.1 // indirect
 	github.com/jmoiron/sqlx v1.3.4 // indirect
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible // indirect
 	github.com/klauspost/compress v1.17.3 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lib/pq v1.10.4 // indirect
 	github.com/mattn/go-sqlite3 v1.14.10 // indirect
-	github.com/miekg/dns v1.1.43 // indirect
 	github.com/modood/table v0.0.0-20220527013332-8d47e76dad33 // indirect
-	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
-	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/paulmach/orb v0.4.0 // indirect
 	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
 	github.com/pierrec/lz4/v4 v4.1.14 // indirect
@@ -88,10 +78,9 @@ require (
 	github.com/qiniu/go-sdk/v7 v7.11.1 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
 	github.com/segmentio/kafka-go v0.4.27 // indirect
-	github.com/shopspring/decimal v1.3.1 // indirect
+	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
-	go-micro.dev/v4 v4.10.2 // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect
 	go.opentelemetry.io/otel/trace v1.3.0 // indirect
 	go.uber.org/ratelimit v0.2.0 // indirect
@@ -100,5 +89,4 @@ require (
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	google.golang.org/protobuf v1.28.1 // indirect
 )

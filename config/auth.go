@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var UserClass = class.Make[contracts.Authenticatable](models.User{})
+var UserClass = class.Make[contracts.Authenticatable](&models.User{})
 
 func init() {
 	configs["auth"] = func(env contracts.Env) any {

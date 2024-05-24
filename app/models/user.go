@@ -7,7 +7,7 @@ import (
 
 var UserClass = class.Make[User]()
 
-func UserQuery() *table.Table[User] {
+func Users() *table.Table[User] {
 	return table.Class(UserClass, "users")
 }
 

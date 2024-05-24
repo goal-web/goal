@@ -51,7 +51,6 @@ func main() {
 		queue.NewService(false),
 		email.NewService(),
 		providers.NewApp(),
-		providers.NewMicro(true),
 	)
 
 	if errors := app.Start(); len(errors) > 0 {

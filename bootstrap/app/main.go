@@ -63,7 +63,6 @@ func main() {
 		sse.NewService(),
 		websocket.NewService(),
 		providers.NewApp(),
-		providers.NewMicro(true),
 		signal.NewService(syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT),
 	)
 
