@@ -8,6 +8,9 @@
 [![Release](https://img.shields.io/github/release/goal-web/goal.svg?style=flat-square)](https://github.com/goal-web/goal/releases)
 [![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/goal-web/goal)](https://www.tickgit.com/browse?repo=github.com/goal-web/goal)
 
+## Star History
+![https://api.star-history.com/svg?repos=goal-web/goal&type=Date](https://api.star-history.com/svg?repos=goal-web/goal&type=Date)
+
 ## About Goal Framework
 
 Goal Framework is a common application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Goal Framework takes the pain out of development by easing common tasks used in many web projects, such as:
