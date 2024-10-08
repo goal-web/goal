@@ -1,0 +1,913 @@
+{{- define "model" -}}
+package {{ .Package }}
+  
+import (
+    "encoding/json"
+    "github.com/goal-web/supports/logs"
+    "github.com/goal-web/contracts"
+    "github.com/goal-web/database/table"
+	"github.com/goal-web/migration/migrate"
+    "github.com/goal-web/supports/utils"
+    "github.com/goal-web/collection"
+    "fmt"
+    {{- if hasMsgComment .Model "@carbon" }}
+    "github.com/golang-module/carbon/v2"
+    {{- end }}
+    {{- range .Imports }}
+    {{ .Alias }} "{{ .Pkg }}"
+    {{- end }}
+)
+
+{{- $modelName := .Model.Name }}
+{{- $rawName := .Model.RawName }}
+{{- $tableName := .Model.TableName }}
+{{- $primaryKey := .Model.PrimaryKey }}
+
+var (
+    {{- range .Relations }}
+    {{ $rawName }}{{ .Name }}Relation contracts.RelationType = "{{ .JSONName }}"
+    {{- end }}
+)
+
+{{ toComments .Model.Name .Model.Comments }}
+type {{ $modelName }} struct {
+
+  {{- range .Fields }}
+  {{- if hasComment .Comment "@belongsTo" }}
+  {{- else }}
+  {{ .Comments }}
+  {{ .Name }} {{ goType . }} `{{ toTags . }}`
+  {{- end }}
+  {{- end }}
+
+  _raw contracts.Fields
+  _update contracts.Fields
+  _append contracts.Fields
+  _hidden map[string]struct{}
+
+  _relation_loaded map[contracts.RelationType]struct{}
+  {{- range .Relations }}
+    _{{ .Name }} {{ goType . }}
+  {{- end }}
+}
+
+{{- $define := join $rawName "Define" }}
+var {{ $define }} {{ $rawName }}Static
+
+type {{ $rawName }}Static struct {
+    TableName string
+	Hidden []string
+	Indexes []string
+	With []contracts.RelationType
+	Appends map[string]func(model *{{ $modelName }}) any
+
+  {{- range .Fields }}
+  {{ .Name }}Getter func(model *{{ $modelName }}, raw {{ goType . }}) {{ goType . }}
+  {{ .Name }}Setter func(model *{{ $modelName }}, raw {{ goType . }}) {{ goType . }}
+  {{- end }}
+
+  Saving   func(model *{{ $modelName }}) contracts.Exception
+  Saved    func(model *{{ $modelName }})
+  Updating func(model *{{ $modelName }}, fields contracts.Fields) contracts.Exception
+  Updated  func(model *{{ $modelName }}, fields contracts.Fields)
+  Deleting func(model *{{ $modelName }}) contracts.Exception
+  Deleted  func(model *{{ $modelName }})
+  PrimaryKeyGetter func(model *{{ $modelName }}) any
+}
+
+func {{ $rawName }}Migrator() migrate.Migrator {
+	return func(executor contracts.SqlExecutor) contracts.Exception {
+	    return migrate.Migrate({{ $define }}.TableName, {{ $define }}.Indexes, {{ $modelName }}{}, executor)
+	}
+}
+
+func init() {
+    {{ $define }}.TableName = "{{ $tableName }}"
+    {{ $define }}.Appends = make(map[string]func(model *{{ $modelName }}) any)
+    {{- if hasMsgComment .Model "@hidden" }}
+    {{ $define }}.Hidden = append(
+        {{ $define }}.Hidden,
+        {{- range .Fields }}
+            {{- if hasComment .Comment "@hidden" }}
+            "{{ .JSONName }}",
+            {{- end }}
+        {{- end }}
+     )
+    {{- end }}
+
+    {{- if hasMsgComment .Model "@with" }}
+    {{ $define }}.With = append(
+        {{ $define }}.With,
+        {{- range .Relations }}
+            {{- if hasComment .Comment "@with" }}
+             {{ $rawName }}{{ .Name }}Relation,
+            {{- end }}
+        {{- end }}
+     )
+    {{- end }}
+
+    {{- if hasMsgComment .Model "@index" }}
+    {{ $define }}.Indexes = append(
+        {{ $define }}.Indexes,
+        {{- range .Fields }}
+            {{- if hasComment .Comment "@index" }}
+             "index;{{ getIndexComment .Comment "@index" 0 (join .JSONName "_idx") }};{{ replace (getIndexComment .Comment "@index" 1 (join "(" .JSONName ")")) ";" "," }}",
+            {{- end }}
+        {{- end }}
+     )
+    {{- end }}
+
+    {{- if hasMsgComment .Model "@unique" }}
+    {{ $define }}.Indexes = append(
+        {{ $define }}.Indexes,
+        {{- range .Fields }}
+            {{- if hasComment .Comment "@unique" }}
+             "unique index;{{ getIndexComment .Comment "@unique" 0 (join .JSONName "_idx") }};{{ replace (getIndexComment .Comment "@unique" 1 (join "(" .JSONName ")")) ";" "," }}",
+            {{- end }}
+        {{- end }}
+     )
+    {{- end }}
+}
+
+func New{{ $modelName }}(fields contracts.Fields) *{{ $modelName }} {
+  var model = {{ $modelName }}{
+    _raw: fields,
+  }
+  model.Set(fields)
+  return &model
+}
+
+func {{ $modelName }}SingleRelationSetter[T any](key contracts.RelationType) func(item *{{ $modelName }}, value []any) {
+    return func(item *{{ $modelName }}, values []any) {
+        var value T
+        if len(values) > 0 {
+            value = values[0].(T)
+        }
+        item.Set(contracts.Fields{
+            string(key): value,
+        })
+    }
+}
+func {{ $modelName }}MultiRelationSetter[T any](key contracts.RelationType) func(item *{{ $modelName }}, value []any) {
+    return func(model *{{ $modelName }}, value []any) {
+        var results []T
+        for _, item := range value {
+            results = append(results, item.(T))
+        }
+        model.Set(contracts.Fields{ string(key): results })
+    }
+}
+
+func {{ $modelName }}LocalKeyGetter(key string) func(item *{{ $modelName }}) any {
+    return func(item *{{ $modelName }}) any {
+        return item.Get(key)
+    }
+}
+
+func {{ $modelName }}RelationGetter[T any](query func() *table.Table[T], foreignKey string) func(keys []any) map[string][]any {
+    return func(keys []any) map[string][]any {
+        var results = map[string][]any{}
+        for key, values := range query().WhereIn(foreignKey, keys).Get().GroupBy(foreignKey) {
+            results[key] = collection.New(values).ToAnyArray()
+        }
+        return results
+    }
+}
+
+func {{ $modelName }}ThroughRelationGetter[T any](query func() *table.Table[T], midTable, firstKey, secondKey, secondLocalKey string) func(keys []any) map[string][]any {
+    return func(keys []any) map[string][]any {
+        var results = map[string][]any{}
+        groupKey := fmt.Sprintf("%s.%s", midTable, firstKey)
+        for key, values := range query().
+            AddSelect(fmt.Sprintf("(%s) as _group_key", groupKey)).
+            WhereIn(groupKey, keys).
+            Join(midTable, fmt.Sprintf("%s.%s", midTable, secondLocalKey), "=", fmt.Sprintf("%s.%s", query().GetTableName(), secondKey)).
+            Get().GroupBy("_group_key") {
+            results[key] = collection.New(values).ToAnyArray()
+        }
+        return results
+    }
+ }
+
+{{- $queryName := replace .Model.Name "Model" "Query" }}
+func {{ $queryName }}WithExecutor(executor contracts.SqlExecutor) *table.Table[{{ $modelName }}] {
+    return {{ $queryName }}().SetExecutor(executor)
+}
+
+func {{ $queryName }}() *table.Table[{{ $modelName }}] {
+  return table.NewQuery({{ $define }}.TableName, New{{ $modelName }}).
+    SetPrimaryKey("{{ $primaryKey }}").
+    {{- if hasMsgComment .Model "@timestamps" }}
+    SetCreatedTimeColumn("{{ getIndexComment .Model.Comment "@timestamps" 0 "created_at" }}").
+    SetUpdatedTimeColumn("{{ getIndexComment .Model.Comment "@timestamps" 1 "updated_at" }}").
+    {{- end }}
+    {{- range $index, $item := .Relations }}
+        {{- $relationType := join $rawName  .Name "Relation" }}
+        {{- $relationItemType := substring (goType .) 1 }}
+        {{- $relationQuery := replace $relationItemType "Model" "Query"}}
+
+        {{- if .Repeated }}
+        {{- $relationItemType = substring (goType .) 2 }}
+        {{- $relationQuery = substring $relationQuery 2 }}
+        {{- end }}
+
+
+        {{- if hasComment .Comment "@belongsTo" }}
+            {{- $ownerKey := getIndexComment .Comment "@belongsTo" 0 "id" }}
+            {{- $localKey := getIndexComment .Comment "@belongsTo" 1 (join .JSONName "_id") }}
+            SetRelation( // belongsTo: {{ .Name }}
+            {{ $rawName }}{{ .Name }}Relation,
+                        {{ $modelName }}LocalKeyGetter("{{ $localKey }}"),
+                        {{ $modelName }}RelationGetter({{ $relationQuery }}, "{{ $ownerKey }}"),
+                        {{ $modelName }}SingleRelationSetter[*{{ $relationItemType }}]({{ $relationType }}),
+            ).
+        {{- else if hasComment .Comment "@hasOneThrough" }}
+
+         {{- $midTable := getIndexComment .Comment "@hasOneThrough" 0 "mid_table" }}
+         {{- $firstKey := getIndexComment .Comment "@hasOneThrough" 1 (join (toLower $rawName) "_id") }}
+         {{- $secondKey := getIndexComment .Comment "@hasOneThrough" 2 "id" }}
+         {{- $localKey := getIndexComment .Comment "@hasOneThrough" 3 "id" }}
+         {{- $secondLocalKey := getIndexComment .Comment "@hasOneThrough" 4 (join $midTable "_id") }}
+
+                    SetRelation( // hasOneThrough: {{ .Name }}
+                    {{ $rawName }}{{ .Name }}Relation,
+                        {{ $modelName }}LocalKeyGetter("{{ $localKey }}"),
+                        {{ $modelName }}ThroughRelationGetter({{ $relationQuery }}, "{{ $midTable }}", "{{ $firstKey }}", "{{ $secondKey }}", "{{ $secondLocalKey }}"),
+                        {{ $modelName }}SingleRelationSetter[*{{ $relationItemType }}]({{ $relationType }}),
+                    ).
+        {{- else if hasComment .Comment "@hasOne" }}
+         {{- $localKey := getIndexComment .Comment "@hasOne" 0 "id" }}
+         {{- $foreignKey := getIndexComment .Comment "@hasOne" 1 (join (toLower $rawName) "_id") }}
+                    SetRelation( // hasOne: {{ .Name }}
+                    {{ $rawName }}{{ .Name }}Relation,
+                        {{ $modelName }}LocalKeyGetter("{{ $localKey }}"),
+                        {{ $modelName }}RelationGetter({{ $relationQuery }}, "{{ $foreignKey }}"),
+                        {{ $modelName }}SingleRelationSetter[*{{ $relationItemType }}]({{ $relationType }}),
+                    ).
+        {{- else if or (hasComment .Comment "@hasManyThrough") (hasComment .Comment "@belongsToMany") }}
+
+            {{- $relationName := "hasManyThrough" }}
+            {{- if (hasComment .Comment "@belongsToMany") }}
+            {{- $relationName = "belongsToMany" }}
+            {{- end }}
+
+         {{- $midTable := getIndexComment .Comment (join "@" $relationName) 0 "mid_table" }}
+         {{- $firstKey := getIndexComment .Comment (join "@" $relationName) 1 (join (toLower $rawName) "_id") }}
+         {{- $secondKey := getIndexComment .Comment (join "@" $relationName) 2 "id" }}
+         {{- $localKey := getIndexComment .Comment (join "@" $relationName) 3 "id" }}
+         {{- $secondLocalKey := getIndexComment .Comment (join "@" $relationName) 4 (join $midTable "_id") }}
+
+                    SetRelation( // {{- $relationName }}: {{ .Name }}
+                    {{ $rawName }}{{ .Name }}Relation,
+                        {{ $modelName }}LocalKeyGetter("{{ $localKey }}"),
+                        {{ $modelName }}ThroughRelationGetter({{ $relationQuery }}, "{{ $midTable }}", "{{ $firstKey }}", "{{ $secondKey }}", "{{ $secondLocalKey }}"),
+                        {{ $modelName }}MultiRelationSetter[{{ $relationItemType }}]({{ $relationType }}),
+                    ).
+        {{- else if hasComment .Comment "@hasMany" }}
+         {{- $relationItemType := substring (goType .) 2 }}
+         {{- $relationQuery := replace (substring (goType .) 3) "Model" "Query"}}
+         {{- $foreignKey := getIndexComment .Comment "@hasMany" 0 (join (toLower $rawName) "_id") }}
+         {{- $localKey := getIndexComment .Comment "@hasMany" 1 "id" }}
+                    SetRelation( // hasMany: {{ .Name }}
+                    {{ $rawName }}{{ .Name }}Relation,
+                        {{ $modelName }}LocalKeyGetter("{{ $localKey }}"),
+                        {{ $modelName }}RelationGetter({{ $relationQuery }}, "{{ $foreignKey }}"),
+                        {{ $modelName }}MultiRelationSetter[{{ $relationItemType }}]({{ $relationType }}),
+                    ).
+        {{- end }}
+
+    {{- end }}
+     SetWiths({{ $define }}.With...)
+}
+
+func (model *{{ $modelName }}) Hidden(fields ...string) *{{ $modelName }} {
+    for _, field := range fields {
+        if model._hidden == nil {
+            model._hidden = map[string]struct{}{
+                field: struct{}{},
+            }
+        } else {
+            model._hidden[field] = struct{}{}
+        }
+
+    }
+
+    return model
+}
+
+func (model *{{ $modelName }}) Exists() bool {
+  return {{ .Model.RawName }}Query().Where("{{ $primaryKey }}", model.GetPrimaryKey()).Count() > 0
+}
+
+func (model *{{ $modelName }}) Save() contracts.Exception {
+  if model._update == nil {
+    return nil
+  }
+  if {{ $define }}.Saving != nil {
+    if err := {{ $define }}.Saving(model); err != nil {
+      return err
+    }
+  } 
+  _, err := {{ .Model.RawName }}Query().Where("{{ $primaryKey }}", model.GetPrimaryKey()).UpdateE(model._update)
+  if err == nil {
+    model._update = nil
+    if {{ $define }}.Saved != nil {
+      {{ $define }}.Saved(model)
+    }
+  }
+  
+  return err
+}
+
+func (model *{{ $modelName }}) Set(fields contracts.Fields) {
+  for key, value := range fields {
+
+    switch key {
+  {{- range .Fields }}
+      case "{{ .JSONName }}":
+        switch v := value.(type) {
+                case {{ goType . }}:
+                  model.Set{{ .Name }}(v)
+                case func() {{ goType . }}:
+                  model.Set{{ .Name }}(v())
+                  {{- $type := goType . }}
+                  {{- if ne $type "string"}}
+                case string:
+                  {{- if eq $type "[]byte" }}
+                  model.Set{{ .Name }}([]byte(v))
+                  {{else}}
+                  var vd {{ goType . }}
+                  err := json.Unmarshal([]byte(v), &vd)
+                  if err != nil {
+                      logs.Default().Warn("Failed to Parse field "+key)
+                      continue
+                  }
+                  model.Set{{ .Name }}(vd)
+                  {{end}}
+                  {{end}}
+                  {{- if ne $type "[]byte"}}
+                case []byte:
+                  {{- if eq $type "string" }}
+                  model.Set{{ .Name }}(string(v))
+                  {{else}}
+                  var vd {{ goType . }}
+                  err := json.Unmarshal(v, &vd)
+                  if err != nil {
+                      logs.Default().Warn("Failed to Parse field "+key)
+                      continue
+                  }
+                  model.Set{{ .Name }}(vd)
+                  {{end}}
+                  {{end}}
+                }
+    {{- end }}
+    {{- range .Relations }}
+    {{- $relationType := join $rawName  .Name "Relation" }}
+    case string({{ $relationType }}):
+        model.Set{{ .Name }}(value.({{ goType . }}))
+    {{- end }}
+    }
+
+  }
+}
+
+func (model *{{ $modelName }}) Only(key ...string) contracts.Fields {
+  var fields = make(contracts.Fields)
+  for _, k := range key {
+  {{- range .Fields }}
+    if k == "{{ .JSONName }}" {
+      fields[k] = model.Get{{ .Name }}()
+      continue
+    }
+  {{- end }}
+  
+    if {{ $define }}.Appends[k] != nil {
+     fields[k] = {{ $define }}.Appends[k](model)
+    }
+  }
+  return fields
+}
+
+func (model *{{ $modelName }}) Get(key string) any {
+    switch key {
+        {{- range $index, $item := .Fields }}
+            case "{{ .JSONName }}":
+              return model.Get{{ .Name }}()
+        {{- end }}
+    }
+
+    if value, exists := model._append[key]; exists {
+      return value
+    }
+
+    if fn, exists := {{ $define }}.Appends[key]; exists {
+        model._append[key] = fn(model)
+      return model._append[key]
+    }
+
+     switch contracts.RelationType(key) {
+            {{- range $index, $item := .Relations }}
+            {{- $relationType := join $rawName  .Name "Relation" }}
+                case {{ $relationType }}:
+                  return model.{{ .Name }}()
+            {{- end }}
+        }
+
+  return nil
+}
+
+func (model *{{ $modelName }}) Except(keys ...string) contracts.Fields {
+  var excepts = map[string]struct{}{}
+  for _, k := range keys {
+    excepts[k] = struct{}{}
+  }
+  var fields = make(contracts.Fields)
+  for key, value := range model.ToFields() {
+    if _, ok := excepts[key]; ok {
+      continue
+    }
+    fields[key] = value
+  }
+  return fields
+}
+
+func (model *{{ $modelName }}) ToFields() contracts.Fields {
+  model.Hidden({{ $define }}.Hidden...)
+
+  fields := contracts.Fields{}
+
+    {{- range .Fields }}
+    if _,exists := model._hidden["{{ .JSONName }}"]; !exists {
+        fields["{{ .JSONName }}"] = model.Get{{ .Name }}()
+    }
+    {{- end }}
+
+  for key := range {{ $define }}.Appends {
+    value := model.Get(key)
+    if fieldsProvider, ok := value.(contracts.FieldsProvider); ok {
+        fields[key] = fieldsProvider.ToFields()
+    } else {
+        fields[key] = value
+    }
+  }
+
+  for key := range model._relation_loaded {
+    switch key {
+    {{- range .Relations }}
+    {{- $relationType := join $rawName  .Name "Relation" }}
+    case {{ $relationType }}:
+        {{- if .Repeated }}
+        var results []contracts.Fields
+        for _, item := range model._{{ .Name }} {
+            results = append(results, item.ToFields())
+        }
+        fields[string(key)] = results
+        {{- else }}
+        fields[string(key)] = model._{{ .Name }}.ToFields()
+        {{- end }}
+    {{- end }}
+    }
+  }
+
+  for key, value := range model._raw {
+    if _, exists := fields[key]; !exists {
+        fields[key] = value
+    }
+  }
+
+  return fields
+}
+
+func (model *{{ $modelName }}) Update(fields contracts.Fields) contracts.Exception {
+
+  if {{ $define }}.Updating != nil {
+    if err := {{ $define }}.Updating(model, fields); err != nil {
+      return err
+    }
+  }
+
+  if model._update != nil {
+    utils.MergeFields(model._update, fields)
+  }
+
+
+  _, err := {{ .Model.RawName }}Query().Where("{{ $primaryKey }}", model.GetPrimaryKey()).UpdateE(fields)
+  
+  if err == nil {
+    model.Set(fields)
+    model._update = nil
+    if {{ $define }}.Updated != nil {
+      {{ $define }}.Updated(model, fields)
+    }
+  }
+  
+  return err
+}
+
+func (model *{{ $modelName }}) Refresh() contracts.Exception {
+  fields, err := table.ArrayQuery("{{ $tableName }}").Where("{{ $primaryKey }}", model.GetPrimaryKey()).FirstE()
+  if err != nil {
+    return err
+  }
+
+  model.Set(*fields)
+  return nil
+}
+
+func (model *{{ $modelName }}) Delete() contracts.Exception {
+  
+  if {{ $define }}.Deleting != nil {
+    if err := {{ $define }}.Deleting(model); err != nil {
+      return err
+    }
+  }
+
+  _, err := {{ .Model.RawName }}Query().Where("{{ $primaryKey }}", model.GetPrimaryKey()).DeleteE()
+  if err == nil && {{ $define }}.Deleted != nil {
+    {{ $define }}.Deleted(model)
+  }
+  
+  return err
+}
+
+  
+func (model *{{ $modelName }}) GetPrimaryKey() any {
+  if {{ $define }}.PrimaryKeyGetter != nil {
+    return {{ $define }}.PrimaryKeyGetter(model)
+  }
+  
+  return model.{{ toCamelCase $primaryKey }}
+}
+
+{{- if .Model.Authenticatable }}
+func (model *{{ $modelName }}) GetAuthenticatableKey() string {
+  return fmt.Sprintf("%v", model.GetPrimaryKey())
+}
+
+func {{ .Model.RawName }}AuthProvider(identify string) contracts.Authenticatable {
+  return {{ .Model.RawName }}Query().Find(identify)
+}
+
+{{- end }}
+
+
+{{- range .Fields }}
+
+func (model *{{ $modelName }}) Get{{ .Name }}() {{ goType . }} {
+  if {{ $define }}.{{ .Name }}Getter != nil {
+    return {{ $define }}.{{ .Name }}Getter(model, model.{{ .Name }})
+  }
+  return model.{{ .Name }}
+}
+
+func (model *{{ $modelName }}) Set{{ .Name }}(value {{ goType . }}) {
+  if {{ $define }}.{{ .Name }}Setter != nil {
+    value = {{ $define }}.{{ .Name }}Setter(model, value)
+  }
+
+  if model._update == nil {
+    model._update = contracts.Fields{"{{ .JSONName }}": value}
+  } else {
+    model._update["{{ .JSONName }}"] = value
+  }
+  model.{{ .Name }} = value
+}
+
+{{- if hasComment .Comment "@carbon" }}
+func (model *{{ $modelName }}) Get{{ .Name }}Carbon() carbon.Carbon {
+  return carbon.Parse(model.Get{{ .Name }}())
+}
+{{- end }}
+
+
+{{- end }}
+
+{{- range .Relations }}
+{{- $relationType := join $rawName  .Name "Relation" }}
+{{- $relationItemType := substring (goType .) 1 }}
+{{- $relationQueryType := substring (goType .) 1 }}
+{{- $throughName := "" }}
+
+{{- if .Repeated }}
+{{- $relationItemType = substring (goType .) 3 }}
+{{- $relationQueryType = substring (goType .) 3 }}
+{{- end }}
+
+
+{{- $relationQuery := replace $relationItemType "Model" "Query" }}
+{{- $foreignKey := "" }}
+{{- $localKey := "" }}
+{{- $localQuery := join .Name "Query" }}
+
+{{- if (hasComment .Comment "@belongsTo") }}
+{{- $throughName = "@belongsTo" }}
+{{- $foreignKey = getIndexComment .Comment "@belongsTo" 0 "id" }}
+{{ $localKey = getIndexComment .Comment "@belongsTo" 1 (join .JSONName "_id") }}
+
+{{- else if (hasComment .Comment "@hasOne") }}
+{{- $throughName = "@hasOne" }}
+
+{{- $localKey = getIndexComment .Comment "@hasOne" 0 "id" }}
+{{- $foreignKey = getIndexComment .Comment "@hasOne" 1 (join (toLower $rawName) "_id") }}
+
+{{- else if (hasComment .Comment "@hasMany") }}
+{{- $throughName = "@hasMany" }}
+
+{{- $relationQuery = replace $relationItemType "Model" "Query" }}
+{{- $foreignKey = getIndexComment .Comment "@hasMany" 0 (join .JSONName "_id") }}
+{{- $localKey = getIndexComment .Comment "@hasMany" 1 "id" }}
+{{- $relationQueryType = $relationItemType }}
+
+{{- end }}
+
+{{- if .Repeated }}
+// {{ $localQuery }} {{ $throughName }}
+func (model *{{ $modelName }}) {{ .Name }}() {{ goType . }} {
+    _, exists := model._relation_loaded[{{ $relationType }}]
+    if !exists {
+        value := model.{{ $localQuery }}().Get().ToArray()
+        model.Set{{ .Name }}(value)
+        return value
+    }
+    return model._{{ .Name }}
+}
+
+{{- else }}
+// {{ $localQuery }} {{ $throughName }}
+func (model *{{ $modelName }}) {{ .Name }}() {{ goType . }} {
+    _, exists := model._relation_loaded[{{ $relationType }}]
+    if !exists {
+        value := model.{{ $localQuery }}().First()
+        model.Set{{ .Name }}(value)
+        return value
+    }
+    return model._{{ .Name }}
+}
+{{- end }}
+
+
+{{- if or (hasComment .Comment "@hasManyThrough") (hasComment .Comment "@belongsToMany") (hasComment .Comment "@hasOneThrough")  }}
+
+{{- $throughName := "@hasManyThrough" }}
+
+{{- if (hasComment .Comment "@belongsToMany") }}
+{{- $throughName = "@belongsToMany" }}
+{{- else if (hasComment .Comment "@hasOneThrough") }}
+{{- $throughName = "@hasOneThrough" }}
+{{- end }}
+
+
+{{- $midTable := getIndexComment .Comment $throughName 0 "mid_table" }}
+{{- $firstKey := getIndexComment .Comment $throughName 1 (join (toLower $rawName) "_id") }}
+{{- $secondKey := getIndexComment .Comment $throughName 2 "id" }}
+{{- $localKey := getIndexComment .Comment $throughName 3 "id" }}
+{{- $secondLocalKey := getIndexComment .Comment $throughName 4 (join $midTable "_id") }}
+// {{ $localQuery }} {{ $throughName }}
+func (model *{{ $modelName }}) {{ $localQuery }}() contracts.QueryBuilder[{{ $relationQueryType }}] {
+    query := {{ $relationQuery }}()
+    return query.
+        Where("{{ $midTable }}.{{ $firstKey }}", model.Get("{{ $localKey }}")).
+        Join("{{ $midTable }}", "{{ $midTable }}.{{ $secondLocalKey }}",  "=", fmt.Sprintf("%s.{{ $secondKey }}", query.GetTableName()))
+}
+
+{{- else }}
+// {{ $localQuery }} {{ $throughName }}
+func (model *{{ $modelName }}) {{ $localQuery }}() contracts.QueryBuilder[{{ $relationQueryType }}] {
+    return {{ $relationQuery }}().Where("{{ $foreignKey }}", model.Get("{{ $localKey }}"))
+}
+{{- end }}
+
+// {{ $localQuery }} {{ $throughName }}
+func (model *{{ $modelName }}) Set{{ .Name }}(value {{ goType . }}) {
+    if model._relation_loaded == nil {
+        model._relation_loaded = make(map[contracts.RelationType]struct{})
+    }
+    model._relation_loaded[{{ $relationType }}] = struct{}{}
+    model._{{ .Name }} = value
+}
+
+{{- end }}
+
+{{ end }}
+
+
+{{- define "data" -}}
+package {{ .Package }}
+  
+import (
+{{- range .Imports }}
+{{ .Alias }} "{{ .Pkg }}"
+{{- end }}
+)
+
+type {{ .Model.Name }} struct {
+  {{- range .Fields }}
+  {{ .Name }} {{ goType . }} `{{ toTags . }}`
+  {{- end }}
+}
+
+{{ end }}
+
+{{- define "request" -}}
+package {{ .Package }}
+  
+import (
+  {{- range .Imports }}
+  {{ .Alias }} "{{ .Pkg }}"
+  {{- end }}
+  "github.com/goal-web/contracts"
+)
+
+type {{ .Model.Name }} struct {
+  {{- range .Fields }}
+  {{ .Name }} {{ goType . }} `{{ toTags . }}`
+  {{- end }}
+}
+
+func (model *{{ .Model.Name }}) ToFields() contracts.Fields {
+  if model == nil {
+    return nil
+  }
+  fields := contracts.Fields{
+  {{- range .Fields }}
+    "{{ .JSONName }}": model.{{ .Name }},
+  {{- end }}
+  }
+  return fields
+}
+
+{{ end }}
+
+{{- define "result" -}}
+package {{ .Package }}
+    
+import (
+    "github.com/goal-web/contracts"
+  {{- range .Imports }}
+  {{ .Alias }} "{{ .Pkg }}"
+  {{- end }}
+)
+
+{{- $resultName := .Model.Name }}
+
+type {{ $resultName }} struct {
+  {{- range .Fields }}
+  {{ .Name }} {{ goType . }} `{{ toTags . }}`
+  {{- end }}
+}
+
+func (result *{{ $resultName }}) ToFields() contracts.Fields {
+    fields := contracts.Fields{
+        {{- range .Fields }}
+            {{- if eq (fieldMsg .) nil }}
+            "{{ .JSONName }}": result.{{ .Name }},
+            {{- else }}
+            "{{ .JSONName }}": result.{{ .Name }}.ToFields(),
+            {{- end }}
+        {{- end }}
+    }
+
+
+    return fields
+}
+
+{{ end }}
+
+{{- define "enum" -}}
+package {{ .Package }}
+
+{{- $enumName := .Name }}
+type {{ .Name }} int
+const (
+  {{- range .Values }}
+  {{- $FieldName := sprintf "%s%s" $enumName .Name }}
+
+  {{ toComments $FieldName .Comments }}
+  {{ $enumName }}{{ .Name }} {{ $enumName }} = {{ .Value }}
+  {{- end }}
+  {{ $enumName }}Unknown {{ $enumName }} = -1000
+      
+)
+  
+  
+func (item {{ $enumName }}) String() string {
+    switch item {
+      {{- range .Values }}
+        case {{ $enumName }}{{ .Name }}:
+          return "{{ .Name }}"
+      {{- end }}
+        default:
+          return "Unknown"
+  }
+}
+
+func (item {{ $enumName }}) Message() string {
+    switch item {
+      {{- range .Values }}
+        case {{ $enumName }}{{ .Name }}:
+          return "{{ .Message }}"
+      {{- end }}
+        default:
+          return "Unknown"
+  }
+}
+
+func Parse{{ $enumName }}FromString(msg string) {{ $enumName }} {
+    switch msg {
+    {{- range .Values }}
+        case "{{ .Name }}":
+          return {{ $enumName }}{{ .Name }}
+    {{- end }}
+        default:
+          return {{ $enumName }}Unknown
+  }
+}
+
+
+{{ end }}
+
+
+
+{{- define "service" -}}
+package {{ .Package }}
+
+import (
+  {{- range .Imports }}
+  {{ .Alias }} "{{ .Pkg }}"
+  {{- end }}
+)
+
+{{- $serviceName := .Name }}
+{{- $define := join .Name "Define" }}
+
+var {{ $define }} {{ $serviceName }}Static
+type  {{ $serviceName }}Static struct {
+{{- range .Methods }}
+    {{ .Name }} func (req *{{ .InputUsageName }}) (*{{ .OutputUsageName }}, error)
+{{- end }}
+}
+
+{{- range .Methods }}
+
+func {{ $serviceName }}{{ .Name }}(req *{{ .InputUsageName }}) (*{{ .OutputUsageName }}, error) {
+  if {{ $define }}.{{ .Name }} != nil {
+    return {{ $define }}.{{ .Name }}(req)
+  }
+  return nil, nil
+}
+{{- end }}
+{{ end }}
+
+{{- define "controller" -}}
+package {{ .Package }}
+
+import (
+  "github.com/goal-web/contracts"
+  "github.com/goal-web/validation"
+  "{{ .ResponsePath }}"
+  svc "{{ .ImportPath }}"
+  {{- range .Imports }}
+  {{- if notContains .Pkg "results" }}
+  {{ .Alias }} "{{ .Pkg }}"
+  {{ end -}}
+  {{- end }}
+)
+
+{{- $serviceName := .Name }}
+{{- $prefix := .Prefix }}
+func {{ .Name }}Router(router contracts.HttpRouter) {
+  routeGroup := router.Group("{{ $prefix }}"{{ toMiddlewares .Middlewares }})
+  {{- range .Methods }}
+  {{- $controllerMethod := sprintf "%s%s" $serviceName .Name  }}
+  {{- $path := .Path  }}
+  {{- $middlewares := .Middlewares }}
+    {{- range .Method }}
+    routeGroup.{{ . }}("{{ $path }}", {{ $controllerMethod }}{{ toMiddlewares $middlewares }})
+    {{- end }}
+  {{- end }}
+}
+
+
+{{- $usageName := .UsageName }}
+
+{{- range .Methods }}
+func {{ $serviceName }}{{ .Name }}(request contracts.HttpRequest) any {
+    var req {{ .InputUsageName }}
+    
+    if err:= request.Parse(&req); err != nil {
+      return response.ParseReqErr(err)
+    }
+    
+    if err := validation.Struct(req); err != nil {
+      return response.InvalidReq(err)
+    }
+  
+    resp, err := {{ $usageName }}{{ .Name }}(&req)
+    if err != nil {
+      return response.BizErr(err)
+    }
+    
+    return response.Success(resp)
+}
+{{- end }}
+{{ end }}

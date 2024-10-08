@@ -3,3 +3,7 @@ database/*.sqlite
 *.pid
 
 /bin*
+
+
+go.work
+go.work.sum

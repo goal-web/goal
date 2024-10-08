@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+option go_package = "user";
+
+message WechatInfoData {
+  string city = 1;
+  int64 gender = 2;
+  string open_id = 3;
+  string country = 4;
+  string language = 5;
+  string nickname = 6;
+  string province = 7;
+  string avatar_url = 8;
+}
+
+// 用户注释
+//@authenticatable
+//@table: users
+//@timestamps
+message UserModel {
+
+  int64 id = 1;
+  string name = 2;
+  string avatar = 3;
+
+  //@index
+  //@goTag:db:"open_id;type:varchar(255);default 'xxasdasdsx'"
+  string open_id = 4;
+
+  //@ptr
+  WechatInfoData wechat_info = 5;
+
+  string channel = 6;
+
+  //@hidden
+  string password = 9;
+
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+// 通过微信小程序的 code 登录
+message LoginByWxCodeReq {
+  //@gotag:validate:"required"
+  string code = 1;
+}
+
+// 通过微信小程序的 code 登录
+message LoginByWxInfoReq {
+  //@gotag: validate:"required"
+  string iv = 1;
+  //@gotag: validate:"required"
+  string sessionKey = 2;
+  //@gotag: validate:"required"
+  string encryptedData = 3;
+}
+
+message LoginByWxResult {
+  //@gotag:json:"token,omitempty"
+  string token = 1;
+  //@ptr
+  //@gotag:json:"user,omitempty"
+  UserModel user = 2;
+  //@gotag:json:"sessionKey,omitempty"
+  string sessionKey = 3;
+}
+
+//@controller:/auth
+service AuthService {
+
+  //@method:Post
+  //@middleware:guest
+  rpc LoginByWxAppCode(LoginByWxCodeReq) returns(LoginByWxResult);
+
+  //@middleware:guest
+  rpc LoginByWxAppInfo(LoginByWxInfoReq) returns(LoginByWxResult);
+}

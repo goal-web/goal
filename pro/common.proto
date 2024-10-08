@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option go_package = ".";
+
+enum Code {
+  //@msg:成功
+  Success = 0;
+
+  //@msg:参数解析失败
+  ParseReqErr = 10400;
+  //@msg:未登录
+  Unauthorized = 10401;
+  //@msg:没有权限
+  Forbidden = 100403;
+  //@msg:找不到
+  NotFound = 100404;
+  //@msg:业务错误
+  BizErr = 10201;
+}
+
+message ResponseResult {
+  int32 code = 1;
+  string err_message = 2;
+  string message = 3;
+  //@goType:any
+  string data = 4;
+}

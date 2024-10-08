@@ -29,6 +29,7 @@ func init() {
 					"strict":          env.GetBool("db.struct"),
 					"max_connections": env.GetInt("db.max_connections"),
 					"max_idles":       env.GetInt("db.max_idles"),
+					"other":           "&parseTime=true&multiStatements=true",
 				},
 				"pgsql": {
 					"driver":          "postgres",

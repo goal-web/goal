@@ -13,11 +13,11 @@ type runner struct {
 	app contracts.Application
 }
 
-func Runner(app contracts.Application) contracts.Command {
-	return &runner{
-		Command: commands.Base("run", "启动 goal"),
-		app:     app,
-	}
+func Runner() (contracts.Command, contracts.CommandHandlerProvider) {
+	return commands.Base("run", "启动 goal"),
+		func(app contracts.Application) contracts.CommandHandler {
+			return &runner{app: app}
+		}
 }
 
 func (runner *runner) Handle() any {

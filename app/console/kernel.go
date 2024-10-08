@@ -9,13 +9,12 @@ import (
 )
 
 func NewService() contracts.ServiceProvider {
-	return console.NewService(NewKernel)
+	return console.NewService()
 }
 
 func NewKernel(app contracts.Application) contracts.Console {
 	return &Kernel{console.NewKernel(app, []contracts.CommandProvider{
 		commands.Runner,
-		commands.NewHello,
 		config.EncryptionCommand,
 	}), app}
 }
