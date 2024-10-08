@@ -3,7 +3,7 @@
 // 	goal-cli v0.5.24
 // 	go       go1.23.2
 //
-// updated_at: 2024-10-09 00:56:11
+// updated_at: 2024-10-09 02:33:34
 // source: pro/user.proto
 // 
 package models
@@ -27,7 +27,7 @@ var ()
 // @authenticatable
 // @timestamps
 type UserModel struct {
-	Id int64 `json:"id" db:"id;type:BIGINT;not null;primary key"`
+	Id int64 `json:"id" db:"id;type:BIGINT;not null;primary key;AUTO_INCREMENT;"`
 
 	Name string `json:"name" db:"name;type:VARCHAR(255);not null;"`
 

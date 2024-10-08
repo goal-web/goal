@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = ".";
+
+//@table: articles
+//@timestamps
+message ArticleModel {
+    uint32 id = 1;
+    string title = 2;
+    string created_at = 3;
+    string updated_at = 4;
+}
