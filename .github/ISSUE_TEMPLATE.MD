@@ -8,7 +8,7 @@
 ### 1. What version of `Go` and system type/arch are you using?
 <!-- 
 Please paste the output of command `go version` from your terminal.
-What expect to see is like: `go 1.23.1, linux/amd64`
+What expect to see is like: `go 1.23.2, linux/amd64`
 -->
 
 

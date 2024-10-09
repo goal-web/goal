@@ -12,4 +12,7 @@ func Api(router contracts.HttpRouter) {
 	})
 
 	router.Get("/", controllers.HelloWorld)
+	router.Get("/view", func(views contracts.Views) any {
+		return views.Render("view.html")
+	})
 }

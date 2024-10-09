@@ -1,6 +1,6 @@
 module github.com/goal-web/goal
 
-go 1.23.1
+go 1.23.2
 
 require (
 	github.com/fasthttp/websocket v1.5.10
@@ -14,6 +14,7 @@ require (
 	github.com/goal-web/contracts v0.5.2
 	github.com/goal-web/database v0.5.2
 	github.com/goal-web/email v0.5.1
+	github.com/goal-web/views v0.5.0
 	github.com/goal-web/encryption v0.5.1
 	github.com/goal-web/events v0.5.1
 	github.com/goal-web/filesystem v0.5.1

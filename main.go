@@ -10,6 +10,7 @@ import (
 	"github.com/goal-web/http/websocket"
 	"github.com/goal-web/session"
 	"github.com/goal-web/supports/signal"
+	"github.com/goal-web/views"
 	"syscall"
 )
 
@@ -20,6 +21,7 @@ func main() {
 	})
 
 	app.RegisterServices(
+		views.NewService(),
 		http.NewService(
 			routes.Api,
 			routes.WebSocket,

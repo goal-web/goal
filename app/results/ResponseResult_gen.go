@@ -3,7 +3,7 @@
 // 	goal-cli v0.5.24
 // 	go       go1.23.2
 //
-// updated_at: 2024-10-09 02:33:34
+// updated_at: 2024-10-09 19:07:27
 // source: pro/common.proto
 // 
 package results

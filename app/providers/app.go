@@ -3,6 +3,7 @@ package providers
 import (
 	"github.com/goal-web/application"
 	"github.com/goal-web/contracts"
+	"github.com/goal-web/goal/app/console"
 	"github.com/goal-web/goal/app/models"
 	"github.com/goal-web/migration/migrate"
 	"github.com/golang-module/carbon/v2"
@@ -14,7 +15,12 @@ type appServiceProvider struct {
 
 func NewApp() contracts.ServiceProvider {
 	return &appServiceProvider{
-		serviceProviders: []contracts.ServiceProvider{},
+		serviceProviders: []contracts.ServiceProvider{
+			NewConsoleService(
+				console.Commands,
+				console.Schedule,
+			),
+		},
 	}
 }
 

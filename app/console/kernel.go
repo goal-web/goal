@@ -2,30 +2,19 @@ package console
 
 import (
 	"github.com/goal-web/config"
-	"github.com/goal-web/console"
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/goal/app/console/commands"
 	"github.com/goal-web/supports/logs"
 )
 
-func NewService() contracts.ServiceProvider {
-	return console.NewService()
+var Commands = []contracts.CommandProvider{
+	commands.Runner,
+	config.EncryptionCommand,
 }
 
-func NewKernel(app contracts.Application) contracts.Console {
-	return &Kernel{console.NewKernel(app, []contracts.CommandProvider{
-		commands.Runner,
-		config.EncryptionCommand,
-	}), app}
-}
-
-type Kernel struct {
-	*console.Kernel
-	app contracts.Application
-}
-
-func (kernel *Kernel) Schedule(schedule contracts.Schedule) {
+func Schedule(schedule contracts.Schedule) {
 	schedule.Call(func() {
-		logs.Default().Info("周日每5秒钟打印 周日愉快")
-	}).EveryFiveSeconds().Sundays()
+		//fmt.Println("打印 hello")
+		logs.Default().Info("打印 hello")
+	}).EveryFiveSeconds()
 }
