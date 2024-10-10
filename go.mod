@@ -7,28 +7,28 @@ require (
 	github.com/goal-web/application v0.5.1
 	github.com/goal-web/auth v0.5.1
 	github.com/goal-web/bloomfilter v0.5.1
-	github.com/goal-web/cache v0.5.1
-	github.com/goal-web/collection v0.5.1
+	github.com/goal-web/cache v0.5.2
+	github.com/goal-web/collection v0.5.2
 	github.com/goal-web/config v0.5.2
-	github.com/goal-web/console v0.5.1
-	github.com/goal-web/contracts v0.5.2
-	github.com/goal-web/database v0.5.2
+	github.com/goal-web/console v0.5.4
+	github.com/goal-web/contracts v0.5.3
+	github.com/goal-web/database v0.5.3
 	github.com/goal-web/email v0.5.1
-	github.com/goal-web/views v0.5.0
-	github.com/goal-web/encryption v0.5.1
+	github.com/goal-web/encryption v0.5.2
 	github.com/goal-web/events v0.5.1
-	github.com/goal-web/filesystem v0.5.1
+	github.com/goal-web/filesystem v0.5.2
 	github.com/goal-web/goal-cli v0.5.30
-	github.com/goal-web/hashing v0.5.1
-	github.com/goal-web/http v0.5.4
-	github.com/goal-web/migration v0.5.2
-	github.com/goal-web/queue v0.5.1
-	github.com/goal-web/ratelimiter v0.5.1
-	github.com/goal-web/redis v0.5.1
-	github.com/goal-web/serialization v0.5.1
+	github.com/goal-web/hashing v0.5.2
+	github.com/goal-web/http v0.5.6
+	github.com/goal-web/migration v0.5.5
+	github.com/goal-web/queue v0.5.2
+	github.com/goal-web/ratelimiter v0.5.2
+	github.com/goal-web/redis v0.5.2
+	github.com/goal-web/serialization v0.5.2
 	github.com/goal-web/session v0.5.1
-	github.com/goal-web/supports v0.5.3
+	github.com/goal-web/supports v0.5.5
 	github.com/goal-web/validation v0.5.1
+	github.com/goal-web/views v0.5.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang-module/carbon/v2 v2.3.12
 	github.com/nsqio/go-nsq v1.1.0
@@ -51,16 +51,17 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/emicklei/proto v1.13.2 // indirect
+	github.com/flosch/pongo2/v6 v6.0.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/goal-web/container v0.5.1 // indirect
-	github.com/goal-web/pipeline v0.5.1 // indirect
-	github.com/goal-web/querybuilder v0.5.2 // indirect
-	github.com/goal-web/routing v0.5.1 // indirect
+	github.com/goal-web/container v0.5.2 // indirect
+	github.com/goal-web/pipeline v0.5.2 // indirect
+	github.com/goal-web/querybuilder v0.5.3 // indirect
+	github.com/goal-web/routing v0.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/uuid v1.6.0 // indirect
