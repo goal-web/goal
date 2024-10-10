@@ -4,30 +4,30 @@ go 1.23.2
 
 require (
 	github.com/fasthttp/websocket v1.5.10
-	github.com/goal-web/application v0.5.1
-	github.com/goal-web/auth v0.5.1
-	github.com/goal-web/bloomfilter v0.5.1
+	github.com/goal-web/application v0.5.2
+	github.com/goal-web/auth v0.5.2
+	github.com/goal-web/bloomfilter v0.5.2
 	github.com/goal-web/cache v0.5.2
 	github.com/goal-web/collection v0.5.2
-	github.com/goal-web/config v0.5.2
+	github.com/goal-web/config v0.5.4
 	github.com/goal-web/console v0.5.4
 	github.com/goal-web/contracts v0.5.3
 	github.com/goal-web/database v0.5.3
-	github.com/goal-web/email v0.5.1
+	github.com/goal-web/email v0.5.2
 	github.com/goal-web/encryption v0.5.2
-	github.com/goal-web/events v0.5.1
+	github.com/goal-web/events v0.5.2
 	github.com/goal-web/filesystem v0.5.2
-	github.com/goal-web/goal-cli v0.5.30
+	github.com/goal-web/goal-cli v0.5.35
 	github.com/goal-web/hashing v0.5.2
-	github.com/goal-web/http v0.5.6
+	github.com/goal-web/http v0.5.7
 	github.com/goal-web/migration v0.5.5
 	github.com/goal-web/queue v0.5.2
 	github.com/goal-web/ratelimiter v0.5.2
 	github.com/goal-web/redis v0.5.2
 	github.com/goal-web/serialization v0.5.2
-	github.com/goal-web/session v0.5.1
-	github.com/goal-web/supports v0.5.5
-	github.com/goal-web/validation v0.5.1
+	github.com/goal-web/session v0.5.2
+	github.com/goal-web/supports v0.5.6
+	github.com/goal-web/validation v0.5.2
 	github.com/goal-web/views v0.5.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang-module/carbon/v2 v2.3.12

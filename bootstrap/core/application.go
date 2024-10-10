@@ -27,6 +27,7 @@ import (
 	"github.com/goal-web/serialization"
 	"github.com/goal-web/supports/utils"
 	"github.com/golang-module/carbon/v2"
+	"os"
 )
 
 type App struct {
@@ -37,6 +38,8 @@ type App struct {
 func Application(c ...App) contracts.Application {
 	env := config.NewToml(config.File("env.toml"))
 	app := application.Singleton(env.GetBool("app.debug"))
+	pwd, _ := os.Getwd()
+	app.Instance("pwd", pwd)
 
 	conf := utils.DefaultValue(c, App{})
 	// 设置异常处理器
