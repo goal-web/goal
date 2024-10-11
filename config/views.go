@@ -8,7 +8,7 @@ import (
 func init() {
 	configs["views"] = func(env contracts.Env) any {
 		return views.Config{
-			Path: env.StringOptional("views.path", "storage/views"),
+			Path: env.StringOptional("views.path", "views"),
 		}
 	}
 }
