@@ -7,12 +7,18 @@ import (
 
 func init() {
 	configs["http"] = func(env contracts.Env) any {
-		return http.Config{
-			Host: env.GetString("http.host"),
-			Port: env.GetString("http.port"),
+		config := http.Config{
+			Host:              env.GetString("http.host"),
+			Port:              env.GetString("http.port"),
 			StaticDirectories: map[string]string{
-				"/static": "storage/app/public",
+				//"/": "public",
 			},
 		}
+
+		if env.GetString("app.env") == "local" {
+			config.StaticDirectories["/"] = "public"
+		}
+
+		return config
 	}
 }
