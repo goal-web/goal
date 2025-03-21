@@ -1,5 +1,8 @@
 DOCKER_TAG=goal
 
+gen:
+	cd pro && go run goal-cli.go --template ../template.tmpl
+
 run:
 	go run main.go run
 

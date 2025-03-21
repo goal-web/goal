@@ -13,6 +13,7 @@ func main() {
 	out := flag.String("out", "app", "output")                   // 输出目录
 	template := flag.String("template", "template.tmpl", "模板文件") // 模板文件
 	dir := flag.String("dir", "pro", "指定扫描的 proto 文件目录")         // 要扫描的目录
+	mode := flag.String("mode", "pro", "pro 或者 SDK")
 
 	flag.Parse()
 
@@ -29,10 +30,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	// 遍历所有找到的 proto 文件，依次调用 gen.Pro()
-	for _, protoFile := range protoFiles {
-		fmt.Printf("正在处理 proto 文件: %s\n", protoFile)
-		gen.Pro(protoFile, *template, *out)
+	if *mode == "pro" {
+		// 遍历所有找到的 proto 文件，依次调用 gen.Pro()
+		for _, protoFile := range protoFiles {
+			fmt.Printf("正在处理 proto 文件: %s\n", protoFile)
+			gen.Pro(protoFile, *template, *out)
+		}
+	} else {
+		// 遍历所有找到的 proto 文件，依次调用 gen.Pro()
+		gen.SDK(protoFiles, *template, *out)
 	}
 }
 

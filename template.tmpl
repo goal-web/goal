@@ -432,6 +432,10 @@ func (model *{{ $modelName }}) Except(keys ...string) contracts.Fields {
 }
 
 func (model *{{ $modelName }}) ToFields() contracts.Fields {
+    if model == nil {
+        return nil
+    }
+
   model.Hidden({{ $define }}.Hidden...)
 
   fields := contracts.Fields{}
@@ -470,7 +474,8 @@ func (model *{{ $modelName }}) ToFields() contracts.Fields {
   }
 
   for key, value := range model._raw {
-    if _, exists := fields[key]; !exists {
+    _, hidden := model._hidden[key]
+    if _, exists := fields[key]; !exists && !hidden {
         fields[key] = value
     }
   }
@@ -492,7 +497,7 @@ func (model *{{ $modelName }}) Update(fields contracts.Fields) contracts.Excepti
 
 
   _, err := {{ .Model.RawName }}Query().Where("{{ $primaryKey }}", model.GetPrimaryKey()).UpdateE(fields)
-  
+
   if err == nil {
     model.Set(fields)
     model._update = nil
@@ -500,7 +505,7 @@ func (model *{{ $modelName }}) Update(fields contracts.Fields) contracts.Excepti
       {{ $define }}.Updated(model, fields)
     }
   }
-  
+
   return err
 }
 
@@ -515,7 +520,7 @@ func (model *{{ $modelName }}) Refresh() contracts.Exception {
 }
 
 func (model *{{ $modelName }}) Delete() contracts.Exception {
-  
+
   if {{ $define }}.Deleting != nil {
     if err := {{ $define }}.Deleting(model); err != nil {
       return err
@@ -526,16 +531,16 @@ func (model *{{ $modelName }}) Delete() contracts.Exception {
   if err == nil && {{ $define }}.Deleted != nil {
     {{ $define }}.Deleted(model)
   }
-  
+
   return err
 }
 
-  
+
 func (model *{{ $modelName }}) GetPrimaryKey() any {
   if {{ $define }}.PrimaryKeyGetter != nil {
     return {{ $define }}.PrimaryKeyGetter(model)
   }
-  
+
   return model.{{ toCamelCase $primaryKey }}
 }
 
@@ -693,7 +698,7 @@ func (model *{{ $modelName }}) Set{{ .Name }}(value {{ goType . }}) {
 
 {{- define "data" -}}
 package {{ .Package }}
-  
+
 import (
 {{- range .Imports }}
 {{ .Alias }} "{{ .Pkg }}"
@@ -710,7 +715,7 @@ type {{ .Model.Name }} struct {
 
 {{- define "request" -}}
 package {{ .Package }}
-  
+
 import (
   {{- range .Imports }}
   {{ .Alias }} "{{ .Pkg }}"
@@ -740,7 +745,7 @@ func (model *{{ .Model.Name }}) ToFields() contracts.Fields {
 
 {{- define "result" -}}
 package {{ .Package }}
-    
+
 import (
     "github.com/goal-web/contracts"
   {{- range .Imports }}
@@ -757,15 +762,28 @@ type {{ $resultName }} struct {
 }
 
 func (result *{{ $resultName }}) ToFields() contracts.Fields {
+
     fields := contracts.Fields{
         {{- range .Fields }}
             {{- if eq (fieldMsg .) nil }}
             "{{ .JSONName }}": result.{{ .Name }},
-            {{- else }}
+            {{- else if and (ne .Repeated true) .IsModel }}
             "{{ .JSONName }}": result.{{ .Name }}.ToFields(),
+            {{- else }}
+            "{{ .JSONName }}": result.{{ .Name }},
             {{- end }}
         {{- end }}
     }
+
+    {{- range .Fields }}
+        {{- if and .Repeated (ne (fieldMsg .) nil) (fieldMsg .).IsModel }}
+        {{ .JSONName }}List := make([]contracts.Fields, len(result.{{ .Name }}))
+        for i, item := range result.{{ .Name }} {
+            {{ .JSONName }}List[i] = item.ToFields()
+        }
+        fields["{{ .JSONName }}"] = {{ .JSONName }}List
+        {{- end }}
+    {{- end }}
 
 
     return fields
@@ -786,10 +804,10 @@ const (
   {{ $enumName }}{{ .Name }} {{ $enumName }} = {{ .Value }}
   {{- end }}
   {{ $enumName }}Unknown {{ $enumName }} = -1000
-      
+
 )
-  
-  
+
+
 func (item {{ $enumName }}) String() string {
     switch item {
       {{- range .Values }}
@@ -832,6 +850,7 @@ func Parse{{ $enumName }}FromString(msg string) {{ $enumName }} {
 package {{ .Package }}
 
 import (
+    "github.com/goal-web/contracts"
   {{- range .Imports }}
   {{ .Alias }} "{{ .Pkg }}"
   {{- end }}
@@ -843,20 +862,21 @@ import (
 var {{ $define }} {{ $serviceName }}Static
 type  {{ $serviceName }}Static struct {
 {{- range .Methods }}
-    {{ .Name }} func (req *{{ .InputUsageName }}) (*{{ .OutputUsageName }}, error)
+    {{ .Name }} func (req *{{ .InputUsageName }}, ctx contracts.Context) (*{{ .OutputUsageName }}, error)
 {{- end }}
 }
 
 {{- range .Methods }}
 
-func {{ $serviceName }}{{ .Name }}(req *{{ .InputUsageName }}) (*{{ .OutputUsageName }}, error) {
+func {{ $serviceName }}{{ .Name }}(req *{{ .InputUsageName }}, ctx contracts.Context) (*{{ .OutputUsageName }}, error) {
   if {{ $define }}.{{ .Name }} != nil {
-    return {{ $define }}.{{ .Name }}(req)
+    return {{ $define }}.{{ .Name }}(req, ctx)
   }
   return nil, nil
 }
 {{- end }}
 {{ end }}
+
 
 {{- define "controller" -}}
 package {{ .Package }}
@@ -893,16 +913,16 @@ func {{ .Name }}Router(router contracts.HttpRouter) {
 {{- range .Methods }}
 func {{ $serviceName }}{{ .Name }}(request contracts.HttpRequest) any {
     var req {{ .InputUsageName }}
-    
+
     if err:= request.Parse(&req); err != nil {
       return response.ParseReqErr(err)
     }
-    
+
     if err := validation.Struct(req); err != nil {
       return response.InvalidReq(err)
     }
-  
-    resp, err := {{ $usageName }}{{ .Name }}(&req)
+
+    resp, err := {{ $usageName }}{{ .Name }}(&req, request)
     if err != nil {
       return response.BizErr(err)
     }

@@ -1,0 +1,118 @@
+{{- define "request" -}}
+{{- range .Imports }}
+import {{ .Alias }} from "{{ .Pkg }}"
+{{- end }}
+
+export default interface {{ .Model.Name }} {
+  {{- range .Fields }}
+  {{ .JSONName }}{{ if hasComment .Comment "@nullable" }}?{{end}}: {{ tsType . }}
+  {{- end }}
+}
+{{ end }}
+
+{{- define "model" -}}
+{{- range .Imports }}
+import {{ .Alias }} from "{{ .Pkg }}"
+{{- end }}
+
+export default interface {{ .Model.Name }} {
+  {{- range .Fields }}
+  {{ .JSONName }}{{ if hasComment .Comment "@nullable" }}?{{end}}: {{ tsType . }}
+  {{- end }}
+}
+{{ end }}
+
+
+{{- define "result" -}}
+{{- range .Imports }}
+import {{ .Alias }} from "{{ .Pkg }}"
+{{- end }}
+
+export default interface {{ .Model.Name }} {
+  {{- range .Fields }}
+  {{ .JSONName }}{{ if hasComment .Comment "@nullable" }}?{{end}}: {{ tsType . }}
+  {{- end }}
+}
+{{ end }}
+
+{{- define "enum" -}}
+
+{{- $enumName := .Name }}
+
+export enum {{ $enumName }} {
+  {{- range .Values }}
+  {{- $FieldName := sprintf "%s%s" $enumName .Name }}
+
+  {{ toComments $FieldName .Comments }}
+  {{ .Name }} = {{ .Value }},
+  {{- end }}
+}
+
+{{ end }}
+
+{{- define "data" -}}
+
+{{- range .Imports }}
+import {{ .Alias }} from "{{ .Pkg }}"
+{{- end }}
+
+export default interface {{ .Model.Name }} {
+  {{- range .Fields }}
+  {{ .JSONName }}{{ if hasComment .Comment "@nullable" }}?{{end}}: {{ tsType . }}
+  {{- end }}
+}
+{{ end }}
+
+{{- define "controller" -}}
+import {alovaInstance, wrapParams} from "../index";
+import {useRequest} from "alova/client";
+import {RequestHookConfig} from "alova/client";
+{{- range .Imports }}
+import {{ .Alias }} from "{{ .Pkg }}"
+{{- end }}
+
+{{- $serviceName := .Name }}
+{{- $prefix := .Prefix }}
+{{- $hasHook := hasComment .Comment "@hook" }}
+
+{{- range .Methods }}
+
+{{- $name := .Name }}
+{{- $req := .InputUsageName }}
+{{- $resp := .OutputUsageName }}
+{{- $path := .Path }}
+{{- $hook := or $hasHook (hasComment .Comment "@hook") }}
+
+{{- if eq (len .Method) 1 }}
+
+export function {{ .Name }}(req: {{ .InputUsageName }}) {
+    return alovaInstance.{{ (index .Method 0) }}<{{ .OutputUsageName }}>("{{ $prefix }}{{ .Path }}", wrapParams('{{ index .Method 0 }}', req))
+}
+
+{{- if $hook }}
+export function use{{ .Name }}(req: {{ .InputUsageName }}, config?: RequestHookConfig<any, any>) {
+    return useRequest({{ .Name }}(req), config)
+}
+{{- end }}
+
+{{- else }}
+{{- range .Method }}
+
+export function {{ . }}{{ $name }}(req: {{ $req }}) {
+    return alovaInstance.{{ . }}<{{ $resp }}>("{{ $prefix }}{{ $path }}", wrapParams('{{ . }}', req))
+}
+
+{{- if $hook }}
+export function use{{ . }}{{ $name }}(req: {{ .InputUsageName }}, config?: RequestHookConfig<any, any>) {
+    return useRequest({{ . }}{{ $name }}(req), config)
+}
+{{- end }}
+
+{{- end }}
+
+{{- end }}
+
+{{- end }}
+
+
+{{ end }}

@@ -5,7 +5,7 @@ go 1.23.2
 require (
 	github.com/fasthttp/websocket v1.5.10
 	github.com/goal-web/application v0.5.2
-	github.com/goal-web/auth v0.5.2
+	github.com/goal-web/auth v0.5.3
 	github.com/goal-web/bloomfilter v0.5.2
 	github.com/goal-web/cache v0.5.2
 	github.com/goal-web/collection v0.5.2
@@ -17,22 +17,22 @@ require (
 	github.com/goal-web/encryption v0.5.2
 	github.com/goal-web/events v0.5.2
 	github.com/goal-web/filesystem v0.5.2
-	github.com/goal-web/goal-cli v0.5.35
+	github.com/goal-web/goal-cli v0.5.39
 	github.com/goal-web/hashing v0.5.2
-	github.com/goal-web/http v0.5.7
-	github.com/goal-web/migration v0.5.5
+	github.com/goal-web/http v0.5.11
+	github.com/goal-web/migration v0.5.6
 	github.com/goal-web/queue v0.5.2
 	github.com/goal-web/ratelimiter v0.5.2
 	github.com/goal-web/redis v0.5.2
+	github.com/goal-web/routing v0.5.2
 	github.com/goal-web/serialization v0.5.2
 	github.com/goal-web/session v0.5.2
-	github.com/goal-web/supports v0.5.6
+	github.com/goal-web/supports v0.5.7
 	github.com/goal-web/validation v0.5.2
-	github.com/goal-web/views v0.5.1
+	github.com/goal-web/views v0.5.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang-module/carbon/v2 v2.3.12
 	github.com/nsqio/go-nsq v1.1.0
-	github.com/stretchr/testify v1.9.0
 )
 
 require (
@@ -48,7 +48,6 @@ require (
 	github.com/apex/log v1.9.0 // indirect
 	github.com/bits-and-blooms/bitset v1.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/emicklei/proto v1.13.2 // indirect
 	github.com/flosch/pongo2/v6 v6.0.0 // indirect
@@ -58,10 +57,9 @@ require (
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/goal-web/container v0.5.2 // indirect
+	github.com/goal-web/container v0.5.3 // indirect
 	github.com/goal-web/pipeline v0.5.2 // indirect
-	github.com/goal-web/querybuilder v0.5.3 // indirect
-	github.com/goal-web/routing v0.5.2 // indirect
+	github.com/goal-web/querybuilder v0.5.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -77,7 +75,6 @@ require (
 	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
 	github.com/pierrec/lz4/v4 v4.1.14 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/qbhy/parallel v1.4.0 // indirect
 	github.com/qiniu/go-sdk/v7 v7.11.1 // indirect
 	github.com/savsgio/gotils v0.0.0-20240704082632-aef3928b8a38 // indirect
