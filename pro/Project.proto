@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+import "pro/user.proto";
+
+//@timestamps
+//@table: projects
+message ProjectModel {
+    uint64 id = 1;
+    string uuid = 2;
+    string name = 3;
+    int32 creator_id = 4;
+    int32 group_id = 5;
+    int32 key_id = 6;
+    string repo_address = 7;
+    string project_path = 8;
+    string default_branch = 9;
+    string settings = 10;
+    string created_at = 11;
+    string updated_at = 12;
+
+    //@belongsTo
+    UserModel user = 100;
+}

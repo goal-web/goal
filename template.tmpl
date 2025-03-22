@@ -9,6 +9,7 @@ import (
 	"github.com/goal-web/migration/migrate"
     "github.com/goal-web/supports/utils"
     "github.com/goal-web/collection"
+	"github.com/spf13/cast"
     "fmt"
     {{- if hasMsgComment .Model "@carbon" }}
     "github.com/golang-module/carbon/v2"
@@ -359,6 +360,10 @@ func (model *{{ $modelName }}) Set(fields contracts.Fields) {
                   model.Set{{ .Name }}(vd)
                   {{end}}
                   {{end}}
+                {{- if isBasicType . }}
+                default:
+                    model.Set{{ .Name }}(cast.{{ convertFunc (goType .) }}(v))
+                {{- end }}
                 }
     {{- end }}
     {{- range .Relations }}

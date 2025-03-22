@@ -36,6 +36,7 @@ func (app appServiceProvider) Register(instance contracts.Application) {
 		migrate.Auto(
 			factory,
 			models.UserMigrator(),
+			models.ProjectMigrator(),
 		)
 	})
 }

@@ -3,7 +3,7 @@
 // 	goal-cli v0.5.24
 // 	go       go1.24.0
 //
-// updated_at: 2025-03-21 19:48:07
+// updated_at: 2025-03-22 23:44:35
 // source: pro/Article.proto
 // 
 package models
@@ -17,6 +17,7 @@ import (
 	"github.com/goal-web/migration/migrate"
 	"github.com/goal-web/supports/logs"
 	"github.com/goal-web/supports/utils"
+	"github.com/spf13/cast"
 )
 
 var ()
@@ -215,6 +216,8 @@ func (model *ArticleModel) Set(fields contracts.Fields) {
 				}
 				model.SetId(vd)
 
+			default:
+				model.SetId(cast.ToUint32(v))
 			}
 		case "title":
 			switch v := value.(type) {
@@ -225,6 +228,8 @@ func (model *ArticleModel) Set(fields contracts.Fields) {
 			case []byte:
 				model.SetTitle(string(v))
 
+			default:
+				model.SetTitle(cast.ToString(v))
 			}
 		case "created_at":
 			switch v := value.(type) {
@@ -235,6 +240,8 @@ func (model *ArticleModel) Set(fields contracts.Fields) {
 			case []byte:
 				model.SetCreatedAt(string(v))
 
+			default:
+				model.SetCreatedAt(cast.ToString(v))
 			}
 		case "updated_at":
 			switch v := value.(type) {
@@ -245,6 +252,8 @@ func (model *ArticleModel) Set(fields contracts.Fields) {
 			case []byte:
 				model.SetUpdatedAt(string(v))
 
+			default:
+				model.SetUpdatedAt(cast.ToString(v))
 			}
 		}
 

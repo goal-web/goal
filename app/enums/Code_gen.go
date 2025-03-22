@@ -3,7 +3,7 @@
 // 	goal-cli v0.5.24
 // 	go       go1.24.0
 //
-// updated_at: 2025-03-21 19:48:07
+// updated_at: 2025-03-22 23:44:43
 // source: pro/common.proto
 // 
 package enums

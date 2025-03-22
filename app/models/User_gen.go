@@ -3,7 +3,7 @@
 // 	goal-cli v0.5.24
 // 	go       go1.24.0
 //
-// updated_at: 2025-03-21 19:48:07
+// updated_at: 2025-03-22 23:44:43
 // source: pro/user.proto
 // 
 package models
@@ -18,6 +18,7 @@ import (
 	"github.com/goal-web/migration/migrate"
 	"github.com/goal-web/supports/logs"
 	"github.com/goal-web/supports/utils"
+	"github.com/spf13/cast"
 )
 
 var ()
@@ -247,6 +248,8 @@ func (model *UserModel) Set(fields contracts.Fields) {
 				}
 				model.SetId(vd)
 
+			default:
+				model.SetId(cast.ToInt64(v))
 			}
 		case "name":
 			switch v := value.(type) {
@@ -257,6 +260,8 @@ func (model *UserModel) Set(fields contracts.Fields) {
 			case []byte:
 				model.SetName(string(v))
 
+			default:
+				model.SetName(cast.ToString(v))
 			}
 		case "avatar":
 			switch v := value.(type) {
@@ -267,6 +272,8 @@ func (model *UserModel) Set(fields contracts.Fields) {
 			case []byte:
 				model.SetAvatar(string(v))
 
+			default:
+				model.SetAvatar(cast.ToString(v))
 			}
 		case "open_id":
 			switch v := value.(type) {
@@ -277,6 +284,8 @@ func (model *UserModel) Set(fields contracts.Fields) {
 			case []byte:
 				model.SetOpenId(string(v))
 
+			default:
+				model.SetOpenId(cast.ToString(v))
 			}
 		case "wechat_info":
 			switch v := value.(type) {
@@ -312,6 +321,8 @@ func (model *UserModel) Set(fields contracts.Fields) {
 			case []byte:
 				model.SetChannel(string(v))
 
+			default:
+				model.SetChannel(cast.ToString(v))
 			}
 		case "password":
 			switch v := value.(type) {
@@ -322,6 +333,8 @@ func (model *UserModel) Set(fields contracts.Fields) {
 			case []byte:
 				model.SetPassword(string(v))
 
+			default:
+				model.SetPassword(cast.ToString(v))
 			}
 		case "created_at":
 			switch v := value.(type) {
@@ -332,6 +345,8 @@ func (model *UserModel) Set(fields contracts.Fields) {
 			case []byte:
 				model.SetCreatedAt(string(v))
 
+			default:
+				model.SetCreatedAt(cast.ToString(v))
 			}
 		case "updated_at":
 			switch v := value.(type) {
@@ -342,6 +357,8 @@ func (model *UserModel) Set(fields contracts.Fields) {
 			case []byte:
 				model.SetUpdatedAt(string(v))
 
+			default:
+				model.SetUpdatedAt(cast.ToString(v))
 			}
 		}
 

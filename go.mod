@@ -2,6 +2,10 @@ module github.com/goal-web/goal
 
 go 1.23.2
 
+replace (
+	github.com/goal-web/goal-cli => ../goal-cli
+)
+
 require (
 	github.com/fasthttp/websocket v1.5.10
 	github.com/goal-web/application v0.5.2
@@ -32,6 +36,7 @@ require (
 	github.com/goal-web/views v0.5.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang-module/carbon/v2 v2.3.12
+	github.com/gookit/goutil v0.6.18
 	github.com/nsqio/go-nsq v1.1.0
 )
 
@@ -63,6 +68,7 @@ require (
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/gookit/color v1.5.4 // indirect
 	github.com/gorhill/cronexpr v0.0.0-20180427100037-88b0669f7d75 // indirect
 	github.com/jmoiron/sqlx v1.3.4 // indirect
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible // indirect
@@ -82,12 +88,13 @@ require (
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.55.0 // indirect
+	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect
 	go.opentelemetry.io/otel/trace v1.3.0 // indirect
 	go.uber.org/ratelimit v0.2.0 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
 	golang.org/x/net v0.26.0 // indirect
-	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 )
