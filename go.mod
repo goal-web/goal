@@ -2,9 +2,7 @@ module github.com/goal-web/goal
 
 go 1.23.2
 
-replace (
-	github.com/goal-web/goal-cli => ../goal-cli
-)
+replace github.com/goal-web/goal-cli => ../goal-cli
 
 require (
 	github.com/fasthttp/websocket v1.5.10
@@ -38,6 +36,7 @@ require (
 	github.com/golang-module/carbon/v2 v2.3.12
 	github.com/gookit/goutil v0.6.18
 	github.com/nsqio/go-nsq v1.1.0
+	github.com/spf13/cast v1.7.1
 )
 
 require (
@@ -66,7 +65,6 @@ require (
 	github.com/goal-web/pipeline v0.5.2 // indirect
 	github.com/goal-web/querybuilder v0.5.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/gorhill/cronexpr v0.0.0-20180427100037-88b0669f7d75 // indirect
