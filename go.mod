@@ -21,7 +21,7 @@ require (
 	github.com/goal-web/encryption v0.5.2
 	github.com/goal-web/events v0.5.2
 	github.com/goal-web/filesystem v0.5.2
-	github.com/goal-web/goal-cli v0.5.39
+	github.com/goal-web/goal-cli v0.5.42
 	github.com/goal-web/hashing v0.5.2
 	github.com/goal-web/http v0.5.11
 	github.com/goal-web/migration v0.5.6

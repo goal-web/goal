@@ -3,7 +3,7 @@
 // 	goal-cli v0.5.24
 // 	go       go1.24.0
 //
-// updated_at: 2025-03-22 23:44:43
+// updated_at: 2025-03-24 11:05:04
 // source: pro/user.proto
 // 
 package models
@@ -209,7 +209,16 @@ func (model *UserModel) Save() contracts.Exception {
 			return err
 		}
 	}
-	_, err := UserQuery().Where("id", model.GetPrimaryKey()).UpdateE(model._update)
+	var err contracts.Exception
+	var pk = model.GetPrimaryKey()
+	if cast.ToUint64(pk) == 0 {
+		pk, err = UserQuery().Where("id", model.GetPrimaryKey()).InsertGetIdE(model._update)
+		if err == nil {
+			model.SetId(cast.ToInt64(pk))
+		}
+	} else {
+		_, err = UserQuery().Where("id", model.GetPrimaryKey()).UpdateE(model._update)
+	}
 	if err == nil {
 		model._update = nil
 		if UserDefine.Saved != nil {

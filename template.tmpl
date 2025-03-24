@@ -1,6 +1,6 @@
 {{- define "model" -}}
 package {{ .Package }}
-  
+
 import (
     "encoding/json"
     "github.com/goal-web/supports/logs"
@@ -308,15 +308,28 @@ func (model *{{ $modelName }}) Save() contracts.Exception {
     if err := {{ $define }}.Saving(model); err != nil {
       return err
     }
-  } 
-  _, err := {{ .Model.RawName }}Query().Where("{{ $primaryKey }}", model.GetPrimaryKey()).UpdateE(model._update)
+  }
+var err contracts.Exception
+var pk = model. GetPrimaryKey()
+if cast.ToUint64(pk) == 0 {
+    pk, err = {{ .Model.RawName }}Query().Where("{{ $primaryKey }}", model.GetPrimaryKey()).InsertGetIdE(model._update)
+    if err == nil {
+        {{- range .Fields }}
+        {{- if eq .JSONName $primaryKey }}
+        model.Set{{.Name}}(cast.{{ convertFunc (goType .) }}(pk))
+        {{- end }}
+        {{- end }}
+    }
+} else {
+  _, err = {{ .Model.RawName }}Query().Where("{{ $primaryKey }}", model.GetPrimaryKey()).UpdateE(model._update)
+}
   if err == nil {
     model._update = nil
     if {{ $define }}.Saved != nil {
       {{ $define }}.Saved(model)
     }
   }
-  
+
   return err
 }
 
@@ -385,7 +398,7 @@ func (model *{{ $modelName }}) Only(key ...string) contracts.Fields {
       continue
     }
   {{- end }}
-  
+
     if {{ $define }}.Appends[k] != nil {
      fields[k] = {{ $define }}.Appends[k](model)
     }
@@ -931,7 +944,7 @@ func {{ $serviceName }}{{ .Name }}(request contracts.HttpRequest) any {
     if err != nil {
       return response.BizErr(err)
     }
-    
+
     return response.Success(resp)
 }
 {{- end }}

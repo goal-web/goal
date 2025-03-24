@@ -11,12 +11,15 @@ func HelloWorld() any {
 	createProject()
 	updateProject()
 	dump.P(23)
-	return getProject()
+	projects := getProjectList()
+	return contracts.Fields{
+		"data": projects,
+	}
 }
 
 func createProject() {
 	fields := contracts.Fields{
-		"uuid":           "your_uuid",
+		"uuid":           "45",
 		"name":           "your_project_name",
 		"creator_id":     1,
 		"group_id":       1,
@@ -35,11 +38,21 @@ func createProject() {
 	}
 }
 
-func getProject() any {
+func getProjectOne() any {
 	query := models.ProjectQuery()
 	project := query.Where("id", 1).First() // 假设查询 id 为 1 的记录
 	fmt.Printf("Project: %+v\n", project)
+
 	return project
+}
+
+func getProjectList() any {
+	query := models.ProjectQuery()
+
+	projects := query.Get().ToAnyArray() //
+	dump.P(projects)
+
+	return projects
 }
 
 func updateProject() {
@@ -47,7 +60,7 @@ func updateProject() {
 	project := query.Where("id", 1).First() // 假设更新 id 为 1 的记录
 
 	updateFields := contracts.Fields{
-		"name": "updated_project_name",
+		"name": "updated_project_name11",
 	}
 	err := project.Update(updateFields)
 
