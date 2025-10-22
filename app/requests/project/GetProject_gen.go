@@ -4,24 +4,24 @@
 // 	go       go1.24.0
 //
 // updated_at: 2025-03-24 20:22:07
-// source: pro/user.proto
+// source: pro/Project.proto
 // 
-package user
+package project
 
 import (
 	"github.com/goal-web/contracts"
 )
 
-type LoginByWxCodeReq struct {
-	Code string `json:"code" query:"code" form:"code"`
+type GetProjectReq struct {
+	Id string `json:"id" query:"id" form:"id"`
 }
 
-func (model *LoginByWxCodeReq) ToFields() contracts.Fields {
+func (model *GetProjectReq) ToFields() contracts.Fields {
 	if model == nil {
 		return nil
 	}
 	fields := contracts.Fields{
-		"code": model.Code,
+		"id": model.Id,
 	}
 	return fields
 }

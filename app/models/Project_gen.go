@@ -3,7 +3,7 @@
 // 	goal-cli v0.5.24
 // 	go       go1.24.0
 //
-// updated_at: 2025-03-24 11:05:04
+// updated_at: 2025-03-24 20:22:07
 // source: pro/Project.proto
 // 
 package models
@@ -20,24 +20,22 @@ import (
 	"github.com/spf13/cast"
 )
 
-var (
-	ProjectUserRelation contracts.RelationType = "user"
-)
+var ()
 
 // ProjectModel
 // @timestamps
 type ProjectModel struct {
-	Id uint64 `json:"id" query:"id" form:"id" db:"id;type:BIGINT UNSIGNED;not null;primary key;AUTO_INCREMENT;"`
+	Id int64 `json:"id" query:"id" form:"id" db:"id;type:BIGINT;not null;primary key;AUTO_INCREMENT;"`
 
 	Uuid string `json:"uuid" query:"uuid" form:"uuid" db:"uuid;type:VARCHAR(255);not null;"`
 
 	Name string `json:"name" query:"name" form:"name" db:"name;type:VARCHAR(255);not null;"`
 
-	CreatorId int32 `json:"creator_id" query:"creator_id" form:"creator_id" db:"creator_id;type:INT;not null;"`
+	CreatorId int64 `json:"creator_id" query:"creator_id" form:"creator_id" db:"creator_id;type:BIGINT;not null;"`
 
-	GroupId int32 `json:"group_id" query:"group_id" form:"group_id" db:"group_id;type:INT;not null;"`
+	GroupId int64 `json:"group_id" query:"group_id" form:"group_id" db:"group_id;type:BIGINT;not null;"`
 
-	KeyId int32 `json:"key_id" query:"key_id" form:"key_id" db:"key_id;type:INT;not null;"`
+	KeyId int64 `json:"key_id" query:"key_id" form:"key_id" db:"key_id;type:BIGINT;not null;"`
 
 	RepoAddress string `json:"repo_address" query:"repo_address" form:"repo_address" db:"repo_address;type:VARCHAR(255);not null;"`
 
@@ -57,7 +55,6 @@ type ProjectModel struct {
 	_hidden map[string]struct{}
 
 	_relation_loaded map[contracts.RelationType]struct{}
-	_User            *UserModel
 }
 
 var ProjectDefine ProjectStatic
@@ -68,18 +65,18 @@ type ProjectStatic struct {
 	Indexes             []string
 	With                []contracts.RelationType
 	Appends             map[string]func(model *ProjectModel) any
-	IdGetter            func(model *ProjectModel, raw uint64) uint64
-	IdSetter            func(model *ProjectModel, raw uint64) uint64
+	IdGetter            func(model *ProjectModel, raw int64) int64
+	IdSetter            func(model *ProjectModel, raw int64) int64
 	UuidGetter          func(model *ProjectModel, raw string) string
 	UuidSetter          func(model *ProjectModel, raw string) string
 	NameGetter          func(model *ProjectModel, raw string) string
 	NameSetter          func(model *ProjectModel, raw string) string
-	CreatorIdGetter     func(model *ProjectModel, raw int32) int32
-	CreatorIdSetter     func(model *ProjectModel, raw int32) int32
-	GroupIdGetter       func(model *ProjectModel, raw int32) int32
-	GroupIdSetter       func(model *ProjectModel, raw int32) int32
-	KeyIdGetter         func(model *ProjectModel, raw int32) int32
-	KeyIdSetter         func(model *ProjectModel, raw int32) int32
+	CreatorIdGetter     func(model *ProjectModel, raw int64) int64
+	CreatorIdSetter     func(model *ProjectModel, raw int64) int64
+	GroupIdGetter       func(model *ProjectModel, raw int64) int64
+	GroupIdSetter       func(model *ProjectModel, raw int64) int64
+	KeyIdGetter         func(model *ProjectModel, raw int64) int64
+	KeyIdSetter         func(model *ProjectModel, raw int64) int64
 	RepoAddressGetter   func(model *ProjectModel, raw string) string
 	RepoAddressSetter   func(model *ProjectModel, raw string) string
 	ProjectPathGetter   func(model *ProjectModel, raw string) string
@@ -181,12 +178,6 @@ func ProjectQuery() *table.Table[ProjectModel] {
 		SetPrimaryKey("id").
 		SetCreatedTimeColumn("created_at").
 		SetUpdatedTimeColumn("updated_at").
-		SetRelation( // belongsTo: User
-			ProjectUserRelation,
-			ProjectModelLocalKeyGetter("user_id"),
-			ProjectModelRelationGetter(UserQuery, "id"),
-			ProjectModelSingleRelationSetter[*UserModel](ProjectUserRelation),
-		).
 		SetWiths(ProjectDefine.With...)
 }
 
@@ -223,7 +214,7 @@ func (model *ProjectModel) Save() contracts.Exception {
 	if cast.ToUint64(pk) == 0 {
 		pk, err = ProjectQuery().Where("id", model.GetPrimaryKey()).InsertGetIdE(model._update)
 		if err == nil {
-			model.SetId(cast.ToUint64(pk))
+			model.SetId(cast.ToInt64(pk))
 		}
 	} else {
 		_, err = ProjectQuery().Where("id", model.GetPrimaryKey()).UpdateE(model._update)
@@ -244,12 +235,12 @@ func (model *ProjectModel) Set(fields contracts.Fields) {
 		switch key {
 		case "id":
 			switch v := value.(type) {
-			case uint64:
+			case int64:
 				model.SetId(v)
-			case func() uint64:
+			case func() int64:
 				model.SetId(v())
 			case string:
-				var vd uint64
+				var vd int64
 				err := json.Unmarshal([]byte(v), &vd)
 				if err != nil {
 					logs.Default().Warn("Failed to Parse field " + key)
@@ -258,7 +249,7 @@ func (model *ProjectModel) Set(fields contracts.Fields) {
 				model.SetId(vd)
 
 			case []byte:
-				var vd uint64
+				var vd int64
 				err := json.Unmarshal(v, &vd)
 				if err != nil {
 					logs.Default().Warn("Failed to Parse field " + key)
@@ -267,7 +258,7 @@ func (model *ProjectModel) Set(fields contracts.Fields) {
 				model.SetId(vd)
 
 			default:
-				model.SetId(cast.ToUint64(v))
+				model.SetId(cast.ToInt64(v))
 			}
 		case "uuid":
 			switch v := value.(type) {
@@ -295,12 +286,12 @@ func (model *ProjectModel) Set(fields contracts.Fields) {
 			}
 		case "creator_id":
 			switch v := value.(type) {
-			case int32:
+			case int64:
 				model.SetCreatorId(v)
-			case func() int32:
+			case func() int64:
 				model.SetCreatorId(v())
 			case string:
-				var vd int32
+				var vd int64
 				err := json.Unmarshal([]byte(v), &vd)
 				if err != nil {
 					logs.Default().Warn("Failed to Parse field " + key)
@@ -309,7 +300,7 @@ func (model *ProjectModel) Set(fields contracts.Fields) {
 				model.SetCreatorId(vd)
 
 			case []byte:
-				var vd int32
+				var vd int64
 				err := json.Unmarshal(v, &vd)
 				if err != nil {
 					logs.Default().Warn("Failed to Parse field " + key)
@@ -318,16 +309,16 @@ func (model *ProjectModel) Set(fields contracts.Fields) {
 				model.SetCreatorId(vd)
 
 			default:
-				model.SetCreatorId(cast.ToInt32(v))
+				model.SetCreatorId(cast.ToInt64(v))
 			}
 		case "group_id":
 			switch v := value.(type) {
-			case int32:
+			case int64:
 				model.SetGroupId(v)
-			case func() int32:
+			case func() int64:
 				model.SetGroupId(v())
 			case string:
-				var vd int32
+				var vd int64
 				err := json.Unmarshal([]byte(v), &vd)
 				if err != nil {
 					logs.Default().Warn("Failed to Parse field " + key)
@@ -336,7 +327,7 @@ func (model *ProjectModel) Set(fields contracts.Fields) {
 				model.SetGroupId(vd)
 
 			case []byte:
-				var vd int32
+				var vd int64
 				err := json.Unmarshal(v, &vd)
 				if err != nil {
 					logs.Default().Warn("Failed to Parse field " + key)
@@ -345,16 +336,16 @@ func (model *ProjectModel) Set(fields contracts.Fields) {
 				model.SetGroupId(vd)
 
 			default:
-				model.SetGroupId(cast.ToInt32(v))
+				model.SetGroupId(cast.ToInt64(v))
 			}
 		case "key_id":
 			switch v := value.(type) {
-			case int32:
+			case int64:
 				model.SetKeyId(v)
-			case func() int32:
+			case func() int64:
 				model.SetKeyId(v())
 			case string:
-				var vd int32
+				var vd int64
 				err := json.Unmarshal([]byte(v), &vd)
 				if err != nil {
 					logs.Default().Warn("Failed to Parse field " + key)
@@ -363,7 +354,7 @@ func (model *ProjectModel) Set(fields contracts.Fields) {
 				model.SetKeyId(vd)
 
 			case []byte:
-				var vd int32
+				var vd int64
 				err := json.Unmarshal(v, &vd)
 				if err != nil {
 					logs.Default().Warn("Failed to Parse field " + key)
@@ -372,7 +363,7 @@ func (model *ProjectModel) Set(fields contracts.Fields) {
 				model.SetKeyId(vd)
 
 			default:
-				model.SetKeyId(cast.ToInt32(v))
+				model.SetKeyId(cast.ToInt64(v))
 			}
 		case "repo_address":
 			switch v := value.(type) {
@@ -446,8 +437,6 @@ func (model *ProjectModel) Set(fields contracts.Fields) {
 			default:
 				model.SetUpdatedAt(cast.ToString(v))
 			}
-		case string(ProjectUserRelation):
-			model.SetUser(value.(*UserModel))
 		}
 
 	}
@@ -550,8 +539,6 @@ func (model *ProjectModel) Get(key string) any {
 	}
 
 	switch contracts.RelationType(key) {
-	case ProjectUserRelation:
-		return model.User()
 	}
 
 	return nil
@@ -628,8 +615,6 @@ func (model *ProjectModel) ToFields() contracts.Fields {
 
 	for key := range model._relation_loaded {
 		switch key {
-		case ProjectUserRelation:
-			fields[string(key)] = model._User.ToFields()
 		}
 	}
 
@@ -702,14 +687,14 @@ func (model *ProjectModel) GetPrimaryKey() any {
 	return model.Id
 }
 
-func (model *ProjectModel) GetId() uint64 {
+func (model *ProjectModel) GetId() int64 {
 	if ProjectDefine.IdGetter != nil {
 		return ProjectDefine.IdGetter(model, model.Id)
 	}
 	return model.Id
 }
 
-func (model *ProjectModel) SetId(value uint64) {
+func (model *ProjectModel) SetId(value int64) {
 	if ProjectDefine.IdSetter != nil {
 		value = ProjectDefine.IdSetter(model, value)
 	}
@@ -762,14 +747,14 @@ func (model *ProjectModel) SetName(value string) {
 	model.Name = value
 }
 
-func (model *ProjectModel) GetCreatorId() int32 {
+func (model *ProjectModel) GetCreatorId() int64 {
 	if ProjectDefine.CreatorIdGetter != nil {
 		return ProjectDefine.CreatorIdGetter(model, model.CreatorId)
 	}
 	return model.CreatorId
 }
 
-func (model *ProjectModel) SetCreatorId(value int32) {
+func (model *ProjectModel) SetCreatorId(value int64) {
 	if ProjectDefine.CreatorIdSetter != nil {
 		value = ProjectDefine.CreatorIdSetter(model, value)
 	}
@@ -782,14 +767,14 @@ func (model *ProjectModel) SetCreatorId(value int32) {
 	model.CreatorId = value
 }
 
-func (model *ProjectModel) GetGroupId() int32 {
+func (model *ProjectModel) GetGroupId() int64 {
 	if ProjectDefine.GroupIdGetter != nil {
 		return ProjectDefine.GroupIdGetter(model, model.GroupId)
 	}
 	return model.GroupId
 }
 
-func (model *ProjectModel) SetGroupId(value int32) {
+func (model *ProjectModel) SetGroupId(value int64) {
 	if ProjectDefine.GroupIdSetter != nil {
 		value = ProjectDefine.GroupIdSetter(model, value)
 	}
@@ -802,14 +787,14 @@ func (model *ProjectModel) SetGroupId(value int32) {
 	model.GroupId = value
 }
 
-func (model *ProjectModel) GetKeyId() int32 {
+func (model *ProjectModel) GetKeyId() int64 {
 	if ProjectDefine.KeyIdGetter != nil {
 		return ProjectDefine.KeyIdGetter(model, model.KeyId)
 	}
 	return model.KeyId
 }
 
-func (model *ProjectModel) SetKeyId(value int32) {
+func (model *ProjectModel) SetKeyId(value int64) {
 	if ProjectDefine.KeyIdSetter != nil {
 		value = ProjectDefine.KeyIdSetter(model, value)
 	}
@@ -940,29 +925,4 @@ func (model *ProjectModel) SetUpdatedAt(value string) {
 		model._update["updated_at"] = value
 	}
 	model.UpdatedAt = value
-}
-
-// UserQuery @belongsTo
-func (model *ProjectModel) User() *UserModel {
-	_, exists := model._relation_loaded[ProjectUserRelation]
-	if !exists {
-		value := model.UserQuery().First()
-		model.SetUser(value)
-		return value
-	}
-	return model._User
-}
-
-// UserQuery @belongsTo
-func (model *ProjectModel) UserQuery() contracts.QueryBuilder[UserModel] {
-	return UserQuery().Where("id", model.Get("user_id"))
-}
-
-// UserQuery @belongsTo
-func (model *ProjectModel) SetUser(value *UserModel) {
-	if model._relation_loaded == nil {
-		model._relation_loaded = make(map[contracts.RelationType]struct{})
-	}
-	model._relation_loaded[ProjectUserRelation] = struct{}{}
-	model._User = value
 }

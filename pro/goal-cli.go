@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/goal-web/goal-cli/app/gen"
 	"os"
 	"path/filepath"
+
+	"github.com/goal-web/goal-cli/app/gen"
 )
 
 func main() {

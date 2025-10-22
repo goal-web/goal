@@ -1,11 +1,13 @@
 module github.com/goal-web/goal
 
-go 1.23.2
+go 1.25.0
 
 replace github.com/goal-web/goal-cli => ../goal-cli
 
 require (
+	github.com/alicebob/miniredis/v2 v2.34.0
 	github.com/fasthttp/websocket v1.5.10
+	github.com/go-redis/redis/v8 v8.11.4
 	github.com/goal-web/application v0.5.2
 	github.com/goal-web/auth v0.5.3
 	github.com/goal-web/bloomfilter v0.5.2
@@ -34,6 +36,7 @@ require (
 	github.com/goal-web/views v0.5.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang-module/carbon/v2 v2.3.12
+	github.com/google/uuid v1.6.0
 	github.com/gookit/goutil v0.6.18
 	github.com/nsqio/go-nsq v1.1.0
 	github.com/spf13/cast v1.7.1
@@ -47,6 +50,7 @@ require (
 
 require (
 	github.com/ClickHouse/clickhouse-go/v2 v2.0.9 // indirect
+	github.com/alicebob/gopher-json v0.0.0-20230218143504-906a9b012302 // indirect
 	github.com/andres-erbsen/clock v0.0.0-20160526145045-9e14626cd129 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/apex/log v1.9.0 // indirect
@@ -59,13 +63,11 @@ require (
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
-	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/goal-web/container v0.5.3 // indirect
 	github.com/goal-web/pipeline v0.5.2 // indirect
 	github.com/goal-web/querybuilder v0.5.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/gorhill/cronexpr v0.0.0-20180427100037-88b0669f7d75 // indirect
 	github.com/jmoiron/sqlx v1.3.4 // indirect
@@ -87,6 +89,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.55.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
+	github.com/yuin/gopher-lua v1.1.1 // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect
 	go.opentelemetry.io/otel/trace v1.3.0 // indirect
 	go.uber.org/ratelimit v0.2.0 // indirect

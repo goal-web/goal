@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"syscall"
+
 	"github.com/goal-web/contracts"
 	"github.com/goal-web/goal/app/controllers"
 	"github.com/goal-web/goal/bootstrap/core"
@@ -11,10 +14,13 @@ import (
 	"github.com/goal-web/session"
 	"github.com/goal-web/supports/signal"
 	"github.com/goal-web/views"
-	"syscall"
 )
 
 func main() {
+
+	a := "a"
+	fmt.Println(a)
+
 	app := core.Application(core.App{
 		QueueWorker:      true,
 		SchedulingWorker: true,

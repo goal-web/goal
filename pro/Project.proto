@@ -1,23 +1,96 @@
 syntax = "proto3";
 
-import "pro/user.proto";
+option go_package = "project";
 
 //@timestamps
 //@table: projects
 message ProjectModel {
-    uint64 id = 1;
-    string uuid = 2;
-    string name = 3;
-    int32 creator_id = 4;
-    int32 group_id = 5;
-    int32 key_id = 6;
-    string repo_address = 7;
-    string project_path = 8;
-    string default_branch = 9;
-    string settings = 10;
-    string created_at = 11;
-    string updated_at = 12;
-
-    //@belongsTo
-    UserModel user = 100;
+  int64 id = 1;
+  string uuid = 2;
+  string name = 3;
+  int64 creator_id = 4;
+  int64 group_id = 5;
+  int64 key_id = 6;
+  string repo_address = 7;
+  string project_path = 8;
+  string default_branch = 9;
+  string settings = 10;
+  string created_at = 11;
+  string updated_at = 12;
 }
+
+
+//@controller:/project
+service ProjectService {
+  rpc CreateProject(CreateProjectReq) returns (CreateProjectResult) {}
+  //@method:Get
+  rpc GetProject(GetProjectReq) returns (GetProjectResult) {}
+  //@method:Get
+  rpc ListProjects(ListProjectsReq) returns (ListProjectsResult) {}
+  rpc UpdateProject(UpdateProjectReq) returns (UpdateProjectResult) {}
+  rpc DeleteProject(DeleteProjectReq) returns (DeleteProjectResult) {}
+}
+
+message CreateProjectReq {
+  string uuid = 1;
+  string name = 2;
+  int64 creator_id = 3;
+  int64 group_id = 4;
+  int64 key_id = 5;
+  string repo_address = 6;
+  string project_path = 7;
+  string default_branch = 8;
+  string settings = 9;
+}
+message CreateProjectResult {
+  string code = 1;
+}
+
+
+message GetProjectReq {
+  string id = 1;
+}
+message GetProjectResult {
+  ProjectModel project = 1;
+}
+
+
+
+message ListProjectsReq {
+  int64 page = 1;
+  int64 per_page = 2;
+}
+message ListProjectsResult {
+  int64 total = 1;
+  //@ptr
+  repeated ProjectModel projects = 2;
+}
+
+
+
+message UpdateProjectReq {
+  int64 id = 1;
+  string uuid = 2;
+  string name = 3;
+  int64 creator_id = 4;
+  int64 group_id = 5;
+  int64 key_id = 6;
+  string repo_address = 7;
+  string project_path = 8;
+  string default_branch = 9;
+  string settings = 10;
+}
+message UpdateProjectResult {
+  string code = 1;
+}
+
+
+message DeleteProjectReq {
+  string id = 1;
+}
+
+message DeleteProjectResult {
+  string code = 1;
+}
+
+
