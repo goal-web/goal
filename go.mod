@@ -1,10 +1,9 @@
 module github.com/goal-web/goal
 
-go 1.23.2
-
-replace github.com/goal-web/goal-cli => ../goal-cli
+go 1.25.0
 
 require (
+	github.com/dromara/carbon/v2 v2.6.15
 	github.com/fasthttp/websocket v1.5.10
 	github.com/goal-web/application v0.5.2
 	github.com/goal-web/auth v0.5.3
@@ -33,7 +32,6 @@ require (
 	github.com/goal-web/validation v0.5.2
 	github.com/goal-web/views v0.5.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
-	github.com/golang-module/carbon/v2 v2.3.12
 	github.com/gookit/goutil v0.6.18
 	github.com/nsqio/go-nsq v1.1.0
 	github.com/spf13/cast v1.7.1

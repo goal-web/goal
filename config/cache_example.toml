@@ -1,0 +1,26 @@
+# 缓存配置示例
+# Cache Configuration Example
+
+# 默认缓存驱动
+cache.default = "memory"
+
+# 缓存键前缀
+cache.prefix = "goal_"
+
+# 默认缓存TTL（秒）
+cache.ttl = 86400
+
+# 文件缓存配置
+cache.file.path = "./storage/cache"
+
+# Redis缓存配置
+cache.connection = "default"
+
+# 环境变量示例
+# CACHE_DEFAULT=memory
+# CACHE_PREFIX=goal_
+# CACHE_TTL=86400
+# CACHE_FILE_PATH=./storage/cache
+# CACHE_CONNECTION=default
+
+

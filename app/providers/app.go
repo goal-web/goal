@@ -1,12 +1,12 @@
 package providers
 
 import (
-	"github.com/goal-web/application"
-	"github.com/goal-web/contracts"
-	"github.com/goal-web/goal/app/console"
-	"github.com/goal-web/goal/app/models"
-	"github.com/goal-web/migration/migrate"
-	"github.com/golang-module/carbon/v2"
+    "github.com/goal-web/application"
+    "github.com/goal-web/contracts"
+    "github.com/goal-web/goal/app/console"
+    "github.com/goal-web/goal/app/models"
+    "github.com/goal-web/migration/migrate"
+    "github.com/dromara/carbon/v2"
 )
 
 type appServiceProvider struct {
