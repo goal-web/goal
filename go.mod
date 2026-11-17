@@ -12,7 +12,7 @@ require (
 	github.com/goal-web/collection v0.5.2
 	github.com/goal-web/config v0.5.4
 	github.com/goal-web/console v0.5.4
-	github.com/goal-web/contracts v0.5.3
+	github.com/goal-web/contracts v0.5.7
 	github.com/goal-web/database v0.5.3
 	github.com/goal-web/email v0.5.2
 	github.com/goal-web/encryption v0.5.2
@@ -21,6 +21,7 @@ require (
 	github.com/goal-web/goal-cli v0.5.42
 	github.com/goal-web/hashing v0.5.2
 	github.com/goal-web/http v0.5.11
+	github.com/goal-web/log v0.5.0
 	github.com/goal-web/migration v0.5.6
 	github.com/goal-web/queue v0.5.2
 	github.com/goal-web/ratelimiter v0.5.2
@@ -28,7 +29,7 @@ require (
 	github.com/goal-web/routing v0.5.2
 	github.com/goal-web/serialization v0.5.2
 	github.com/goal-web/session v0.5.2
-	github.com/goal-web/supports v0.5.7
+	github.com/goal-web/supports v0.5.16
 	github.com/goal-web/validation v0.5.2
 	github.com/goal-web/views v0.5.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
@@ -47,7 +48,6 @@ require (
 	github.com/ClickHouse/clickhouse-go/v2 v2.0.9 // indirect
 	github.com/andres-erbsen/clock v0.0.0-20160526145045-9e14626cd129 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/apex/log v1.9.0 // indirect
 	github.com/bits-and-blooms/bitset v1.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
@@ -62,6 +62,7 @@ require (
 	github.com/goal-web/container v0.5.3 // indirect
 	github.com/goal-web/pipeline v0.5.2 // indirect
 	github.com/goal-web/querybuilder v0.5.4 // indirect
+	github.com/golang-module/carbon/v2 v2.3.12 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
@@ -87,7 +88,9 @@ require (
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect
 	go.opentelemetry.io/otel/trace v1.3.0 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
 	go.uber.org/ratelimit v0.2.0 // indirect
+	go.uber.org/zap v1.28.0 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
 	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/sync v0.10.0 // indirect

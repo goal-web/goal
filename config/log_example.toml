@@ -1,0 +1,16 @@
+# 日志配置示例
+# Log Configuration Example
+
+# 默认日志通道（stack 通道会经 zapcore.NewTee 把同一条日志同时扇出到 console 与 file）
+log.default = "stack"
+
+# console 通道日志级别
+log.level = "debug"
+
+# 文件通道日志路径（按天切分为 app-YYYYMMDD.log，json 格式落盘）
+log.path = "storage/logs/app.log"
+
+# 环境变量示例
+# LOG_DEFAULT=stack
+# LOG_LEVEL=debug
+# LOG_PATH=storage/logs/app.log
