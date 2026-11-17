@@ -78,6 +78,14 @@ func Application(c ...App) contracts.Application {
 	// 都经容器解析到 zap 适配实现（stack 默认通道 = console + file 双通道）。
 	// 必须放在 providers.NewApp() 注册之前——它的 Register 会在引导期触发
 	// migrate.Auto 并经 logs.* 输出，接线晚了这些记录会落到兜底 logger。
+	// 若从上方服务列表移除 log.NewService，此闭包首次调用即 panic
+	// （container.Get 对未注册键返回 nil，接口断言失败）——属引导期
+	// fail-fast，是有意设计：装配残缺在启动时暴露，而不是静默丢日志。
+	// Note: removing log.NewService from the service list above makes this
+	// closure panic on its first invocation (container.Get returns nil for an
+	// unregistered key and the interface assertion fails) — bootstrap-time
+	// fail-fast, intentional: broken wiring surfaces at startup instead of
+	// silently dropping logs.
 	logs.SetDefault(func() contracts.Logger {
 		return app.Get("log").(contracts.LogManager).Channel()
 	})
